@@ -9,6 +9,8 @@
 .project
 bin/
 target/
+.classpath
+build.fxbuild
 
 # BlueJ files
 *.ctxt
