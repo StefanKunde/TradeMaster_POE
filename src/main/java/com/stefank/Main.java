@@ -1,4 +1,4 @@
-package com.yourcompany;
+package com.stefank;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

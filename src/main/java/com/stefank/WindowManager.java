@@ -1,4 +1,4 @@
-package com.yourcompany;
+package com.stefank;
 
 
 import java.util.Timer;
@@ -6,6 +6,9 @@ import java.util.TimerTask;
 
 import com.sun.jna.Native;
 import com.sun.jna.PointerType;
+
+import gui.Frame;
+import utility.User32;
 
 
 

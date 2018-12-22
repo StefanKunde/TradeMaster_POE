@@ -1,4 +1,4 @@
-package com.yourcompany;
+package utility;
 
 
 import com.sun.jna.Native;
