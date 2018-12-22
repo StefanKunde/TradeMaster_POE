@@ -3,13 +3,13 @@ package viewcontroller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import gui.Frame;
+import gui.MainFrame;
 
 public class ExitButtonListener implements ActionListener {
 
-	private Frame frame;
+	private MainFrame frame;
 	
-	public ExitButtonListener(Frame frame) {
+	public ExitButtonListener(MainFrame frame) {
 		this.frame = frame;
 	}
 	

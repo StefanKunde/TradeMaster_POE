@@ -4,45 +4,24 @@ package com.stefank;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JFrame;
+
 import com.sun.jna.Native;
 import com.sun.jna.PointerType;
 
-import gui.Frame;
+import gui.MainFrame;
+import gui.IHideable;
 import utility.User32;
 
 
 
-public class WindowManager {
+public class WindowManager implements Runnable {
 
 	private User32 user32 = User32.INSTANCE;
-	Frame myFrame = new Frame();
+	JFrame myFrame;
 	
-	public WindowManager() {
-	    Timer timer = new Timer();
-	    timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-	            	System.out.println("running...");
-	                byte[] windowText = new byte[512];
-	                PointerType hwnd = user32.GetForegroundWindow();
-	                User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
-	                System.out.println(Native.toString(windowText));
-	                
-	                if(!Native.toString(windowText).equals("Path of Exile")){
-	                	if(!Native.toString(windowText).equals("JFrame Example")) {
-	                		myFrame.setInvisible();
-	                		System.out.println("hide window!");
-	                	}
-	                }else{
-	                	if(!myFrame.isVisible()) {
-	                		myFrame.setVisible();
-	                	}
-	                	
-	                	System.out.println("show window!");
-	                	
-	                }
-                }
-        },0,700);
+	public WindowManager(IHideable frame) {
+		this.myFrame = (JFrame) frame;
 	}
 	
 	public void setForegroundWindow(final String titleName){
@@ -60,5 +39,39 @@ public class WindowManager {
             }
             return true;
         }, null);
+	}
+
+	@Override
+	public void run() {
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				System.out.println("running...");
+                byte[] windowText = new byte[512];
+                PointerType hwnd = user32.GetForegroundWindow();
+                User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
+                System.out.println(Native.toString(windowText));
+                
+                if(!Native.toString(windowText).equals("Path of Exile")){
+                	if(!Native.toString(windowText).equals(myFrame.getTitle())) {
+                		((IHideable) myFrame).setFrameInvisible();
+                		myFrame.hide();
+                		System.out.println("hide window!");
+                	}
+                	if(((IHideable) myFrame).isUserWantsMinimize()) {
+                		myFrame.hide();
+                		System.out.println("hide window!");
+                	}
+                }else{
+                	if(!((IHideable) myFrame).isFrameVisible() && !((IHideable) myFrame).isUserWantsMinimize()) {
+                		((IHideable) myFrame).setFrameVisible();
+                		myFrame.show();
+                		System.out.println("show window!");
+                	}
+                }
+			}
+			
+		},0,200);
 	}
 }

@@ -5,13 +5,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
 
-import gui.Frame;
+import gui.MainFrame;
 
 public class MapComboboxListener implements ActionListener {
 
-	private Frame frame;
+	private MainFrame frame;
 	
-	public MapComboboxListener(Frame frame) {
+	public MapComboboxListener(MainFrame frame) {
 		this.frame = frame;
 	}
 	@Override

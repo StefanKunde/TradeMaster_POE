@@ -15,13 +15,13 @@ import org.json.JSONObject;
 
 import com.stefank.Main;
 
-import gui.Frame;
+import gui.MainFrame;
 
 public class TierComboboxListener implements ActionListener {
 	
-	private Frame frame;
+	private MainFrame frame;
 	
-	public TierComboboxListener(Frame frame) {
+	public TierComboboxListener(MainFrame frame) {
 		this.frame = frame;
 	}
 
