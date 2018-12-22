@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.nodes.Element;
 
-import com.yourcompany.Main;
+import com.stefank.Main;
 
 import connector.SearchParameter;
 import handler.TradeHandler;
