@@ -1,5 +1,7 @@
 package gui;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -10,6 +12,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jsoup.nodes.Element;
 
+import com.stefank.Main;
 import com.sun.jna.Native;
 
 import connector.SearchParameter;
@@ -20,6 +23,7 @@ import utility.User32;
 import viewcontroller.CurrencyComboboxListener;
 import viewcontroller.ExitButtonListener;
 import viewcontroller.MapComboboxListener;
+import viewcontroller.MinimizeButtonListener;
 import viewcontroller.NextButtonListener;
 import viewcontroller.TierComboboxListener;
 import viewcontroller.UpdateButtonListener;
@@ -27,18 +31,21 @@ import viewcontroller.UpdateButtonListener;
 import javax.swing.JComboBox;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
-public class Frame {
+
+public class MainFrame extends JFrame implements IHideable {
 	private User32 user32 = User32.INSTANCE;
-	JFrame frame;
 	JPanel panel;
+	private JPanel panel_1;
 	JLabel lblCurrency;
 	JLabel lbl_count;
 	JLabel lblTier;
@@ -50,6 +57,8 @@ public class Frame {
 	JButton btn_update;
 	JButton btn_nextTrade;
 	JButton btn_exit;
+	JButton btn_minimize;
+	//JButton btn_minimize;
 	private JComboBox cmb_currency;
 	private JComboBox cmb_tier;
 	private JComboBox cmb_map;
@@ -66,48 +75,57 @@ public class Frame {
 	boolean selectedTier = false;
 	boolean selectedMap = false;
 	
+	boolean userWantsMinimize = false;
 	
 	
-	public Frame() {
+	
+	public MainFrame() {
 		maps = new ArrayList<Map>();
 		tradeableMaps = new ArrayList<Map>();
 		searchBuilder = new SearchParameter();
 		panel = new JPanel();
-		frame = new JFrame("JFrame Example");
-		panel = new JPanel();
+		this.setTitle("JFrame Example");
+		panel_1 = new JPanel();
 		lblCurrency = new JLabel("Currency");
 		lblTier = new JLabel("Tier");
 		lbl_count = new JLabel("Tradeables: ");
 		lblMap = new JLabel("Map");
 		btn_update = new JButton();
-		btn_exit = new JButton("X");
+		btn_exit = new JButton();
 		btn_nextTrade = new JButton();
+		btn_minimize = new JButton();
 		cmb_tier = new JComboBox(tiers);
-		cmb_currency = new JComboBox(currencys);
 		cmb_map = new JComboBox(new Object[]{});
+		cmb_currency = new JComboBox(currencys);
 		
 		initFrame();
+		
+		
 	}
 	
 	private void initFrame() {
-		frame.setForeground(Color.GRAY);
-		frame.setFont(new Font("Calibri", Font.PLAIN, 12));
-		frame.setBackground(Color.GRAY);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setForeground(Color.GRAY);
+		this.setFont(new Font("Calibri", Font.PLAIN, 12));
+		this.setBackground(Color.GRAY);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		panel.setBackground(new Color(51, 51, 51));
-		panel.setForeground(Color.GRAY);
+		panel_1.setBackground(new Color(51, 51, 51));
+		panel_1.setForeground(Color.GRAY);
 		
 		lblCurrency.setForeground(new Color(255, 255, 255));
 		lblCurrency.setBackground(Color.GRAY);
-		lblCurrency.setBounds(10, 9, 71, 14);
+		lblCurrency.setBounds(10, 34, 71, 14);
 		
 		btn_update.setEnabled(false);
-		btn_update.setBounds(155, 102, 129, 29);
+		btn_update.setBounds(155, 127, 129, 29);
 		btn_update.setText("Update");
-		panel.setLayout(null);
-		panel.add(lblCurrency);
-		panel.add(btn_update);
+		panel_1.setLayout(null);
+		
+		
+		cmb_currency.setBounds(91, 30, 243, 22);
+		
+		panel_1.add(lblCurrency);
+		panel_1.add(btn_update);
 		
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -121,47 +139,87 @@ public class Frame {
 			e1.printStackTrace();
 		}
 
-		frame.getContentPane().add(panel);
-		cmb_currency.setBounds(91, 5, 243, 22);
-		panel.add(cmb_currency);
+		this.getContentPane().add(panel_1);
 		btn_exit.setForeground(new Color(0, 0, 0));
 		btn_exit.setBackground(new Color(204, 0, 0));
-		btn_exit.setBounds(349, 11, 39, 29);
-		panel.add(btn_exit);
-		cmb_tier.setBounds(91, 34, 243, 22);
-		panel.add(cmb_tier);
+		btn_exit.setBounds(377, 5, 16, 16);
+		Image cancelIcon = null;
+		btn_exit.setOpaque(false);
+		btn_exit.setContentAreaFilled(false);
+		btn_exit.setBorderPainted(false);
+		try {
+			cancelIcon = ImageIO.read(Main.class.getResourceAsStream("cancel.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		btn_exit.setIcon(new ImageIcon(cancelIcon));
+		btn_exit.setFocusPainted(false);
+		panel_1.add(btn_exit);
+		cmb_tier.setBounds(91, 59, 243, 22);
+		panel_1.add(cmb_tier);
 		lblTier.setForeground(Color.WHITE);
 		lblTier.setBackground(Color.GRAY);
-		lblTier.setBounds(10, 38, 71, 14);
-		panel.add(lblTier);
+		lblTier.setBounds(10, 63, 71, 14);
+		panel_1.add(lblTier);
 		cmb_map.setEnabled(false);
-		cmb_map.setBounds(91, 67, 243, 22);
-		panel.add(cmb_map);
+		cmb_map.setBounds(91, 92, 243, 22);
+		panel_1.add(cmb_map);
 		lblMap.setForeground(Color.WHITE);
 		lblMap.setBackground(Color.GRAY);
-		lblMap.setBounds(10, 71, 71, 14);
-		panel.add(lblMap);
+		lblMap.setBounds(10, 96, 71, 14);
+		panel_1.add(lblMap);
 		lbl_count.setEnabled(false);
-		lbl_count.setBounds(155, 142, 129, 14);
-		panel.add(lbl_count);
+		lbl_count.setBounds(155, 167, 129, 14);
+		panel_1.add(lbl_count);
 		btn_nextTrade.setEnabled(false);
 		btn_nextTrade.setText("Next Trade");
 		btn_nextTrade.setBounds(10, 192, 161, 54);
-		panel.add(btn_nextTrade);
-		frame.setSize(398, 257);
-		frame.setLocationRelativeTo(null);
-	    frame.setUndecorated(true);
-	    FrameDragListener frameDragListener = new FrameDragListener(frame);
-        frame.addMouseListener(frameDragListener);
-        frame.addMouseMotionListener(frameDragListener);
-		frame.setAlwaysOnTop(true);
+		panel_1.add(btn_nextTrade);
+		btn_minimize.setOpaque(false);
+		btn_minimize.setForeground(Color.BLACK);
+		btn_minimize.setContentAreaFilled(false);
+		btn_minimize.setBorderPainted(false);
+		btn_minimize.setBackground(new Color(204, 0, 0));
+		btn_minimize.setBounds(355, 5, 16, 16);
+		
+		btn_minimize.setOpaque(false);
+		btn_minimize.setContentAreaFilled(false);
+		btn_minimize.setBorderPainted(false);
+		Image minimizeIcon = null;
+		try {
+			minimizeIcon = ImageIO.read(Main.class.getResourceAsStream("minimize.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		btn_minimize.setIcon(new ImageIcon(minimizeIcon));
+		btn_minimize.setFocusPainted(false);
+		
+		
+		panel_1.add(btn_minimize);
+		
+		panel_1.add(cmb_currency);
+		
+		this.setSize(398, 257);
+		this.setLocationRelativeTo(null);
+		this.setUndecorated(true);
+		this.getContentPane().requestFocusInWindow();
+	    FrameDragListener frameDragListener = new FrameDragListener(this);
+	    this.addMouseListener(frameDragListener);
+	    this.addMouseMotionListener(frameDragListener);
+        this.setAlwaysOnTop(true);
 		//frame.setMinimumSize(new Dimension(300, 300));
-		SwingUtilities.updateComponentTreeUI(frame);
-		this.isVisible = false;
+		SwingUtilities.updateComponentTreeUI(this);
+		isVisible = false;
+		this.setVisible(false);
+		
 		
 		// Add Listeners
 		ExitButtonListener exitListener = new ExitButtonListener(this);
 		btn_exit.addActionListener(exitListener);
+		
+		MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this);
+		btn_minimize.addActionListener(minimizeListener);
 		
 		UpdateButtonListener updateListener = new UpdateButtonListener(this);
 		btn_update.addActionListener(updateListener);
@@ -197,18 +255,16 @@ public class Frame {
 	}
 	
 	
-	public void setVisible() {
-		frame.setVisible(true);
-		this.isVisible = true;
+	public void setFrameVisible() {
+		this.getFrame().setVisible(true);
 	}
 	
-	public void setInvisible() {
-		frame.setVisible(false);
-		this.isVisible = false;
+	public void setFrameInvisible() {
+		this.getFrame().setVisible(false);
 	}
 	
-	public boolean isVisible() {
-		return this.isVisible;
+	public boolean isFrameVisible() {
+		return this.getFrame().isVisible();
 	}
 
 	public User32 getUser32() {
@@ -220,19 +276,15 @@ public class Frame {
 	}
 
 	public JFrame getFrame() {
-		return frame;
-	}
-
-	public void setFrame(JFrame frame) {
-		this.frame = frame;
+		return this;
 	}
 
 	public JPanel getPanel() {
-		return panel;
+		return panel_1;
 	}
 
 	public void setPanel(JPanel panel) {
-		this.panel = panel;
+		this.panel_1 = panel;
 	}
 
 	public JLabel getLblCurrency() {
@@ -382,4 +434,38 @@ public class Frame {
 	public void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
+
+	public JLabel getLblTier() {
+		return lblTier;
+	}
+
+	public void setLblTier(JLabel lblTier) {
+		this.lblTier = lblTier;
+	}
+
+	public JLabel getLblMap() {
+		return lblMap;
+	}
+
+	public void setLblMap(JLabel lblMap) {
+		this.lblMap = lblMap;
+	}
+
+	public JButton getBtn_minimize() {
+		return btn_minimize;
+	}
+
+	public void setBtn_minimize(JButton btn_minimize) {
+		this.btn_minimize = btn_minimize;
+	}
+
+	public boolean isUserWantsMinimize() {
+		return userWantsMinimize;
+	}
+
+	public void setUserWantsMinimize(boolean userWantsMinimize) {
+		this.userWantsMinimize = userWantsMinimize;
+	}
+	
+	
 }

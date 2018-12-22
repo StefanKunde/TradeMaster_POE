@@ -7,16 +7,16 @@ import java.util.List;
 
 import org.jsoup.nodes.Element;
 
-import gui.Frame;
+import gui.MainFrame;
 import handler.TradeHandler;
 import items.Map;
 import items.Maps;
 
 public class UpdateButtonListener implements ActionListener {
 
-	private Frame frame;
+	private MainFrame frame;
 	
-	public UpdateButtonListener(Frame frame) {
+	public UpdateButtonListener(MainFrame frame) {
 		this.frame = frame;
 	}
 	

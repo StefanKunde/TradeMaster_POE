@@ -6,14 +6,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import gui.Frame;
+import gui.MainFrame;
 
 
 public class NextButtonListener implements ActionListener {
 
-	private Frame frame;
+	private MainFrame frame;
 	
-	public NextButtonListener(Frame frame) {
+	public NextButtonListener(MainFrame frame) {
 		this.frame = frame;
 	}
 	

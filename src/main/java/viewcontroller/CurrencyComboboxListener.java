@@ -5,12 +5,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
 
-import gui.Frame;
+import gui.MainFrame;
 
 public class CurrencyComboboxListener implements ActionListener {
-	private Frame frame;
+	private MainFrame frame;
 	
-	public CurrencyComboboxListener(Frame frame) {
+	public CurrencyComboboxListener(MainFrame frame) {
 		this.frame = frame;
 	}
 	@Override
