@@ -199,5 +199,17 @@ public class SearchParameter {
 		this.level_min = new BasicNameValuePair("level_min", tierLevel);
 	}
 	
+	public void setRarity(String rarity) {
+		this.rarity = new BasicNameValuePair("rarity", rarity);
+	}
+	
+	public void setCorrupted(boolean corrupted) {
+		if(corrupted) {
+			this.corrupted = new BasicNameValuePair("corrupted", "1");
+		} else {
+			this.corrupted = new BasicNameValuePair("corrupted", "0");
+		}
+	}
+	
 
 }

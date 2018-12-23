@@ -20,6 +20,7 @@ import handler.TradeHandler;
 import items.Map;
 import items.Maps;
 import utility.User32;
+import viewcontroller.CorruptedCheckBoxListener;
 import viewcontroller.CurrencyComboboxListener;
 import viewcontroller.ExitButtonListener;
 import viewcontroller.MapComboboxListener;
@@ -27,6 +28,7 @@ import viewcontroller.MinimizeButtonListener;
 import viewcontroller.NextButtonListener;
 import viewcontroller.TierComboboxListener;
 import viewcontroller.UpdateButtonListener;
+import viewcontroller.WhiteCheckBoxListener;
 
 import javax.swing.JComboBox;
 import java.awt.Color;
@@ -40,16 +42,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
 
 
 public class MainFrame extends JFrame implements IHideable {
 	private User32 user32 = User32.INSTANCE;
 	JPanel panel;
-	private JPanel panel_1;
+	JPanel panel_1;
 	JLabel lblCurrency;
 	JLabel lbl_count;
 	JLabel lblTier;
 	JLabel lblMap;
+	JLabel lblLoading;
 	boolean isVisible;
 	String[] currencys = { "ANY", "chaos", "alchemy", "chisel", "vaal", "fusing" };
 	String[] tiers = {"Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6", "Tier 7", "Tier 8", 
@@ -59,9 +63,12 @@ public class MainFrame extends JFrame implements IHideable {
 	JButton btn_exit;
 	JButton btn_minimize;
 	//JButton btn_minimize;
-	private JComboBox cmb_currency;
-	private JComboBox cmb_tier;
-	private JComboBox cmb_map;
+	JComboBox cmb_currency;
+	JComboBox cmb_tier;
+	JComboBox cmb_map;
+	
+	JCheckBox chckbx_corrupted;
+	JCheckBox chckbx_white;
 	
 	List<Map> maps;
 	List<Map> tradeableMaps;
@@ -88,6 +95,7 @@ public class MainFrame extends JFrame implements IHideable {
 		lblTier = new JLabel("Tier");
 		lbl_count = new JLabel("Tradeables: ");
 		lblMap = new JLabel("Map");
+		lblLoading = new JLabel("loading...");
 		btn_update = new JButton();
 		btn_exit = new JButton();
 		btn_nextTrade = new JButton();
@@ -95,6 +103,10 @@ public class MainFrame extends JFrame implements IHideable {
 		cmb_tier = new JComboBox(tiers);
 		cmb_map = new JComboBox(new Object[]{});
 		cmb_currency = new JComboBox(currencys);
+		chckbx_white = new JCheckBox("White");
+		chckbx_corrupted = new JCheckBox("Corrupted and Rare");
+		
+		
 		
 		initFrame();
 		
@@ -115,7 +127,7 @@ public class MainFrame extends JFrame implements IHideable {
 		lblCurrency.setBounds(10, 34, 71, 14);
 		
 		btn_update.setEnabled(false);
-		btn_update.setBounds(155, 127, 129, 29);
+		btn_update.setBounds(155, 163, 129, 29);
 		btn_update.setText("Update");
 		panel_1.setLayout(null);
 		
@@ -168,11 +180,11 @@ public class MainFrame extends JFrame implements IHideable {
 		lblMap.setBounds(10, 96, 71, 14);
 		panel_1.add(lblMap);
 		lbl_count.setEnabled(false);
-		lbl_count.setBounds(155, 167, 129, 14);
+		lbl_count.setBounds(155, 203, 129, 14);
 		panel_1.add(lbl_count);
 		btn_nextTrade.setEnabled(false);
 		btn_nextTrade.setText("Next Trade");
-		btn_nextTrade.setBounds(10, 192, 161, 54);
+		btn_nextTrade.setBounds(10, 228, 161, 54);
 		panel_1.add(btn_nextTrade);
 		btn_minimize.setOpaque(false);
 		btn_minimize.setForeground(Color.BLACK);
@@ -198,7 +210,24 @@ public class MainFrame extends JFrame implements IHideable {
 		
 		panel_1.add(cmb_currency);
 		
-		this.setSize(398, 257);
+		
+		lblLoading.setIcon(new ImageIcon(MainFrame.class.getResource("/com/stefank/Spinner.gif")));
+		lblLoading.setForeground(Color.WHITE);
+		lblLoading.setBounds(284, 150, 114, 54);
+		panel_1.add(lblLoading);
+		
+		
+		chckbx_white.setBackground(UIManager.getColor("Button.background"));
+		chckbx_white.setBounds(91, 121, 97, 23);
+		panel_1.add(chckbx_white);
+		
+		
+		chckbx_corrupted.setBackground(new Color(250, 128, 114));
+		chckbx_corrupted.setBounds(190, 121, 144, 23);
+		panel_1.add(chckbx_corrupted);
+		lblLoading.setVisible(false);
+		
+		this.setSize(408, 293);
 		this.setLocationRelativeTo(null);
 		this.setUndecorated(true);
 		this.getContentPane().requestFocusInWindow();
@@ -213,6 +242,12 @@ public class MainFrame extends JFrame implements IHideable {
 		
 		
 		// Add Listeners
+		CorruptedCheckBoxListener corruptedBoxListener = new CorruptedCheckBoxListener(this);
+		chckbx_corrupted.addActionListener(corruptedBoxListener);
+		
+		WhiteCheckBoxListener whiteBoxListener = new WhiteCheckBoxListener(this);
+		chckbx_white.addActionListener(whiteBoxListener);
+		
 		ExitButtonListener exitListener = new ExitButtonListener(this);
 		btn_exit.addActionListener(exitListener);
 		
@@ -253,6 +288,32 @@ public class MainFrame extends JFrame implements IHideable {
 	}
 	
 	
+	
+	
+	public JCheckBox getChckbx_corrupted() {
+		return chckbx_corrupted;
+	}
+
+	public void setChckbx_corrupted(JCheckBox chckbx_corrupted) {
+		this.chckbx_corrupted = chckbx_corrupted;
+	}
+
+	public JCheckBox getChckbx_white() {
+		return chckbx_white;
+	}
+
+	public void setChckbx_white(JCheckBox chckbx_white) {
+		this.chckbx_white = chckbx_white;
+	}
+
+	public JLabel getLblLoading() {
+		return lblLoading;
+	}
+
+	public void setLblLoading(JLabel lblLoading) {
+		this.lblLoading = lblLoading;
+	}
+
 	public void setFrameVisible() {
 		this.getFrame().setVisible(true);
 	}
@@ -464,6 +525,4 @@ public class MainFrame extends JFrame implements IHideable {
 	public void setUserWantsMinimize(boolean userWantsMinimize) {
 		this.userWantsMinimize = userWantsMinimize;
 	}
-	
-	
 }
