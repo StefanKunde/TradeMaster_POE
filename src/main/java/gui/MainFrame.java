@@ -53,7 +53,7 @@ public class MainFrame extends JFrame implements IHideable {
 	boolean isVisible;
 	String[] currencys = { "ANY", "chaos", "alchemy", "chisel", "vaal", "fusing" };
 	String[] tiers = {"Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6", "Tier 7", "Tier 8", 
-			"Tier 9", "Tier 10", "Tier 11", "Tier 12", "Tier 13", "Tier 14", "Tier 15"};
+			"Tier 9", "Tier 10", "Tier 11", "Tier 12", "Tier 13", "Tier 14", "Tier 15", "Tier 16"};
 	JButton btn_update;
 	JButton btn_nextTrade;
 	JButton btn_exit;
