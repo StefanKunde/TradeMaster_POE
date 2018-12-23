@@ -39,6 +39,7 @@ public class MinimizedFrame extends JFrame implements IHideable {
 	
 	
 	public MinimizedFrame(MainFrame mainFrame)  {
+		this.setTitle("MapTrado Mini");
 		getContentPane().setForeground(Color.GRAY);
 		getContentPane().setBackground(Color.DARK_GRAY);
 		setResizable(false);
@@ -72,7 +73,6 @@ public class MinimizedFrame extends JFrame implements IHideable {
 		btnMaximize.addActionListener(maxBtnListener);
 		getContentPane().setLayout(null);
 		getContentPane().add(btnMaximize);
-		this.setTitle("Minimized Frame");
 		
 		
 		this.setSize(60, 60);

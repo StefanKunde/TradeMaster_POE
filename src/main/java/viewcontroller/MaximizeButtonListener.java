@@ -5,8 +5,10 @@ import java.awt.event.ActionListener;
 
 import gui.MainFrame;
 import gui.MinimizedFrame;
+import utility.User32;
 
 public class MaximizeButtonListener implements ActionListener {
+	
 	private MinimizedFrame minimizeFrame;
 	private MainFrame mainframe;
 	
@@ -20,7 +22,10 @@ public class MaximizeButtonListener implements ActionListener {
 		minimizeFrame.setUserWantsMinimize(true);
 		minimizeFrame.setFrameInvisible();
 		
+		
 		mainframe.setUserWantsMinimize(false);
 		mainframe.setFrameVisible();
 	}
+	
+	
 }
