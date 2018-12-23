@@ -22,6 +22,7 @@ public class UpdateButtonListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		TradeHandler trader = new TradeHandler(frame.getSearchBuilder().generateSearchData());
 		List<Element> buyableMaps = trader.fetchBuyableMapsAsHtml();
 		frame.setMaps(new ArrayList<Map>());

@@ -90,7 +90,7 @@ public class SearchParameter {
 	BasicNameValuePair buyout_min = new BasicNameValuePair("buyout_min", "");
 	BasicNameValuePair buyout_max = new BasicNameValuePair("buyout_max", "");	
 	BasicNameValuePair buyout_currency = new BasicNameValuePair("buyout_currency", "");
-	BasicNameValuePair has_buyout = new BasicNameValuePair("has_buyout", "");	
+	BasicNameValuePair has_buyout = new BasicNameValuePair("has_buyout", "1");	
 	BasicNameValuePair exact_currency = new BasicNameValuePair("exact_currency", "");	
 
 	
@@ -193,6 +193,22 @@ public class SearchParameter {
 	
 	public void setCurrency(String currency) {
 		this.buyout_currency = new BasicNameValuePair("buyout_currency", currency);
+	}
+	
+	public void setTier(String tierLevel) {
+		this.level_min = new BasicNameValuePair("level_min", tierLevel);
+	}
+	
+	public void setRarity(String rarity) {
+		this.rarity = new BasicNameValuePair("rarity", rarity);
+	}
+	
+	public void setCorrupted(boolean corrupted) {
+		if(corrupted) {
+			this.corrupted = new BasicNameValuePair("corrupted", "1");
+		} else {
+			this.corrupted = new BasicNameValuePair("corrupted", "0");
+		}
 	}
 	
 

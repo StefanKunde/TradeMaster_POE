@@ -58,6 +58,9 @@ public class TierComboboxListener implements ActionListener {
 	        	frame.getCmb_map().addItem( mapsAsList.get(i) );
 	        }
 	        
+	        String segments[] = selectedTier.split(" ");
+	        frame.getSearchBuilder().setTier(segments[1]);
+	        
 	        frame.getCmb_map().setEnabled(true);
 	        frame.getBtn_update().setEnabled(true);
 		}
