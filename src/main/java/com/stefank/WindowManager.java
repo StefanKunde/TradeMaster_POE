@@ -60,6 +60,6 @@ public class WindowManager implements Runnable {
                 }
 			}
 			
-		},0,1000);
+		},0,700);
 	}
 }
