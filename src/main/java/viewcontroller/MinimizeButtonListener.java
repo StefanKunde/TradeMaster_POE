@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 
 import javax.swing.SwingUtilities;
 
+import com.stefank.Main;
 import com.stefank.WindowManager;
 
 import gui.MainFrame;

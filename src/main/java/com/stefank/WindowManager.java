@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 
 import com.sun.jna.Native;
 import com.sun.jna.PointerType;
+import com.sun.jna.platform.linux.LibC.Sysinfo;
 
 import gui.MainFrame;
 import gui.IHideable;
@@ -23,23 +24,6 @@ public class WindowManager implements Runnable {
 	public WindowManager(IHideable frame) {
 		this.myFrame = (JFrame) frame;
 	}
-	
-	public void setForegroundWindow(final String titleName){
-        user32.EnumWindows((hWnd, arg1) -> {
-            byte[] windowText = new byte[512];
-            user32.GetWindowTextA(hWnd, windowText, 512);
-            String wText = Native.toString(windowText);
-
-            if (wText.isEmpty()) {
-                return true;
-            }
-            if (wText.equals(titleName)) {
-                user32.SetForegroundWindow(hWnd);
-                return false;
-            }
-            return true;
-        }, null);
-	}
 
 	@Override
 	public void run() {
@@ -48,30 +32,34 @@ public class WindowManager implements Runnable {
 			@Override
 			public void run() {
 				System.out.println("running...");
+				System.out.println("My Frame title: " + myFrame.getTitle());
                 byte[] windowText = new byte[512];
                 PointerType hwnd = user32.GetForegroundWindow();
                 User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
-                System.out.println(Native.toString(windowText));
                 
-                if(!Native.toString(windowText).equals("Path of Exile")){
-                	if(!Native.toString(windowText).equals(myFrame.getTitle())) {
+                String acticeWindowTitle = Native.toString(windowText);
+                
+                if(Native.toString(windowText).equals("Path of Exile")){
+                	if(!((IHideable) myFrame).isFrameVisible() && !((IHideable) myFrame).isUserWantsMinimize()) {
+                		myFrame.show();
+                		System.out.println("show window!");
+                	}
+                } else {
+                	
+                	boolean isActiveWindowMain = acticeWindowTitle.equals("MapTrado Main");
+                	boolean isActiveWindowMini = acticeWindowTitle.equals("MapTrado Mini");
+                	
+                	if(!isActiveWindowMain && !isActiveWindowMini) {
                 		((IHideable) myFrame).setFrameInvisible();
                 		myFrame.hide();
-                		System.out.println("hide window!");
                 	}
                 	if(((IHideable) myFrame).isUserWantsMinimize()) {
                 		myFrame.hide();
                 		System.out.println("hide window!");
                 	}
-                }else{
-                	if(!((IHideable) myFrame).isFrameVisible() && !((IHideable) myFrame).isUserWantsMinimize()) {
-                		((IHideable) myFrame).setFrameVisible();
-                		myFrame.show();
-                		System.out.println("show window!");
-                	}
                 }
 			}
 			
-		},0,200);
+		},0,1000);
 	}
 }

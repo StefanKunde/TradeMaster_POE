@@ -51,7 +51,7 @@ public class MainFrame extends JFrame implements IHideable {
 	JLabel lblTier;
 	JLabel lblMap;
 	boolean isVisible;
-	String[] currencys = { "ANY", "chaos", "alchemy", "chisel", "vaal" };
+	String[] currencys = { "ANY", "chaos", "alchemy", "chisel", "vaal", "fusing" };
 	String[] tiers = {"Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6", "Tier 7", "Tier 8", 
 			"Tier 9", "Tier 10", "Tier 11", "Tier 12", "Tier 13", "Tier 14", "Tier 15"};
 	JButton btn_update;
@@ -65,9 +65,9 @@ public class MainFrame extends JFrame implements IHideable {
 	
 	List<Map> maps;
 	List<Map> tradeableMaps;
-	//List<String> tier_1_maps = new ArrayList<String>();
 	
 	SearchParameter searchBuilder;
+	
 	String currency = "";
 	String mapName = "";
 	
@@ -77,14 +77,12 @@ public class MainFrame extends JFrame implements IHideable {
 	
 	boolean userWantsMinimize = false;
 	
-	
-	
 	public MainFrame() {
 		maps = new ArrayList<Map>();
 		tradeableMaps = new ArrayList<Map>();
 		searchBuilder = new SearchParameter();
 		panel = new JPanel();
-		this.setTitle("JFrame Example");
+		this.setTitle("MapTrado Main");
 		panel_1 = new JPanel();
 		lblCurrency = new JLabel("Currency");
 		lblTier = new JLabel("Tier");

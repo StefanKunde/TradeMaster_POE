@@ -41,15 +41,19 @@ public class Maps {
 	}
 	
 	public void filterByCurrency(String currency) {
-		List<Map> tmpMaps = new ArrayList<Map>();
 		
-		for(int i = 0; i < this.getMaps().size(); i++) {
-			if(this.getMaps().get(i).getPaymentCurrency().equals(currency)) {
-				tmpMaps.add(this.getMaps().get(i));
+		if(!currency.equals("")) {
+			List<Map> tmpMaps = new ArrayList<Map>();
+			
+			for(int i = 0; i < this.getMaps().size(); i++) {
+				if(this.getMaps().get(i).getPaymentCurrency().equals(currency)) {
+					tmpMaps.add(this.getMaps().get(i));
+				}
 			}
+			
+			this.setMaps(tmpMaps);
 		}
 		
-		this.setMaps(tmpMaps);
 	}
 	
 
