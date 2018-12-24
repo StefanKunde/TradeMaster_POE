@@ -26,6 +26,7 @@ import listener.CorruptedCheckBoxListener;
 import listener.CurrencyBulksCmbListener;
 import listener.CurrencyComboboxListener;
 import listener.ExitButtonListener;
+import listener.MapCmbBoxBulksListener;
 import listener.MapComboboxListener;
 import listener.MinimizeButtonListener;
 import listener.NextButtonBulksListener;
@@ -487,6 +488,9 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		CurrencyBulksCmbListener currencyBulksCmbListener = new CurrencyBulksCmbListener(this);
 		cmb_currency_bulks.addActionListener(currencyBulksCmbListener);
+		
+		MapCmbBoxBulksListener mapCmbListener = new MapCmbBoxBulksListener(this);
+		cmb_maps_bulks.addActionListener(mapCmbListener);
 		
 		TierComboboxListener tierListener = new TierComboboxListener(this);
 		cmb_tier.addActionListener(tierListener);
