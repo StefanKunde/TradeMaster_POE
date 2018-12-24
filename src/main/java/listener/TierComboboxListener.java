@@ -1,7 +1,8 @@
-package viewcontroller;
+package listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,10 +37,18 @@ public class TierComboboxListener implements ActionListener {
 	private void loadMapsFromSelectedTier(String selectedTier) {
 		System.out.println("selectedTier " + selectedTier);
 		if(selectedTier.startsWith("Tier ")) {
-			String mapsAsJsonString = "";
 	        //mapsAsJsonString = new String(Files.readAllBytes(Paths.get("/resources/maps.json")));
-			String text = new Scanner(Main.class.getResourceAsStream("maps.json"), "UTF-8").useDelimiter("\\A").next();
-			mapsAsJsonString = new String(text);
+			String text = new Scanner(Main.class.getResourceAsStream("maps.json")).useDelimiter("\\A").next();
+			
+			byte[] bytes;
+			String mapsAsJsonString = "";
+			try {
+				bytes = text.getBytes("UTF-8");
+				mapsAsJsonString = new String(bytes, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        
 	        JSONObject json = new JSONObject(mapsAsJsonString);
 	        JSONArray maps = json.getJSONArray(selectedTier);

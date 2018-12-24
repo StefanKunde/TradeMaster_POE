@@ -4,6 +4,7 @@ package com.stefank;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import com.sun.jna.Native;
@@ -19,10 +20,10 @@ import utility.User32;
 public class WindowManager implements Runnable {
 
 	private User32 user32 = User32.INSTANCE;
-	JFrame myFrame;
+	JDialog myFrame;
 	
-	public WindowManager(IHideable frame) {
-		this.myFrame = (JFrame) frame;
+	public WindowManager(JDialog frame) {
+		this.myFrame = frame;
 	}
 
 	@Override

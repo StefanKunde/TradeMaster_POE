@@ -11,13 +11,13 @@ import org.jsoup.select.Elements;
 import connector.PoeTradeFetcher;
 import items.Map;
 
-public class TradeHandler {
+public class PoeTradeHandler {
 	
 	PoeTradeFetcher poeConnector;
 	List<NameValuePair> searchData;
 	Map map;
 	
-	public TradeHandler(List<NameValuePair> searchData) {
+	public PoeTradeHandler(List<NameValuePair> searchData) {
 		this.searchData = searchData;
 		this.poeConnector = new PoeTradeFetcher();
 	}
