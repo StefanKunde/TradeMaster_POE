@@ -7,3 +7,6 @@ You know the pain when you need to buy a map!
 This app is for all the people who feel the pain!
 
 Give it a try and you probably will love it :)
+
+Warn:
+This is still in the alpha. Its normaly working, but there are some bugs in it.
