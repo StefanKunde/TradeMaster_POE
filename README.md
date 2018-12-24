@@ -1,5 +1,5 @@
 # PainlessMapTrader
-This is a small overview application for Path of exile.
+This is an overview application for Path of exile.
 You can search for single or even for bulks of maps with it.
 
 You know the pain when you need to buy a map!
