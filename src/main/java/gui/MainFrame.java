@@ -25,6 +25,7 @@ import listener.AmountTxtBoxListener;
 import listener.CorruptedCheckBoxListener;
 import listener.CurrencyBulksCmbListener;
 import listener.CurrencyComboboxListener;
+import listener.ElderChBoxListener;
 import listener.ExitButtonListener;
 import listener.MapCmbBoxBulksListener;
 import listener.MapComboboxListener;
@@ -32,6 +33,7 @@ import listener.MinimizeButtonListener;
 import listener.NextButtonBulksListener;
 import listener.NextButtonListener;
 import listener.PricePerMapTxtBoxListener;
+import listener.ShapedChBoxListener;
 import listener.TierComboboxListener;
 import listener.UpdateButtonBulksListener;
 import listener.UpdateButtonListener;
@@ -109,6 +111,8 @@ public class MainFrame extends JDialog implements IHideable {
 	
 	boolean validAmountInput = false;
 	boolean validPricePerMapInput = false;
+	boolean loadedShapedMaps = false;
+	boolean loadedElderMaps = false;
 	
 	boolean userWantsMinimize = false;
 	private JLabel lblMadeByEzkk;
@@ -121,6 +125,7 @@ public class MainFrame extends JDialog implements IHideable {
 	private JLabel lblBulkAmount;
 	private JTextField txt_amount_bulks;
 	JCheckBox chckbxElderMap;
+	JCheckBox chckbxShapedMap;
 	JComboBox cmb_maps_bulks;
 	JLabel lbl_tradeables_bulks;
 	JButton btn_update_bulks;
@@ -381,7 +386,7 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		
 		chckbxElderMap.setBackground(new Color(188, 143, 143));
-		chckbxElderMap.setBounds(138, 145, 153, 23);
+		chckbxElderMap.setBounds(186, 145, 153, 23);
 		panel_bulksMaps.add(chckbxElderMap);
 		
 		
@@ -434,6 +439,11 @@ public class MainFrame extends JDialog implements IHideable {
 		txtbox_pricePerMap.setColumns(10);
 		txtbox_pricePerMap.setBounds(139, 58, 153, 20);
 		panel_bulksMaps.add(txtbox_pricePerMap);
+		
+		chckbxShapedMap = new JCheckBox("SHAPED MAP?");
+		chckbxShapedMap.setBackground(new Color(153, 204, 204));
+		chckbxShapedMap.setBounds(31, 145, 153, 23);
+		panel_bulksMaps.add(chckbxShapedMap);
 		lblLoading.setVisible(false);
 		
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -462,6 +472,12 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		WhiteCheckBoxListener whiteBoxListener = new WhiteCheckBoxListener(this);
 		chckbx_white.addActionListener(whiteBoxListener);
+		
+		ShapedChBoxListener shapedCbListener = new ShapedChBoxListener(this);
+		chckbxShapedMap.addActionListener(shapedCbListener);
+		
+		ElderChBoxListener elderCbListener = new ElderChBoxListener(this);
+		chckbxElderMap.addActionListener(elderCbListener);
 		
 		ExitButtonListener exitListener = new ExitButtonListener(this);
 		btn_exit.addActionListener(exitListener);
@@ -908,7 +924,31 @@ public class MainFrame extends JDialog implements IHideable {
 		this.tradeables = tradeables;
 	}
 
-	private void loadMapsFromJson() {
+	public boolean isLoadedShapedMaps() {
+		return loadedShapedMaps;
+	}
+
+	public void setLoadedShapedMaps(boolean loadedShapedMaps) {
+		this.loadedShapedMaps = loadedShapedMaps;
+	}
+
+	public boolean isLoadedElderMaps() {
+		return loadedElderMaps;
+	}
+
+	public void setLoadedElderMaps(boolean loadedElderMaps) {
+		this.loadedElderMaps = loadedElderMaps;
+	}
+
+	public JCheckBox getChckbxShapedMap() {
+		return chckbxShapedMap;
+	}
+
+	public void setChckbxShapedMap(JCheckBox chckbxShapedMap) {
+		this.chckbxShapedMap = chckbxShapedMap;
+	}
+
+	public void loadMapsFromJson() {
 		String[] allMaps;
 		List<String> allMapsAsList = new ArrayList<String>();
 		System.out.println("selectedTier " + selectedTier);
@@ -935,7 +975,5 @@ public class MainFrame extends JDialog implements IHideable {
         for(int i = 0; i < allMapsAsList.size(); i++) {
         	getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
         }
-        
-		
 	}
 }
