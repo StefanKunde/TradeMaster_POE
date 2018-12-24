@@ -21,22 +21,22 @@ public class NextButtonBulksListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(frame.getTradeables().getTradeableItems().size() > 0) {
+		if(frame.getTradeables().getFilteredTradeableItems().size() > 0) {
 			
-			if(frame.getTradeables().getTradeableItems().size() == 1) {
+			if(frame.getTradeables().getFilteredTradeableItems().size() == 1) {
 				frame.getBtn_nextTrade_bulks().setEnabled(false);
 			}
 			
 			String bulkAmount = frame.getTxt_amount_bulks().getText();
-			String tradeMessage = frame.getTradeables().getTradeableItems().get(0).generateTradeMessage(Integer.valueOf(bulkAmount));
+			String tradeMessage = frame.getTradeables().getFilteredTradeableItems().get(0).generateTradeMessage(Integer.valueOf(bulkAmount));
 			StringSelection stringSelection = new StringSelection(tradeMessage);
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			clipboard.setContents(stringSelection, null);
 			
 			TradeableBulk tmpTradeables = new TradeableBulk();
-			if(frame.getTradeables().getTradeableItems().size() >= 1) {
+			if(frame.getTradeables().getFilteredTradeableItems().size() >= 1) {
 				
-				for(int i = 1; i < frame.getTradeables().getTradeableItems().size(); i++) {
+				for(int i = 1; i < frame.getTradeables().getFilteredTradeableItems().size(); i++) {
 					tmpTradeables.getTradeableItems().add(frame.getTradeables().getTradeableItems().get(i));
 				}
 				frame.setTradeables(tmpTradeables);
@@ -44,8 +44,12 @@ public class NextButtonBulksListener implements ActionListener {
 			}
 			
 		} else {
-			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getTradeableItems().size());
+			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
 			frame.getBtn_nextTrade_bulks().setEnabled(false);
+		}
+		
+		if(frame.getTradeables().getFilteredTradeableItems().size() == 0) {
+			frame.getBtn_update_bulks().setEnabled(true);
 		}
 	}
 

@@ -23,12 +23,14 @@ import items.Map;
 import items.TradeableBulk;
 import listener.AmountTxtBoxListener;
 import listener.CorruptedCheckBoxListener;
+import listener.CurrencyBulksCmbListener;
 import listener.CurrencyComboboxListener;
 import listener.ExitButtonListener;
 import listener.MapComboboxListener;
 import listener.MinimizeButtonListener;
 import listener.NextButtonBulksListener;
 import listener.NextButtonListener;
+import listener.PricePerMapTxtBoxListener;
 import listener.TierComboboxListener;
 import listener.UpdateButtonBulksListener;
 import listener.UpdateButtonListener;
@@ -76,7 +78,7 @@ public class MainFrame extends JDialog implements IHideable {
 	JLabel lblMap;
 	JLabel lblLoading;
 	boolean isVisible;
-	String[] currencys = { "ANY", "chaos", "alchemy", "chisel", "vaal", "fusing" };
+	String[] currencys = { "ANY", "chaos", "alch", "chisel", "vaal", "fuse" };
 	String[] tiers = {"Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6", "Tier 7", "Tier 8", 
 			"Tier 9", "Tier 10", "Tier 11", "Tier 12", "Tier 13", "Tier 14", "Tier 15", "Tier 16"};
 	JButton btn_update;
@@ -105,6 +107,7 @@ public class MainFrame extends JDialog implements IHideable {
 	boolean selectedMap = false;
 	
 	boolean validAmountInput = false;
+	boolean validPricePerMapInput = false;
 	
 	boolean userWantsMinimize = false;
 	private JLabel lblMadeByEzkk;
@@ -125,6 +128,7 @@ public class MainFrame extends JDialog implements IHideable {
 	private JLabel lblMaptradoV_1;
 	private JLabel label;
 	private JLabel label_1;
+	private JTextField txtbox_pricePerMap;
 	
 	public MainFrame() {
 		tradeables = new TradeableBulk();
@@ -185,6 +189,8 @@ public class MainFrame extends JDialog implements IHideable {
 		chckbx_corrupted.setBounds(105, 122, 131, 23);
 		lblBulkAmount = new JLabel("Bulk amount:");
 		txt_amount_bulks = new JTextField();
+		txtbox_pricePerMap = new JTextField();
+		txtbox_pricePerMap.setEnabled(false);
 		
 		initFrame();
 		loadMapsFromJson();
@@ -197,7 +203,7 @@ public class MainFrame extends JDialog implements IHideable {
 		this.setBackground(Color.GRAY);
 		panel_oneMap.setBackground(new Color(51, 51, 51));
 		panel_oneMap.setForeground(Color.GRAY);
-		panel_oneMap.setPreferredSize(new Dimension(420, 308));
+		panel_oneMap.setPreferredSize(new Dimension(420, 315));
 		lblCurrency.setForeground(new Color(255, 255, 255));
 		lblCurrency.setBackground(Color.GRAY);
 		btn_update.setEnabled(false);
@@ -205,6 +211,8 @@ public class MainFrame extends JDialog implements IHideable {
 		panel_oneMap.setLayout(null);
 		panel_oneMap.add(lblCurrency);
 		panel_oneMap.add(btn_update);
+		
+		
 		
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -325,6 +333,7 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		
 		panel_bulksMaps.setBackground(new Color(51, 51, 51));
+		panel_bulksMaps.setPreferredSize(new Dimension(420, 315));
 		panel_bulksMaps.setForeground(Color.GRAY);
 		tabbedPane.addTab("Buy bulks of maps", null, panel_bulksMaps, null);
 		panel_bulksMaps.setLayout(null);
@@ -339,22 +348,22 @@ public class MainFrame extends JDialog implements IHideable {
 		lbl_currency_bulks.setForeground(Color.WHITE);
 		lbl_currency_bulks.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lbl_currency_bulks.setBackground(Color.GRAY);
-		lbl_currency_bulks.setBounds(18, 34, 77, 14);
+		lbl_currency_bulks.setBounds(11, 37, 77, 14);
 		panel_bulksMaps.add(lbl_currency_bulks);
 		
 		
-		cmb_currency_bulks.setBounds(105, 31, 152, 20);
+		cmb_currency_bulks.setBounds(139, 34, 152, 20);
 		panel_bulksMaps.add(cmb_currency_bulks);
 		
 		
 		lblBulkAmount.setForeground(Color.WHITE);
 		lblBulkAmount.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblBulkAmount.setBackground(Color.GRAY);
-		lblBulkAmount.setBounds(18, 91, 77, 14);
+		lblBulkAmount.setBounds(11, 121, 77, 14);
 		panel_bulksMaps.add(lblBulkAmount);
 		
 		
-		txt_amount_bulks.setBounds(104, 88, 153, 20);
+		txt_amount_bulks.setBounds(139, 118, 152, 20);
 		panel_bulksMaps.add(txt_amount_bulks);
 		txt_amount_bulks.setColumns(10);
 		
@@ -362,28 +371,28 @@ public class MainFrame extends JDialog implements IHideable {
 		lbl_map_bulks.setForeground(Color.WHITE);
 		lbl_map_bulks.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lbl_map_bulks.setBackground(Color.GRAY);
-		lbl_map_bulks.setBounds(18, 63, 77, 14);
+		lbl_map_bulks.setBounds(11, 98, 77, 14);
 		panel_bulksMaps.add(lbl_map_bulks);
 		
 		
-		cmb_maps_bulks.setBounds(105, 59, 152, 20);
+		cmb_maps_bulks.setBounds(139, 95, 152, 20);
 		panel_bulksMaps.add(cmb_maps_bulks);
 		
 		
 		chckbxElderMap.setBackground(new Color(188, 143, 143));
-		chckbxElderMap.setBounds(104, 115, 153, 23);
+		chckbxElderMap.setBounds(138, 145, 153, 23);
 		panel_bulksMaps.add(chckbxElderMap);
 		
 		
 		lbl_tradeables_bulks.setForeground(Color.WHITE);
 		lbl_tradeables_bulks.setEnabled(false);
-		lbl_tradeables_bulks.setBounds(105, 210, 128, 14);
+		lbl_tradeables_bulks.setBounds(154, 250, 128, 14);
 		panel_bulksMaps.add(lbl_tradeables_bulks);
 		
 		
 		btn_update_bulks.setText("Update");
 		btn_update_bulks.setEnabled(false);
-		btn_update_bulks.setBounds(105, 156, 152, 43);
+		btn_update_bulks.setBounds(139, 186, 152, 43);
 		panel_bulksMaps.add(btn_update_bulks);
 		
 		
@@ -412,10 +421,22 @@ public class MainFrame extends JDialog implements IHideable {
 		label.setBackground(new Color(0, 128, 0));
 		label.setBounds(210, 286, 86, 14);
 		panel_bulksMaps.add(label);
+		
+		JLabel lbl_payPerMap = new JLabel("Max price per map:");
+		lbl_payPerMap.setForeground(Color.WHITE);
+		lbl_payPerMap.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lbl_payPerMap.setBackground(Color.GRAY);
+		lbl_payPerMap.setBounds(11, 61, 128, 14);
+		panel_bulksMaps.add(lbl_payPerMap);
+		
+		
+		txtbox_pricePerMap.setColumns(10);
+		txtbox_pricePerMap.setBounds(139, 58, 153, 20);
+		panel_bulksMaps.add(txtbox_pricePerMap);
 		lblLoading.setVisible(false);
 		
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.setSize(353, 365);
+		this.setSize(366, 378);
 		this.setLocationRelativeTo(null);
 		this.getContentPane().requestFocusInWindow();
 	    //FrameDragListener frameDragListener = new FrameDragListener(this);
@@ -431,6 +452,9 @@ public class MainFrame extends JDialog implements IHideable {
 		// Add Listeners
 		AmountTxtBoxListener amountListener = new AmountTxtBoxListener(this);
 		txt_amount_bulks.getDocument().addDocumentListener(amountListener);
+		
+		PricePerMapTxtBoxListener pricePerMapListener = new PricePerMapTxtBoxListener(this);
+		txtbox_pricePerMap.getDocument().addDocumentListener(pricePerMapListener);
 		
 		CorruptedCheckBoxListener corruptedBoxListener = new CorruptedCheckBoxListener(this);
 		chckbx_corrupted.addActionListener(corruptedBoxListener);
@@ -461,6 +485,9 @@ public class MainFrame extends JDialog implements IHideable {
 		CurrencyComboboxListener currencyListener = new CurrencyComboboxListener(this);
 		cmb_currency.addActionListener(currencyListener);
 		
+		CurrencyBulksCmbListener currencyBulksCmbListener = new CurrencyBulksCmbListener(this);
+		cmb_currency_bulks.addActionListener(currencyBulksCmbListener);
+		
 		TierComboboxListener tierListener = new TierComboboxListener(this);
 		cmb_tier.addActionListener(tierListener);
 		
@@ -484,6 +511,15 @@ public class MainFrame extends JDialog implements IHideable {
             return true;
         }, null);
 	}
+	
+	public JTextField getTxtbox_pricePerMap() {
+		return txtbox_pricePerMap;
+	}
+
+	public void setTxtbox_pricePerMap(JTextField txtbox_pricePerMap) {
+		this.txtbox_pricePerMap = txtbox_pricePerMap;
+	}
+
 	public JCheckBox getChckbx_corrupted() {
 		return chckbx_corrupted;
 	}
@@ -827,6 +863,14 @@ public class MainFrame extends JDialog implements IHideable {
 	public void setValidAmountInput(boolean validAmountInput) {
 		this.validAmountInput = validAmountInput;
 	}
+	
+	public boolean isValidPricePerMapInput() {
+		return validPricePerMapInput;
+	}
+
+	public void setValidPricePerMapInput(boolean validPricePerMapInput) {
+		this.validPricePerMapInput = validPricePerMapInput;
+	}
 
 	public JButton getBtn_update_bulks() {
 		return btn_update_bulks;
@@ -890,7 +934,4 @@ public class MainFrame extends JDialog implements IHideable {
         
 		
 	}
-	
-	
-	
 }

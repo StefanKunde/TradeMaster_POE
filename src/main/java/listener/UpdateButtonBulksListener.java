@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
+
 import org.jsoup.nodes.Element;
 
 import gui.MainFrame;
@@ -49,10 +51,21 @@ import items.TradeableBulk;
 			
 			frame.setTradeables( ninjaHandler.getTradeableBulks() );
 			
-			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getTradeableItems().size());
+			// Filter by currency and price per map
+			if(frame.getTxtbox_pricePerMap().isEnabled() && frame.isValidPricePerMapInput()) {
+				int pricePerMap;
+				String currency;
+				
+				pricePerMap = Integer.valueOf(frame.getTxtbox_pricePerMap().getText());
+				currency = (String )frame.getCmb_currency_bulks().getSelectedItem();
+				
+				frame.getTradeables().filterByCurrencyAndMaxPrice(currency, pricePerMap);
+			}
 			
-			frame.getBtn_update_bulks().setEnabled(true);
-			if(frame.getTradeables().getTradeableItems().size() > 0 ) {
+			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
+			
+			
+			if(frame.getTradeables().getFilteredTradeableItems().size() > 0 ) {
 				frame.getBtn_nextTrade_bulks().setEnabled(true);
 			}
 		}

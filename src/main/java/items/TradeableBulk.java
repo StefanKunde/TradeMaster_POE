@@ -10,10 +10,12 @@ public class TradeableBulk {
 	
 	private List<Result_> results;
 	private List<TradeableItem> tradeableItems;
+	private List<TradeableItem> filteredTradeableItems;
 	
 	public TradeableBulk() {
 		results = new ArrayList<Result_>();
 		this.tradeableItems = new ArrayList<TradeableItem>();
+		filteredTradeableItems = this.tradeableItems;
 	}
 
 	public List<Result_> getResults() {
@@ -63,6 +65,8 @@ public class TradeableBulk {
 				tradeableItems.add(item);
 			}
 		}
+		
+		this.filteredTradeableItems = tradeableItems;
 	}
 
 	public List<TradeableItem> getTradeableItems() {
@@ -71,5 +75,25 @@ public class TradeableBulk {
 
 	public void setTradeableItems(List<TradeableItem> tradeableItems) {
 		this.tradeableItems = tradeableItems;
+	}
+
+	public List<TradeableItem> getFilteredTradeableItems() {
+		return filteredTradeableItems;
+	}
+
+	public void setFilteredTradeableItems(List<TradeableItem> filteredTradeableItems) {
+		this.filteredTradeableItems = filteredTradeableItems;
+	}
+	
+	public void filterByCurrencyAndMaxPrice(String currency, int maxPrice) {
+		List<TradeableItem> tmpTradeables = new ArrayList<TradeableItem>();
+		
+		for(TradeableItem item : this.tradeableItems) {
+			if(item.getCurrencyToPay().equals(currency) && item.getPricePerMap() <= maxPrice) {
+				tmpTradeables.add(item);
+			}
+		}
+		
+		this.filteredTradeableItems = tmpTradeables;
 	}
 }
