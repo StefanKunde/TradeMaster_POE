@@ -1,4 +1,4 @@
-# PainlessMapTrader
+# PainlessMapTrader v0.1-alpha
 This is an overview application for Path of exile.
 You can search for single or even for bulks of maps with it.
 
@@ -16,4 +16,4 @@ Works only in window mode of poe.
 
 
 Download:
-https://github.com/StefanKunde/PainlessMapTrader/releases/download/v0.0.1-alpha/PainlessMapTrader.jar
+https://github.com/StefanKunde/PainlessMapTrader/releases/download/v0.1-alpha/PainlessMapTrader.jar
