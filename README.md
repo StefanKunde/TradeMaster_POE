@@ -9,4 +9,5 @@ This app is for all the people who feel the pain!
 Give it a try and you probably will love it :)
 
 Warn:
-PainlessMapTrader is still in the alpha. Its normaly working, but there are some bugs in it.
+PainlessMapTrader is still in the alpha. Its normaly working, but there are some bugs in it. 
+Still in development.
