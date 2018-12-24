@@ -24,6 +24,10 @@ public class CurrencyBulksCmbListener implements ActionListener {
 			frame.getTxtbox_pricePerMap().setText("");
 			frame.getTxtbox_pricePerMap().setEnabled(false);
 		}
+		
+		if(frame.isValidAmountInput() && frame.isValidPricePerMapInput()) {
+			frame.getBtn_update_bulks().setEnabled(true);
+		}
 	}
 
 }
