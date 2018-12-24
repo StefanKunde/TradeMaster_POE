@@ -14,12 +14,11 @@ Works only in window mode of poe.
 Features:
 + Look for maps you need
 + Set currency you whould like to pay with
-+ Buy maps in bulks (i.e. elder maps)
++ Buy maps in bulks (i.e. elder maps, shaped maps, burials, ...)
 + Minimize main window with little icon to reopen it
 + Set a max price of the selected currency you are willing to pay for 1 map
 
 Plans for future:
-- Support shaped maps
 - view for trades
 - automatically post trade messages
 
@@ -41,4 +40,4 @@ Java (min 1.8)
 
 
 Download:
-https://github.com/StefanKunde/PainlessMapTrader/releases/download/v0.1-alpha/PainlessMapTrader.jar
+https://github.com/StefanKunde/PainlessMapTrader/releases/download/v0.2-alpha/PainlessMapTrader.jar
