@@ -35,14 +35,12 @@ public class NextButtonBulksListener implements ActionListener {
 			
 			TradeableBulk tmpTradeables = new TradeableBulk();
 			if(frame.getTradeables().getFilteredTradeableItems().size() >= 1) {
-				
 				for(int i = 1; i < frame.getTradeables().getFilteredTradeableItems().size(); i++) {
-					tmpTradeables.getTradeableItems().add(frame.getTradeables().getTradeableItems().get(i));
+					tmpTradeables.getTradeableItems().add(frame.getTradeables().getFilteredTradeableItems().get(i));
 				}
 				frame.setTradeables(tmpTradeables);
 				frame.getLbl_tradeables_bulks().setText("Tradeables: " + tmpTradeables.getTradeableItems().size());
 			}
-			
 		} else {
 			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
 			frame.getBtn_nextTrade_bulks().setEnabled(false);
