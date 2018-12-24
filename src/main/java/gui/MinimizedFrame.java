@@ -6,7 +6,7 @@ import javax.swing.SwingUtilities;
 
 import com.stefank.Main;
 
-import viewcontroller.MaximizeButtonListener;
+import listener.MaximizeButtonListener;
 
 import java.awt.BorderLayout;
 import java.awt.Image;

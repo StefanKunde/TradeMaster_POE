@@ -9,46 +9,67 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import static java.nio.charset.StandardCharsets.*;
 
-import org.jsoup.nodes.Element;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.stefank.Main;
 import com.sun.jna.Native;
 
 import connector.SearchParameter;
-import handler.TradeHandler;
 import items.Map;
-import items.Maps;
+import items.TradeableBulk;
+import listener.AmountTxtBoxListener;
+import listener.CorruptedCheckBoxListener;
+import listener.CurrencyComboboxListener;
+import listener.ExitButtonListener;
+import listener.MapComboboxListener;
+import listener.MinimizeButtonListener;
+import listener.NextButtonBulksListener;
+import listener.NextButtonListener;
+import listener.TierComboboxListener;
+import listener.UpdateButtonBulksListener;
+import listener.UpdateButtonListener;
+import listener.WhiteCheckBoxListener;
 import utility.User32;
-import viewcontroller.CorruptedCheckBoxListener;
-import viewcontroller.CurrencyComboboxListener;
-import viewcontroller.ExitButtonListener;
-import viewcontroller.MapComboboxListener;
-import viewcontroller.MinimizeButtonListener;
-import viewcontroller.NextButtonListener;
-import viewcontroller.TierComboboxListener;
-import viewcontroller.UpdateButtonListener;
-import viewcontroller.WhiteCheckBoxListener;
 
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
-import java.awt.event.ActionEvent;
+import java.util.Scanner;
+
 import javax.swing.JCheckBox;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JTabbedPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import java.awt.SystemColor;
 
-
-public class MainFrame extends JFrame implements IHideable {
+public class MainFrame extends JDialog implements IHideable {
+	private static final Charset UTF_8 = Charset.forName("UTF-8");
+	private static final Charset ISO = Charset.forName("ISO-8859-1");
 	private User32 user32 = User32.INSTANCE;
+	TradeableBulk tradeables;
 	JPanel panel;
-	JPanel panel_1;
+	JPanel panel_oneMap;
 	JLabel lblCurrency;
 	JLabel lbl_count;
 	JLabel lblTier;
@@ -61,6 +82,7 @@ public class MainFrame extends JFrame implements IHideable {
 	JButton btn_update;
 	JButton btn_nextTrade;
 	JButton btn_exit;
+	JButton btn_exit_bulks;
 	JButton btn_minimize;
 	//JButton btn_minimize;
 	JComboBox cmb_currency;
@@ -82,60 +104,107 @@ public class MainFrame extends JFrame implements IHideable {
 	boolean selectedTier = false;
 	boolean selectedMap = false;
 	
+	boolean validAmountInput = false;
+	
 	boolean userWantsMinimize = false;
+	private JLabel lblMadeByEzkk;
+	private JTabbedPane tabbedPane;
+	private JLabel lblMaptradoV;
+	private JPanel panel_bulksMaps;
+	JButton btn_minimize_bulks;
+	private JLabel lbl_currency_bulks;
+	private JComboBox cmb_currency_bulks;
+	private JLabel lblBulkAmount;
+	private JTextField txt_amount_bulks;
+	JCheckBox chckbxElderMap;
+	JComboBox cmb_maps_bulks;
+	JLabel lbl_tradeables_bulks;
+	JButton btn_update_bulks;
+	JButton btn_nextTrade_bulks;
+	JLabel lbl_map_bulks;
+	private JLabel lblMaptradoV_1;
+	private JLabel label;
+	private JLabel label_1;
 	
 	public MainFrame() {
+		tradeables = new TradeableBulk();
 		maps = new ArrayList<Map>();
 		tradeableMaps = new ArrayList<Map>();
 		searchBuilder = new SearchParameter();
 		panel = new JPanel();
 		this.setTitle("MapTrado Main");
-		panel_1 = new JPanel();
-		lblCurrency = new JLabel("Currency");
-		lblTier = new JLabel("Tier");
+		panel_oneMap = new JPanel();
+		panel_bulksMaps = new JPanel();
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		lblCurrency = new JLabel("Pay with:");
+		lblCurrency.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCurrency.setBounds(18, 34, 77, 14);
+		lblTier = new JLabel("Tier:");
+		lblTier.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblTier.setBounds(18, 62, 77, 14);
 		lbl_count = new JLabel("Tradeables: ");
-		lblMap = new JLabel("Map");
+		lbl_tradeables_bulks = new JLabel("Tradeables: ");
+		lbl_count.setForeground(Color.WHITE);
+		lbl_count.setBounds(105, 200, 128, 14);
+		lblMap = new JLabel("Map:");
+		lblMap.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblMap.setBounds(18, 91, 77, 14);
 		lblLoading = new JLabel("loading...");
+		lblMaptradoV = new JLabel("MapTrado - Singlebuyer");
+		lblMadeByEzkk = new JLabel("alpha 0.0.1");
+		lbl_currency_bulks = new JLabel("Pay with:");
+		lbl_map_bulks = new JLabel("Map:");
+		lblLoading.setBounds(182, 213, 99, 50);
 		btn_update = new JButton();
+		btn_update.setBounds(105, 156, 152, 43);
 		btn_exit = new JButton();
+		btn_update_bulks = new JButton();
+		btn_exit_bulks = new JButton();
+		btn_exit_bulks.setSize(19, 24);
+		btn_exit_bulks.setLocation(320, -1);
+		btn_nextTrade_bulks = new JButton();
+		btn_exit.setBounds(320, -1, 19, 24);
 		btn_nextTrade = new JButton();
+		btn_nextTrade.setBounds(10, 250, 134, 50);
 		btn_minimize = new JButton();
+		btn_minimize_bulks = new JButton();
+		btn_minimize.setBounds(300, -1, 19, 24);
+		btn_minimize_bulks.setBounds(300, -1, 19, 24);
 		cmb_tier = new JComboBox(tiers);
+		cmb_tier.setBounds(105, 59, 152, 20);
 		cmb_map = new JComboBox(new Object[]{});
+		cmb_maps_bulks = new JComboBox(new Object[]{});
+		cmb_map.setBounds(105, 87, 152, 22);
 		cmb_currency = new JComboBox(currencys);
+		cmb_currency_bulks = new JComboBox(currencys);
+		cmb_currency.setBounds(105, 31, 152, 20);
 		chckbx_white = new JCheckBox("White");
+		chckbx_white.setBounds(18, 122, 87, 23);
+		chckbxElderMap = new JCheckBox("ELDER MAP?");
 		chckbx_corrupted = new JCheckBox("Corrupted and Rare");
-		
-		
+		chckbx_corrupted.setBounds(105, 122, 131, 23);
+		lblBulkAmount = new JLabel("Bulk amount:");
+		txt_amount_bulks = new JTextField();
 		
 		initFrame();
-		
-		
+		loadMapsFromJson();
 	}
 	
 	private void initFrame() {
+		this.setPreferredSize(new Dimension(400, 200));
 		this.setForeground(Color.GRAY);
 		this.setFont(new Font("Calibri", Font.PLAIN, 12));
 		this.setBackground(Color.GRAY);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		panel_1.setBackground(new Color(51, 51, 51));
-		panel_1.setForeground(Color.GRAY);
-		
+		panel_oneMap.setBackground(new Color(51, 51, 51));
+		panel_oneMap.setForeground(Color.GRAY);
+		panel_oneMap.setPreferredSize(new Dimension(420, 308));
 		lblCurrency.setForeground(new Color(255, 255, 255));
 		lblCurrency.setBackground(Color.GRAY);
-		lblCurrency.setBounds(10, 34, 71, 14);
-		
 		btn_update.setEnabled(false);
-		btn_update.setBounds(155, 163, 129, 29);
 		btn_update.setText("Update");
-		panel_1.setLayout(null);
-		
-		
-		cmb_currency.setBounds(91, 30, 243, 22);
-		
-		panel_1.add(lblCurrency);
-		panel_1.add(btn_update);
+		panel_oneMap.setLayout(null);
+		panel_oneMap.add(lblCurrency);
+		panel_oneMap.add(btn_update);
 		
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -148,100 +217,221 @@ public class MainFrame extends JFrame implements IHideable {
 		} catch (UnsupportedLookAndFeelException e1) {
 			e1.printStackTrace();
 		}
-
-		this.getContentPane().add(panel_1);
-		btn_exit.setForeground(new Color(0, 0, 0));
-		btn_exit.setBackground(new Color(204, 0, 0));
-		btn_exit.setBounds(377, 5, 16, 16);
+		
+		tabbedPane.setBackground(new Color(32, 178, 170));
+		getContentPane().add(tabbedPane, BorderLayout.NORTH);
+		//this.getContentPane().add(panel_1);
+		
 		Image cancelIcon = null;
-		btn_exit.setOpaque(false);
-		btn_exit.setContentAreaFilled(false);
-		btn_exit.setBorderPainted(false);
 		try {
 			cancelIcon = ImageIO.read(Main.class.getResourceAsStream("cancel.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		btn_exit.setForeground(new Color(0, 0, 0));
+		btn_exit.setBackground(new Color(204, 0, 0));
+		btn_exit.setOpaque(false);
+		btn_exit.setContentAreaFilled(false);
+		btn_exit.setBorderPainted(false);
 		btn_exit.setIcon(new ImageIcon(cancelIcon));
 		btn_exit.setFocusPainted(false);
-		panel_1.add(btn_exit);
-		cmb_tier.setBounds(91, 59, 243, 22);
-		panel_1.add(cmb_tier);
+		btn_exit_bulks.setForeground(new Color(0, 0, 0));
+		btn_exit_bulks.setBackground(new Color(204, 0, 0));
+		btn_exit_bulks.setOpaque(false);
+		btn_exit_bulks.setContentAreaFilled(false);
+		btn_exit_bulks.setBorderPainted(false);
+		btn_exit_bulks.setIcon(new ImageIcon(cancelIcon));
+		btn_exit_bulks.setFocusPainted(false);
+		
+		
+		
+		panel_oneMap.add(btn_exit);
+		panel_oneMap.add(cmb_tier);
 		lblTier.setForeground(Color.WHITE);
 		lblTier.setBackground(Color.GRAY);
-		lblTier.setBounds(10, 63, 71, 14);
-		panel_1.add(lblTier);
+		panel_oneMap.add(lblTier);
 		cmb_map.setEnabled(false);
-		cmb_map.setBounds(91, 92, 243, 22);
-		panel_1.add(cmb_map);
+		panel_oneMap.add(cmb_map);
 		lblMap.setForeground(Color.WHITE);
 		lblMap.setBackground(Color.GRAY);
-		lblMap.setBounds(10, 96, 71, 14);
-		panel_1.add(lblMap);
+		panel_oneMap.add(lblMap);
 		lbl_count.setEnabled(false);
-		lbl_count.setBounds(155, 203, 129, 14);
-		panel_1.add(lbl_count);
+		panel_oneMap.add(lbl_count);
 		btn_nextTrade.setEnabled(false);
 		btn_nextTrade.setText("Next Trade");
-		btn_nextTrade.setBounds(10, 228, 161, 54);
-		panel_1.add(btn_nextTrade);
-		btn_minimize.setOpaque(false);
-		btn_minimize.setForeground(Color.BLACK);
-		btn_minimize.setContentAreaFilled(false);
-		btn_minimize.setBorderPainted(false);
-		btn_minimize.setBackground(new Color(204, 0, 0));
-		btn_minimize.setBounds(355, 5, 16, 16);
+		panel_oneMap.add(btn_nextTrade);
 		
-		btn_minimize.setOpaque(false);
-		btn_minimize.setContentAreaFilled(false);
-		btn_minimize.setBorderPainted(false);
+		
 		Image minimizeIcon = null;
 		try {
 			minimizeIcon = ImageIO.read(Main.class.getResourceAsStream("minimize.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		btn_minimize.setOpaque(false);
+		btn_minimize.setForeground(Color.BLACK);
+		btn_minimize.setContentAreaFilled(false);
+		btn_minimize.setBorderPainted(false);
+		btn_minimize.setBackground(new Color(204, 0, 0));
+		btn_minimize.setOpaque(false);
+		btn_minimize.setContentAreaFilled(false);
+		btn_minimize.setBorderPainted(false);
 		btn_minimize.setIcon(new ImageIcon(minimizeIcon));
 		btn_minimize.setFocusPainted(false);
 		
+		btn_minimize_bulks.setOpaque(false);
+		btn_minimize_bulks.setForeground(Color.BLACK);
+		btn_minimize_bulks.setContentAreaFilled(false);
+		btn_minimize_bulks.setBorderPainted(false);
+		btn_minimize_bulks.setBackground(new Color(204, 0, 0));
+		btn_minimize_bulks.setOpaque(false);
+		btn_minimize_bulks.setContentAreaFilled(false);
+		btn_minimize_bulks.setBorderPainted(false);
+		btn_minimize_bulks.setIcon(new ImageIcon(minimizeIcon));
+		btn_minimize_bulks.setFocusPainted(false);
 		
-		panel_1.add(btn_minimize);
-		
-		panel_1.add(cmb_currency);
 		
 		
+		panel_oneMap.add(btn_minimize);
+		panel_oneMap.add(cmb_currency);
 		lblLoading.setIcon(new ImageIcon(MainFrame.class.getResource("/com/stefank/Spinner.gif")));
 		lblLoading.setForeground(Color.WHITE);
-		lblLoading.setBounds(284, 150, 114, 54);
-		panel_1.add(lblLoading);
-		
-		
+		panel_oneMap.add(lblLoading);
 		chckbx_white.setBackground(UIManager.getColor("Button.background"));
-		chckbx_white.setBounds(91, 121, 97, 23);
-		panel_1.add(chckbx_white);
-		
-		
+		panel_oneMap.add(chckbx_white);
 		chckbx_corrupted.setBackground(new Color(250, 128, 114));
-		chckbx_corrupted.setBounds(190, 121, 144, 23);
-		panel_1.add(chckbx_corrupted);
+		panel_oneMap.add(chckbx_corrupted);
+		
+		lblMadeByEzkk.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		lblMadeByEzkk.setBounds(294, 286, 45, 14);
+		lblMadeByEzkk.setBackground(new Color(0, 128, 0));
+		lblMadeByEzkk.setForeground(new Color(255, 235, 205));
+		panel_oneMap.add(lblMadeByEzkk);
+		tabbedPane.add("Buy single maps", panel_oneMap);
+		
+		lblMaptradoV.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblMaptradoV.setForeground(new Color(255, 235, 205));
+		lblMaptradoV.setBackground(new Color(0, 128, 0));
+		lblMaptradoV.setBounds(68, -1, 213, 24);
+		panel_oneMap.add(lblMaptradoV);
+		
+		label_1 = new JLabel("Created by ezkk2");
+		label_1.setForeground(new Color(255, 235, 205));
+		label_1.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		label_1.setBackground(new Color(0, 128, 0));
+		label_1.setBounds(210, 286, 86, 14);
+		panel_oneMap.add(label_1);
+		
+		
+		panel_bulksMaps.setBackground(new Color(51, 51, 51));
+		panel_bulksMaps.setForeground(Color.GRAY);
+		tabbedPane.addTab("Buy bulks of maps", null, panel_bulksMaps, null);
+		panel_bulksMaps.setLayout(null);
+		
+		
+		
+		panel_bulksMaps.add(btn_minimize_bulks);
+		
+		panel_bulksMaps.add(btn_exit_bulks);
+		
+		
+		lbl_currency_bulks.setForeground(Color.WHITE);
+		lbl_currency_bulks.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lbl_currency_bulks.setBackground(Color.GRAY);
+		lbl_currency_bulks.setBounds(18, 34, 77, 14);
+		panel_bulksMaps.add(lbl_currency_bulks);
+		
+		
+		cmb_currency_bulks.setBounds(105, 31, 152, 20);
+		panel_bulksMaps.add(cmb_currency_bulks);
+		
+		
+		lblBulkAmount.setForeground(Color.WHITE);
+		lblBulkAmount.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblBulkAmount.setBackground(Color.GRAY);
+		lblBulkAmount.setBounds(18, 91, 77, 14);
+		panel_bulksMaps.add(lblBulkAmount);
+		
+		
+		txt_amount_bulks.setBounds(104, 88, 153, 20);
+		panel_bulksMaps.add(txt_amount_bulks);
+		txt_amount_bulks.setColumns(10);
+		
+		
+		lbl_map_bulks.setForeground(Color.WHITE);
+		lbl_map_bulks.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lbl_map_bulks.setBackground(Color.GRAY);
+		lbl_map_bulks.setBounds(18, 63, 77, 14);
+		panel_bulksMaps.add(lbl_map_bulks);
+		
+		
+		cmb_maps_bulks.setBounds(105, 59, 152, 20);
+		panel_bulksMaps.add(cmb_maps_bulks);
+		
+		
+		chckbxElderMap.setBackground(new Color(188, 143, 143));
+		chckbxElderMap.setBounds(104, 115, 153, 23);
+		panel_bulksMaps.add(chckbxElderMap);
+		
+		
+		lbl_tradeables_bulks.setForeground(Color.WHITE);
+		lbl_tradeables_bulks.setEnabled(false);
+		lbl_tradeables_bulks.setBounds(105, 210, 128, 14);
+		panel_bulksMaps.add(lbl_tradeables_bulks);
+		
+		
+		btn_update_bulks.setText("Update");
+		btn_update_bulks.setEnabled(false);
+		btn_update_bulks.setBounds(105, 156, 152, 43);
+		panel_bulksMaps.add(btn_update_bulks);
+		
+		
+		btn_nextTrade_bulks.setText("Next Trade");
+		btn_nextTrade_bulks.setEnabled(false);
+		btn_nextTrade_bulks.setBounds(10, 250, 134, 50);
+		panel_bulksMaps.add(btn_nextTrade_bulks);
+		
+		JLabel lbl_created_bulks = new JLabel("alpha 0.0.1");
+		lbl_created_bulks.setForeground(new Color(255, 235, 205));
+		lbl_created_bulks.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		lbl_created_bulks.setBackground(new Color(0, 128, 0));
+		lbl_created_bulks.setBounds(294, 286, 45, 14);
+		panel_bulksMaps.add(lbl_created_bulks);
+		
+		lblMaptradoV_1 = new JLabel("MapTrado - Bulkbuyer");
+		lblMaptradoV_1.setForeground(new Color(255, 235, 205));
+		lblMaptradoV_1.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblMaptradoV_1.setBackground(new Color(0, 128, 0));
+		lblMaptradoV_1.setBounds(73, -1, 195, 24);
+		panel_bulksMaps.add(lblMaptradoV_1);
+		
+		label = new JLabel("Created by ezkk2");
+		label.setForeground(new Color(255, 235, 205));
+		label.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		label.setBackground(new Color(0, 128, 0));
+		label.setBounds(210, 286, 86, 14);
+		panel_bulksMaps.add(label);
 		lblLoading.setVisible(false);
 		
-		this.setSize(408, 293);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setSize(353, 365);
 		this.setLocationRelativeTo(null);
-		this.setUndecorated(true);
 		this.getContentPane().requestFocusInWindow();
-	    FrameDragListener frameDragListener = new FrameDragListener(this);
-	    this.addMouseListener(frameDragListener);
-	    this.addMouseMotionListener(frameDragListener);
+	    //FrameDragListener frameDragListener = new FrameDragListener(this);
+//	    this.addMouseListener(frameDragListener);
+//	    this.addMouseMotionListener(frameDragListener);
         this.setAlwaysOnTop(true);
-		//frame.setMinimumSize(new Dimension(300, 300));
 		SwingUtilities.updateComponentTreeUI(this);
 		isVisible = false;
 		this.setVisible(false);
-		
+		this.setResizable(false);
+		setDefaultLookAndFeelDecorated(true);
 		
 		// Add Listeners
+		AmountTxtBoxListener amountListener = new AmountTxtBoxListener(this);
+		txt_amount_bulks.getDocument().addDocumentListener(amountListener);
+		
 		CorruptedCheckBoxListener corruptedBoxListener = new CorruptedCheckBoxListener(this);
 		chckbx_corrupted.addActionListener(corruptedBoxListener);
 		
@@ -250,15 +440,23 @@ public class MainFrame extends JFrame implements IHideable {
 		
 		ExitButtonListener exitListener = new ExitButtonListener(this);
 		btn_exit.addActionListener(exitListener);
+		btn_exit_bulks.addActionListener(exitListener);
 		
 		MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this);
 		btn_minimize.addActionListener(minimizeListener);
+		btn_minimize_bulks.addActionListener(minimizeListener);
 		
 		UpdateButtonListener updateListener = new UpdateButtonListener(this);
 		btn_update.addActionListener(updateListener);
 		
+		UpdateButtonBulksListener updateBulkListener = new UpdateButtonBulksListener(this);
+		btn_update_bulks.addActionListener(updateBulkListener);
+		
 		NextButtonListener nextTradeListener = new NextButtonListener(this);
 		btn_nextTrade.addActionListener(nextTradeListener);
+		
+		NextButtonBulksListener nextTradeBulksListener = new NextButtonBulksListener(this);
+		btn_nextTrade_bulks.addActionListener(nextTradeBulksListener);
 		
 		CurrencyComboboxListener currencyListener = new CurrencyComboboxListener(this);
 		cmb_currency.addActionListener(currencyListener);
@@ -286,10 +484,6 @@ public class MainFrame extends JFrame implements IHideable {
             return true;
         }, null);
 	}
-	
-	
-	
-	
 	public JCheckBox getChckbx_corrupted() {
 		return chckbx_corrupted;
 	}
@@ -334,16 +528,16 @@ public class MainFrame extends JFrame implements IHideable {
 		this.user32 = user32;
 	}
 
-	public JFrame getFrame() {
+	public JDialog getFrame() {
 		return this;
 	}
 
 	public JPanel getPanel() {
-		return panel_1;
+		return panel_oneMap;
 	}
 
 	public void setPanel(JPanel panel) {
-		this.panel_1 = panel;
+		this.panel_oneMap = panel;
 	}
 
 	public JLabel getLblCurrency() {
@@ -490,10 +684,6 @@ public class MainFrame extends JFrame implements IHideable {
 		this.selectedMap = selectedMap;
 	}
 
-	public void setVisible(boolean isVisible) {
-		this.isVisible = isVisible;
-	}
-
 	public JLabel getLblTier() {
 		return lblTier;
 	}
@@ -525,4 +715,182 @@ public class MainFrame extends JFrame implements IHideable {
 	public void setUserWantsMinimize(boolean userWantsMinimize) {
 		this.userWantsMinimize = userWantsMinimize;
 	}
+
+	public JPanel getPanel_oneMap() {
+		return panel_oneMap;
+	}
+
+	public void setPanel_oneMap(JPanel panel_oneMap) {
+		this.panel_oneMap = panel_oneMap;
+	}
+
+	public JButton getBtn_exit_bulks() {
+		return btn_exit_bulks;
+	}
+
+	public void setBtn_exit_bulks(JButton btn_exit_bulks) {
+		this.btn_exit_bulks = btn_exit_bulks;
+	}
+
+	public JLabel getLblMadeByEzkk() {
+		return lblMadeByEzkk;
+	}
+
+	public void setLblMadeByEzkk(JLabel lblMadeByEzkk) {
+		this.lblMadeByEzkk = lblMadeByEzkk;
+	}
+
+	public JTabbedPane getTabbedPane() {
+		return tabbedPane;
+	}
+
+	public void setTabbedPane(JTabbedPane tabbedPane) {
+		this.tabbedPane = tabbedPane;
+	}
+
+	public JLabel getLblMaptradoV() {
+		return lblMaptradoV;
+	}
+
+	public void setLblMaptradoV(JLabel lblMaptradoV) {
+		this.lblMaptradoV = lblMaptradoV;
+	}
+
+	public JPanel getPanel_bulksMaps() {
+		return panel_bulksMaps;
+	}
+
+	public void setPanel_bulksMaps(JPanel panel_bulksMaps) {
+		this.panel_bulksMaps = panel_bulksMaps;
+	}
+
+	public JButton getBtn_minimize_bulks() {
+		return btn_minimize_bulks;
+	}
+
+	public void setBtn_minimize_bulks(JButton btn_minimize_bulks) {
+		this.btn_minimize_bulks = btn_minimize_bulks;
+	}
+
+	public JLabel getLbl_currency_bulks() {
+		return lbl_currency_bulks;
+	}
+
+	public void setLbl_currency_bulks(JLabel lbl_currency_bulks) {
+		this.lbl_currency_bulks = lbl_currency_bulks;
+	}
+
+	public JComboBox getCmb_currency_bulks() {
+		return cmb_currency_bulks;
+	}
+
+	public void setCmb_currency_bulks(JComboBox cmb_currency_bulks) {
+		this.cmb_currency_bulks = cmb_currency_bulks;
+	}
+
+	public JLabel getLblBulkAmount() {
+		return lblBulkAmount;
+	}
+
+	public void setLblBulkAmount(JLabel lblBulkAmount) {
+		this.lblBulkAmount = lblBulkAmount;
+	}
+
+	public JTextField getTxt_amount_bulks() {
+		return txt_amount_bulks;
+	}
+
+	public void setTxt_amount_bulks(JTextField txt_amount_bulks) {
+		this.txt_amount_bulks = txt_amount_bulks;
+	}
+
+	public JCheckBox getChckbxElderMap() {
+		return chckbxElderMap;
+	}
+
+	public void setChckbxElderMap(JCheckBox chckbxElderMap) {
+		this.chckbxElderMap = chckbxElderMap;
+	}
+
+	public JComboBox getCmb_maps_bulks() {
+		return cmb_maps_bulks;
+	}
+
+	public void setCmb_maps_bulks(JComboBox cmb_maps_bulks) {
+		this.cmb_maps_bulks = cmb_maps_bulks;
+	}
+	
+	public boolean isValidAmountInput() {
+		return validAmountInput;
+	}
+
+	public void setValidAmountInput(boolean validAmountInput) {
+		this.validAmountInput = validAmountInput;
+	}
+
+	public JButton getBtn_update_bulks() {
+		return btn_update_bulks;
+	}
+
+	public void setBtn_update_bulks(JButton btn_update_bulks) {
+		this.btn_update_bulks = btn_update_bulks;
+	}
+
+	public JButton getBtn_nextTrade_bulks() {
+		return btn_nextTrade_bulks;
+	}
+
+	public void setBtn_nextTrade_bulks(JButton btn_nextTrade_bulks) {
+		this.btn_nextTrade_bulks = btn_nextTrade_bulks;
+	}
+
+	public JLabel getLbl_tradeables_bulks() {
+		return lbl_tradeables_bulks;
+	}
+
+	public void setLbl_tradeables_bulks(JLabel lbl_tradeables_bulks) {
+		this.lbl_tradeables_bulks = lbl_tradeables_bulks;
+	}
+	
+	public TradeableBulk getTradeables() {
+		return tradeables;
+	}
+
+	public void setTradeables(TradeableBulk tradeables) {
+		this.tradeables = tradeables;
+	}
+
+	private void loadMapsFromJson() {
+		String[] allMaps;
+		List<String> allMapsAsList = new ArrayList<String>();
+		System.out.println("selectedTier " + selectedTier);
+		String text = new Scanner(Main.class.getResourceAsStream("allMaps.json")).useDelimiter("\\A").next();
+		byte[] bytes;
+		String mapsAsJsonString = "";
+		try {
+			bytes = text.getBytes("UTF-8");
+			mapsAsJsonString = new String(bytes, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        JSONObject json = new JSONObject(mapsAsJsonString);
+        JSONArray maps = json.getJSONArray("Maps");
+        // convert json array into arraylist
+        for(int i = 0; i < maps.length(); i++) {
+        	
+        	allMapsAsList.add(maps.get(i).toString());
+        }
+        Collections.sort(allMapsAsList, String.CASE_INSENSITIVE_ORDER);
+        getCmb_maps_bulks().removeAllItems();
+        
+        for(int i = 0; i < allMapsAsList.size(); i++) {
+        	getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
+        }
+        
+		
+	}
+	
+	
+	
 }

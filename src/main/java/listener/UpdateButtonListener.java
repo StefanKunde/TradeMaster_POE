@@ -1,4 +1,4 @@
-package viewcontroller;
+package listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.jsoup.nodes.Element;
 
 import gui.MainFrame;
-import handler.TradeHandler;
+import handler.PoeTradeHandler;
 import items.Map;
 import items.Maps;
 
@@ -23,7 +23,7 @@ public class UpdateButtonListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		TradeHandler trader = new TradeHandler(frame.getSearchBuilder().generateSearchData());
+		PoeTradeHandler trader = new PoeTradeHandler(frame.getSearchBuilder().generateSearchData());
 		List<Element> buyableMaps = trader.fetchBuyableMapsAsHtml();
 		frame.setMaps(new ArrayList<Map>());
 		

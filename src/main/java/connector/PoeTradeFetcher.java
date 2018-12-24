@@ -61,13 +61,6 @@ public class PoeTradeFetcher {
 		
 		String resultString = result.toString();
 		
-//		Document doc = Jsoup.parse(result.toString());
-//		System.out.println(doc.title());
-//		Elements body = doc.select("body");
-//		for (Element headline : body) {
-//		    System.out.println(headline);
-//		}
-		
 		return resultString;
 		
 
@@ -82,14 +75,6 @@ public class PoeTradeFetcher {
 		// add header
 		post.setHeader("User-Agent", USER_AGENT);
 		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
-		
-
-//		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-//		urlParameters.add(new BasicNameValuePair("sn", "C02G8416DRJM"));
-//		urlParameters.add(new BasicNameValuePair("cn", ""));
-//		urlParameters.add(new BasicNameValuePair("locale", ""));
-//		urlParameters.add(new BasicNameValuePair("caller", ""));
-//		urlParameters.add(new BasicNameValuePair("num", "12345"));
 
 		post.setEntity(new UrlEncodedFormEntity(postData));
 		
