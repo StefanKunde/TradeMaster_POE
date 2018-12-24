@@ -58,6 +58,7 @@ import items.TradeableBulk;
 				
 				pricePerMap = Integer.valueOf(frame.getTxtbox_pricePerMap().getText());
 				currency = (String )frame.getCmb_currency_bulks().getSelectedItem();
+				System.out.println("Currency before filtering: "  + currency);
 				
 				frame.getTradeables().filterByCurrencyAndMaxPrice(currency, pricePerMap);
 			}

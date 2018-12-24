@@ -91,6 +91,7 @@ public class TradeableBulk {
 		for(TradeableItem item : this.tradeableItems) {
 			if(item.getCurrencyToPay().equals(currency) && item.getPricePerMap() <= maxPrice) {
 				tmpTradeables.add(item);
+				System.out.println("Added item to filtered tradeables: currency =  " + item.getCurrencyToPay() + " priceperMap: " + item.getPricePerMap());
 			}
 		}
 		
