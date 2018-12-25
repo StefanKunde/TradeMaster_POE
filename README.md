@@ -1,4 +1,4 @@
-# PainlessMapTrader v0.1-alpha
+# PainlessMapTrader v0.2-alpha
 This is an overview application for Path of exile.
 You can search for single or even for bulks of maps with it.
 
