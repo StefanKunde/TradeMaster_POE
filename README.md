@@ -20,6 +20,7 @@ Features:
 
 Plans for future:
 - view for trades
+- Divination cards
 - automatically post trade messages
 
 
