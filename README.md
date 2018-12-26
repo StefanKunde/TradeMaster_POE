@@ -21,6 +21,7 @@ Features:
 Plans for future:
 - view for trades
 - Divination cards
+- Prophecies
 - automatically post trade messages
 
 
