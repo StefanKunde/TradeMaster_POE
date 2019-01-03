@@ -23,6 +23,8 @@ Plans for future:
 - Divination cards
 - Prophecies
 - automatically post trade messages
+- Add Currency support
+- Mod support for buying maps (i.e. filter out reflected maps)
 
 
 
