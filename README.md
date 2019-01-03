@@ -42,4 +42,4 @@ Java (min 1.8)
 
 
 Download:
-https://github.com/StefanKunde/PainlessMapTrader/releases/download/v0.2-alpha/PainlessMapTrader.jar
+https://github.com/StefanKunde/TradeMaster_POE/releases/download/v0.2-alpha/TradeMaster_POE.v1.2-beta.jar
