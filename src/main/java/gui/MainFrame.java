@@ -46,6 +46,7 @@ import javax.swing.JDialog;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -57,6 +58,8 @@ import java.util.Scanner;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -71,6 +74,7 @@ import java.awt.SystemColor;
 public class MainFrame extends JDialog implements IHideable {
 	private static final Charset UTF_8 = Charset.forName("UTF-8");
 	private static final Charset ISO = Charset.forName("ISO-8859-1");
+	private Point mouseClickPoint; // Will reference to the last pressing (not clicking) position
 	private User32 user32 = User32.INSTANCE;
 	TradeableBulk tradeables;
 	JPanel panel;
@@ -135,6 +139,25 @@ public class MainFrame extends JDialog implements IHideable {
 	private JLabel label;
 	private JLabel label_1;
 	private JTextField txtbox_pricePerMap;
+	private JPanel panel_1;
+	private JButton btn_minimize_cur;
+	private JButton btn_exit_cur;
+	private JLabel lblIWant;
+	private JComboBox comboBox;
+	private JLabel label_3;
+	private JTextField textField;
+	private JLabel label_4;
+	private JComboBox comboBox_1;
+	private JCheckBox checkBox;
+	private JLabel label_5;
+	private JButton button_2;
+	private JButton button_3;
+	private JLabel label_6;
+	private JLabel label_7;
+	private JLabel label_8;
+	private JLabel lblWhatDoI;
+	private JTextField textField_1;
+	private JCheckBox checkBox_1;
 	
 	public MainFrame() {
 		tradeables = new TradeableBulk();
@@ -173,6 +196,7 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_exit_bulks.setSize(19, 24);
 		btn_exit_bulks.setLocation(320, -1);
 		btn_nextTrade_bulks = new JButton();
+		btn_exit_cur = new JButton();
 		btn_exit.setBounds(320, -1, 19, 24);
 		btn_nextTrade = new JButton();
 		btn_nextTrade.setBounds(10, 250, 134, 50);
@@ -180,6 +204,9 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_minimize_bulks = new JButton();
 		btn_minimize.setBounds(300, -1, 19, 24);
 		btn_minimize_bulks.setBounds(300, -1, 19, 24);
+		btn_minimize_cur = new JButton();
+		btn_minimize_cur.setSize(19, 24);
+		btn_minimize_cur.setLocation(300, -1);
 		cmb_tier = new JComboBox(tiers);
 		cmb_tier.setBounds(105, 59, 152, 20);
 		cmb_map = new JComboBox(new Object[]{});
@@ -199,6 +226,9 @@ public class MainFrame extends JDialog implements IHideable {
 		txtbox_pricePerMap.setEnabled(false);
 		
 		initFrame();
+		this.setUndecorated(true);
+		this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+		addEventsForDragging();
 		loadMapsFromJson();
 	}
 	
@@ -250,6 +280,8 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_exit.setBorderPainted(false);
 		btn_exit.setIcon(new ImageIcon(cancelIcon));
 		btn_exit.setFocusPainted(false);
+		
+		
 		btn_exit_bulks.setForeground(new Color(0, 0, 0));
 		btn_exit_bulks.setBackground(new Color(204, 0, 0));
 		btn_exit_bulks.setOpaque(false);
@@ -257,6 +289,14 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_exit_bulks.setBorderPainted(false);
 		btn_exit_bulks.setIcon(new ImageIcon(cancelIcon));
 		btn_exit_bulks.setFocusPainted(false);
+		
+		btn_exit_cur.setForeground(new Color(0, 0, 0));
+		btn_exit_cur.setBackground(new Color(204, 0, 0));
+		btn_exit_cur.setOpaque(false);
+		btn_exit_cur.setContentAreaFilled(false);
+		btn_exit_cur.setBorderPainted(false);
+		btn_exit_cur.setIcon(new ImageIcon(cancelIcon));
+		btn_exit_cur.setFocusPainted(false);
 		
 		
 		
@@ -304,6 +344,20 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_minimize_bulks.setBorderPainted(false);
 		btn_minimize_bulks.setIcon(new ImageIcon(minimizeIcon));
 		btn_minimize_bulks.setFocusPainted(false);
+		
+		
+		btn_minimize_cur.setOpaque(false);
+		btn_minimize_cur.setForeground(Color.BLACK);
+		btn_minimize_cur.setContentAreaFilled(false);
+		btn_minimize_cur.setBorderPainted(false);
+		btn_minimize_cur.setBackground(new Color(204, 0, 0));
+		btn_minimize_cur.setOpaque(false);
+		btn_minimize_cur.setContentAreaFilled(false);
+		btn_minimize_cur.setBorderPainted(false);
+		btn_minimize_cur.setIcon(new ImageIcon(minimizeIcon));
+		btn_minimize_cur.setFocusPainted(false);
+		
+		
 		
 		
 		
@@ -444,10 +498,125 @@ public class MainFrame extends JDialog implements IHideable {
 		chckbxShapedMap.setBackground(new Color(153, 204, 204));
 		chckbxShapedMap.setBounds(31, 145, 153, 23);
 		panel_bulksMaps.add(chckbxShapedMap);
+		
+		panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setPreferredSize(new Dimension(420, 315));
+		panel_1.setForeground(Color.GRAY);
+		panel_1.setBackground(new Color(51, 51, 51));
+		tabbedPane.addTab("New tab", null, panel_1, null);
+		
+		panel_1.add(btn_minimize_cur);
+		
+		
+		btn_exit_cur.setOpaque(false);
+		btn_exit_cur.setForeground(Color.BLACK);
+		btn_exit_cur.setFocusPainted(false);
+		btn_exit_cur.setContentAreaFilled(false);
+		btn_exit_cur.setBorderPainted(false);
+		btn_exit_cur.setBackground(new Color(204, 0, 0));
+		btn_exit_cur.setBounds(320, -1, 19, 24);
+		panel_1.add(btn_exit_cur);
+		
+		lblIWant = new JLabel("What do I want?");
+		lblIWant.setForeground(Color.WHITE);
+		lblIWant.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblIWant.setBackground(Color.GRAY);
+		lblIWant.setBounds(11, 37, 105, 14);
+		panel_1.add(lblIWant);
+		
+		comboBox = new JComboBox(new Object[]{});
+		comboBox.setBounds(139, 34, 152, 20);
+		panel_1.add(comboBox);
+		
+		label_3 = new JLabel("Bulk amount:");
+		label_3.setForeground(Color.WHITE);
+		label_3.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_3.setBackground(Color.GRAY);
+		label_3.setBounds(11, 121, 77, 14);
+		panel_1.add(label_3);
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(139, 118, 152, 20);
+		panel_1.add(textField);
+		
+		label_4 = new JLabel("Map:");
+		label_4.setForeground(Color.WHITE);
+		label_4.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_4.setBackground(Color.GRAY);
+		label_4.setBounds(11, 98, 77, 14);
+		panel_1.add(label_4);
+		
+		comboBox_1 = new JComboBox(new Object[]{});
+		comboBox_1.setBounds(139, 95, 152, 20);
+		panel_1.add(comboBox_1);
+		
+		checkBox = new JCheckBox("ELDER MAP?");
+		checkBox.setBackground(new Color(188, 143, 143));
+		checkBox.setBounds(186, 145, 153, 23);
+		panel_1.add(checkBox);
+		
+		label_5 = new JLabel("Tradeables: ");
+		label_5.setForeground(Color.WHITE);
+		label_5.setEnabled(false);
+		label_5.setBounds(154, 250, 128, 14);
+		panel_1.add(label_5);
+		
+		button_2 = new JButton();
+		button_2.setText("Update");
+		button_2.setEnabled(false);
+		button_2.setBounds(139, 186, 152, 43);
+		panel_1.add(button_2);
+		
+		button_3 = new JButton();
+		button_3.setText("Next Trade");
+		button_3.setEnabled(false);
+		button_3.setBounds(10, 250, 134, 50);
+		panel_1.add(button_3);
+		
+		label_6 = new JLabel("alpha 0.0.1");
+		label_6.setForeground(new Color(255, 235, 205));
+		label_6.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		label_6.setBackground(new Color(0, 128, 0));
+		label_6.setBounds(294, 286, 45, 14);
+		panel_1.add(label_6);
+		
+		label_7 = new JLabel("MapTrado - Bulkbuyer");
+		label_7.setForeground(new Color(255, 235, 205));
+		label_7.setFont(new Font("Tahoma", Font.BOLD, 17));
+		label_7.setBackground(new Color(0, 128, 0));
+		label_7.setBounds(73, -1, 195, 24);
+		panel_1.add(label_7);
+		
+		label_8 = new JLabel("Created by ezkk2");
+		label_8.setForeground(new Color(255, 235, 205));
+		label_8.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		label_8.setBackground(new Color(0, 128, 0));
+		label_8.setBounds(210, 286, 86, 14);
+		panel_1.add(label_8);
+		
+		lblWhatDoI = new JLabel("What do I pay?");
+		lblWhatDoI.setForeground(Color.WHITE);
+		lblWhatDoI.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblWhatDoI.setBackground(Color.GRAY);
+		lblWhatDoI.setBounds(11, 61, 128, 14);
+		panel_1.add(lblWhatDoI);
+		
+		textField_1 = new JTextField();
+		textField_1.setEnabled(false);
+		textField_1.setColumns(10);
+		textField_1.setBounds(139, 58, 153, 20);
+		panel_1.add(textField_1);
+		
+		checkBox_1 = new JCheckBox("SHAPED MAP?");
+		checkBox_1.setBackground(new Color(153, 204, 204));
+		checkBox_1.setBounds(31, 145, 153, 23);
+		panel_1.add(checkBox_1);
 		lblLoading.setVisible(false);
 		
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.setSize(366, 378);
+		this.setSize(366, 343);
 		this.setLocationRelativeTo(null);
 		this.getContentPane().requestFocusInWindow();
 	    //FrameDragListener frameDragListener = new FrameDragListener(this);
@@ -482,10 +651,12 @@ public class MainFrame extends JDialog implements IHideable {
 		ExitButtonListener exitListener = new ExitButtonListener(this);
 		btn_exit.addActionListener(exitListener);
 		btn_exit_bulks.addActionListener(exitListener);
+		btn_exit_cur.addActionListener(exitListener);
 		
 		MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this);
 		btn_minimize.addActionListener(minimizeListener);
 		btn_minimize_bulks.addActionListener(minimizeListener);
+		btn_minimize_cur.addActionListener(minimizeListener);
 		
 		UpdateButtonListener updateListener = new UpdateButtonListener(this);
 		btn_update.addActionListener(updateListener);
@@ -966,7 +1137,6 @@ public class MainFrame extends JDialog implements IHideable {
         JSONArray maps = json.getJSONArray("Maps");
         // convert json array into arraylist
         for(int i = 0; i < maps.length(); i++) {
-        	
         	allMapsAsList.add(maps.get(i).toString());
         }
         Collections.sort(allMapsAsList, String.CASE_INSENSITIVE_ORDER);
@@ -975,5 +1145,42 @@ public class MainFrame extends JDialog implements IHideable {
         for(int i = 0; i < allMapsAsList.size(); i++) {
         	getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
         }
+	}
+	
+	private void addEventsForDragging() {
+	    // Here is the code does moving
+	    this.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mousePressed(MouseEvent e) {
+	            mouseClickPoint = e.getPoint(); // update the position
+	        }
+	    });
+	    
+	    this.addMouseMotionListener(new MouseAdapter() {
+	        @Override
+	        public void mouseDragged(MouseEvent e) {
+	            Point newPoint = e.getLocationOnScreen();
+	            newPoint.translate(-mouseClickPoint.x, -mouseClickPoint.y); // Moves the point by given values from its location
+	            setLocation(newPoint); // set the new location
+	        }
+	    });
+	    
+	    tabbedPane.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mousePressed(MouseEvent e) {
+	            mouseClickPoint = e.getPoint(); // update the position
+	        }
+	    });
+	    
+	    tabbedPane.addMouseMotionListener(new MouseAdapter() {
+	        @Override
+	        public void mouseDragged(MouseEvent e) {
+	            Point newPoint = e.getLocationOnScreen();
+	            newPoint.translate(-mouseClickPoint.x, -mouseClickPoint.y); // Moves the point by given values from its location
+	            setLocation(newPoint); // set the new location
+	        }
+	    });
+	    
+	    
 	}
 }
