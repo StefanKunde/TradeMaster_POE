@@ -63,7 +63,7 @@ public class MainFrame extends JDialog implements IHideable {
 	private User32 user32 = User32.INSTANCE;
 	TradeableBulk tradeables;
 	CurrencyOffers currencyOffers;
-	PanelSingleMaps singleMapsPanel;
+	
 	boolean isVisible;
 	List<Map> maps;
 	List<Map> tradeableMaps;
@@ -81,7 +81,9 @@ public class MainFrame extends JDialog implements IHideable {
 	boolean validAmountCurrencyInput = false;
 	boolean userWantsMinimize = false;
 	private JTabbedPane tabbedPane;
-	private PanelBulkMaps panelBulkMaps;
+	
+	PanelSingleMaps singleMapsPanel;
+	PanelBulkMaps panelBulkMaps;
 	PanelCurrencyBuyer currencyBuyerPanel;
 	
 	public MainFrame() {
@@ -91,6 +93,7 @@ public class MainFrame extends JDialog implements IHideable {
 		searchBuilder = new SearchParameter();
 		singleMapsPanel = new PanelSingleMaps();
 		panelBulkMaps = new PanelBulkMaps();
+		currencyBuyerPanel = new PanelCurrencyBuyer();
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		initFrame();
@@ -120,7 +123,6 @@ public class MainFrame extends JDialog implements IHideable {
 		tabbedPane.add("Buy single maps", singleMapsPanel);
 		tabbedPane.addTab("Buy bulks of maps", null, panelBulkMaps, null);
 		tabbedPane.addTab("Currency", null, currencyBuyerPanel, null);
-		currencyBuyerPanel = new PanelCurrencyBuyer();
 		
 		this.setPreferredSize(new Dimension(400, 200));
 		this.setForeground(Color.GRAY);
