@@ -19,6 +19,7 @@ import com.stefank.Main;
 import com.sun.jna.Native;
 
 import connector.SearchParameter;
+import items.CurrencyOffers;
 import items.Map;
 import items.TradeableBulk;
 import listener.AmountTxtBoxListener;
@@ -29,13 +30,17 @@ import listener.ElderChBoxListener;
 import listener.ExitButtonListener;
 import listener.MapCmbBoxBulksListener;
 import listener.MapComboboxListener;
+import listener.MaxPayTxtBoxListener;
 import listener.MinimizeButtonListener;
+import listener.NeededAmountTxtBoxListener;
 import listener.NextButtonBulksListener;
+import listener.NextButtonCurrencyListener;
 import listener.NextButtonListener;
 import listener.PricePerMapTxtBoxListener;
 import listener.ShapedChBoxListener;
 import listener.TierComboboxListener;
 import listener.UpdateButtonBulksListener;
+import listener.UpdateButtonCurrencyListener;
 import listener.UpdateButtonListener;
 import listener.WhiteCheckBoxListener;
 import utility.User32;
@@ -46,6 +51,7 @@ import javax.swing.JDialog;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -57,6 +63,8 @@ import java.util.Scanner;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -71,8 +79,10 @@ import java.awt.SystemColor;
 public class MainFrame extends JDialog implements IHideable {
 	private static final Charset UTF_8 = Charset.forName("UTF-8");
 	private static final Charset ISO = Charset.forName("ISO-8859-1");
+	private Point mouseClickPoint; // Will reference to the last pressing (not clicking) position
 	private User32 user32 = User32.INSTANCE;
 	TradeableBulk tradeables;
+	CurrencyOffers currencyOffers;
 	JPanel panel;
 	JPanel panel_oneMap;
 	JLabel lblCurrency;
@@ -114,6 +124,9 @@ public class MainFrame extends JDialog implements IHideable {
 	boolean loadedShapedMaps = false;
 	boolean loadedElderMaps = false;
 	
+	boolean validMaxPayInput = false;
+	boolean validAmountCurrencyInput = false;
+	
 	boolean userWantsMinimize = false;
 	private JLabel lblMadeByEzkk;
 	private JTabbedPane tabbedPane;
@@ -122,19 +135,34 @@ public class MainFrame extends JDialog implements IHideable {
 	JButton btn_minimize_bulks;
 	private JLabel lbl_currency_bulks;
 	private JComboBox cmb_currency_bulks;
+	JComboBox cmb_currencyTab_pay;
 	private JLabel lblBulkAmount;
 	private JTextField txt_amount_bulks;
 	JCheckBox chckbxElderMap;
 	JCheckBox chckbxShapedMap;
 	JComboBox cmb_maps_bulks;
 	JLabel lbl_tradeables_bulks;
-	JButton btn_update_bulks;
+	JButton btn_update_bulkbuyer;
 	JButton btn_nextTrade_bulks;
 	JLabel lbl_map_bulks;
 	private JLabel lblMaptradoV_1;
 	private JLabel label;
 	private JLabel label_1;
 	private JTextField txtbox_pricePerMap;
+	private JPanel panel_currency;
+	private JButton btn_minimize_cur;
+	private JButton btn_exit_cur;
+	private JLabel lblIWant;
+	private JComboBox cmb_currencyTab_want;
+	private JLabel lbl_tradeables_currencyTab;
+	private JButton btn_update_currency;
+	private JButton btn_nextTrade_currencyTab;
+	private JLabel lblBeta;
+	private JLabel lblTrademasterCurrency;
+	private JLabel label_8;
+	private JLabel lblWhatDoI;
+	private JTextField txt_currencyTab_neededAmount;
+	private JTextField txt_currencyTab_MAXpay;
 	
 	public MainFrame() {
 		tradeables = new TradeableBulk();
@@ -160,26 +188,30 @@ public class MainFrame extends JDialog implements IHideable {
 		lblMap.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMap.setBounds(18, 91, 77, 14);
 		lblLoading = new JLabel("loading...");
-		lblMaptradoV = new JLabel("MapTrado - Singlebuyer");
-		lblMadeByEzkk = new JLabel("alpha 0.0.1");
+		lblMaptradoV = new JLabel("Trademaster - Singlebuyer");
+		lblMadeByEzkk = new JLabel("beta 1.3");
 		lbl_currency_bulks = new JLabel("Pay with:");
 		lbl_map_bulks = new JLabel("Map:");
 		lblLoading.setBounds(182, 213, 99, 50);
 		btn_update = new JButton();
 		btn_update.setBounds(105, 156, 152, 43);
 		btn_exit = new JButton();
-		btn_update_bulks = new JButton();
+		btn_update_bulkbuyer = new JButton();
 		btn_exit_bulks = new JButton();
 		btn_exit_bulks.setSize(19, 24);
-		btn_exit_bulks.setLocation(320, -1);
+		btn_exit_bulks.setLocation(342, -1);
 		btn_nextTrade_bulks = new JButton();
-		btn_exit.setBounds(320, -1, 19, 24);
+		btn_exit_cur = new JButton();
+		btn_exit.setBounds(342, -1, 19, 24);
 		btn_nextTrade = new JButton();
 		btn_nextTrade.setBounds(10, 250, 134, 50);
 		btn_minimize = new JButton();
 		btn_minimize_bulks = new JButton();
-		btn_minimize.setBounds(300, -1, 19, 24);
-		btn_minimize_bulks.setBounds(300, -1, 19, 24);
+		btn_minimize.setBounds(322, -1, 19, 24);
+		btn_minimize_bulks.setBounds(322, -1, 19, 24);
+		btn_minimize_cur = new JButton();
+		btn_minimize_cur.setSize(19, 24);
+		btn_minimize_cur.setLocation(322, -1);
 		cmb_tier = new JComboBox(tiers);
 		cmb_tier.setBounds(105, 59, 152, 20);
 		cmb_map = new JComboBox(new Object[]{});
@@ -199,7 +231,11 @@ public class MainFrame extends JDialog implements IHideable {
 		txtbox_pricePerMap.setEnabled(false);
 		
 		initFrame();
+		this.setUndecorated(true);
+		this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+		addEventsForDragging();
 		loadMapsFromJson();
+		loadCurrencyFromJson();
 	}
 	
 	private void initFrame() {
@@ -250,6 +286,8 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_exit.setBorderPainted(false);
 		btn_exit.setIcon(new ImageIcon(cancelIcon));
 		btn_exit.setFocusPainted(false);
+		
+		
 		btn_exit_bulks.setForeground(new Color(0, 0, 0));
 		btn_exit_bulks.setBackground(new Color(204, 0, 0));
 		btn_exit_bulks.setOpaque(false);
@@ -257,6 +295,14 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_exit_bulks.setBorderPainted(false);
 		btn_exit_bulks.setIcon(new ImageIcon(cancelIcon));
 		btn_exit_bulks.setFocusPainted(false);
+		
+		btn_exit_cur.setForeground(new Color(0, 0, 0));
+		btn_exit_cur.setBackground(new Color(204, 0, 0));
+		btn_exit_cur.setOpaque(false);
+		btn_exit_cur.setContentAreaFilled(false);
+		btn_exit_cur.setBorderPainted(false);
+		btn_exit_cur.setIcon(new ImageIcon(cancelIcon));
+		btn_exit_cur.setFocusPainted(false);
 		
 		
 		
@@ -306,6 +352,20 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_minimize_bulks.setFocusPainted(false);
 		
 		
+		btn_minimize_cur.setOpaque(false);
+		btn_minimize_cur.setForeground(Color.BLACK);
+		btn_minimize_cur.setContentAreaFilled(false);
+		btn_minimize_cur.setBorderPainted(false);
+		btn_minimize_cur.setBackground(new Color(204, 0, 0));
+		btn_minimize_cur.setOpaque(false);
+		btn_minimize_cur.setContentAreaFilled(false);
+		btn_minimize_cur.setBorderPainted(false);
+		btn_minimize_cur.setIcon(new ImageIcon(minimizeIcon));
+		btn_minimize_cur.setFocusPainted(false);
+		
+		
+		
+		
 		
 		panel_oneMap.add(btn_minimize);
 		panel_oneMap.add(cmb_currency);
@@ -327,7 +387,7 @@ public class MainFrame extends JDialog implements IHideable {
 		lblMaptradoV.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblMaptradoV.setForeground(new Color(255, 235, 205));
 		lblMaptradoV.setBackground(new Color(0, 128, 0));
-		lblMaptradoV.setBounds(68, -1, 213, 24);
+		lblMaptradoV.setBounds(70, -1, 242, 24);
 		panel_oneMap.add(lblMaptradoV);
 		
 		label_1 = new JLabel("Created by ezkk2");
@@ -396,10 +456,10 @@ public class MainFrame extends JDialog implements IHideable {
 		panel_bulksMaps.add(lbl_tradeables_bulks);
 		
 		
-		btn_update_bulks.setText("Update");
-		btn_update_bulks.setEnabled(false);
-		btn_update_bulks.setBounds(139, 186, 152, 43);
-		panel_bulksMaps.add(btn_update_bulks);
+		btn_update_bulkbuyer.setText("Update");
+		btn_update_bulkbuyer.setEnabled(false);
+		btn_update_bulkbuyer.setBounds(139, 186, 152, 43);
+		panel_bulksMaps.add(btn_update_bulkbuyer);
 		
 		
 		btn_nextTrade_bulks.setText("Next Trade");
@@ -407,18 +467,18 @@ public class MainFrame extends JDialog implements IHideable {
 		btn_nextTrade_bulks.setBounds(10, 250, 134, 50);
 		panel_bulksMaps.add(btn_nextTrade_bulks);
 		
-		JLabel lbl_created_bulks = new JLabel("alpha 0.0.1");
+		JLabel lbl_created_bulks = new JLabel("beta 1.3");
 		lbl_created_bulks.setForeground(new Color(255, 235, 205));
 		lbl_created_bulks.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		lbl_created_bulks.setBackground(new Color(0, 128, 0));
 		lbl_created_bulks.setBounds(294, 286, 45, 14);
 		panel_bulksMaps.add(lbl_created_bulks);
 		
-		lblMaptradoV_1 = new JLabel("MapTrado - Bulkbuyer");
+		lblMaptradoV_1 = new JLabel("Trademaster - Bulkbuyer");
 		lblMaptradoV_1.setForeground(new Color(255, 235, 205));
 		lblMaptradoV_1.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblMaptradoV_1.setBackground(new Color(0, 128, 0));
-		lblMaptradoV_1.setBounds(73, -1, 195, 24);
+		lblMaptradoV_1.setBounds(73, -1, 218, 24);
 		panel_bulksMaps.add(lblMaptradoV_1);
 		
 		label = new JLabel("Created by ezkk2");
@@ -444,10 +504,114 @@ public class MainFrame extends JDialog implements IHideable {
 		chckbxShapedMap.setBackground(new Color(153, 204, 204));
 		chckbxShapedMap.setBounds(31, 145, 153, 23);
 		panel_bulksMaps.add(chckbxShapedMap);
+		
+		panel_currency = new JPanel();
+		panel_currency.setLayout(null);
+		panel_currency.setPreferredSize(new Dimension(420, 315));
+		panel_currency.setForeground(Color.GRAY);
+		panel_currency.setBackground(new Color(51, 51, 51));
+		tabbedPane.addTab("Currency", null, panel_currency, null);
+		
+		panel_currency.add(btn_minimize_cur);
+		
+		
+		btn_exit_cur.setOpaque(false);
+		btn_exit_cur.setForeground(Color.BLACK);
+		btn_exit_cur.setFocusPainted(false);
+		btn_exit_cur.setContentAreaFilled(false);
+		btn_exit_cur.setBorderPainted(false);
+		btn_exit_cur.setBackground(new Color(204, 0, 0));
+		btn_exit_cur.setBounds(342, -1, 19, 24);
+		panel_currency.add(btn_exit_cur);
+		
+		lblIWant = new JLabel("What do I want?");
+		lblIWant.setForeground(Color.WHITE);
+		lblIWant.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblIWant.setBackground(Color.GRAY);
+		lblIWant.setBounds(10, 34, 152, 14);
+		panel_currency.add(lblIWant);
+		
+		cmb_currencyTab_want = new JComboBox(new Object[]{});
+		cmb_currencyTab_want.setBounds(10, 59, 152, 20);
+		panel_currency.add(cmb_currencyTab_want);
+		
+		lbl_tradeables_currencyTab = new JLabel("Tradeables: ");
+		lbl_tradeables_currencyTab.setForeground(Color.WHITE);
+		lbl_tradeables_currencyTab.setEnabled(false);
+		lbl_tradeables_currencyTab.setBounds(154, 250, 128, 14);
+		panel_currency.add(lbl_tradeables_currencyTab);
+		
+		btn_update_currency = new JButton();
+		btn_update_currency.setText("Update");
+		btn_update_currency.setEnabled(false);
+		btn_update_currency.setBounds(139, 186, 152, 43);
+		panel_currency.add(btn_update_currency);
+		
+		btn_nextTrade_currencyTab = new JButton();
+		btn_nextTrade_currencyTab.setText("Next Trade");
+		btn_nextTrade_currencyTab.setEnabled(false);
+		btn_nextTrade_currencyTab.setBounds(10, 250, 134, 50);
+		panel_currency.add(btn_nextTrade_currencyTab);
+		
+		lblBeta = new JLabel("beta 1.3");
+		lblBeta.setForeground(new Color(255, 235, 205));
+		lblBeta.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		lblBeta.setBackground(new Color(0, 128, 0));
+		lblBeta.setBounds(294, 286, 45, 14);
+		panel_currency.add(lblBeta);
+		
+		lblTrademasterCurrency = new JLabel("Trademaster - Currency");
+		lblTrademasterCurrency.setForeground(new Color(255, 235, 205));
+		lblTrademasterCurrency.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblTrademasterCurrency.setBackground(new Color(0, 128, 0));
+		lblTrademasterCurrency.setBounds(75, -1, 237, 24);
+		panel_currency.add(lblTrademasterCurrency);
+		
+		label_8 = new JLabel("Created by ezkk2");
+		label_8.setForeground(new Color(255, 235, 205));
+		label_8.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		label_8.setBackground(new Color(0, 128, 0));
+		label_8.setBounds(210, 286, 86, 14);
+		panel_currency.add(label_8);
+		
+		lblWhatDoI = new JLabel("What do I pay?");
+		lblWhatDoI.setForeground(Color.WHITE);
+		lblWhatDoI.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblWhatDoI.setBackground(Color.GRAY);
+		lblWhatDoI.setBounds(10, 90, 152, 14);
+		panel_currency.add(lblWhatDoI);
+		
+		cmb_currencyTab_pay = new JComboBox(new Object[]{});
+		cmb_currencyTab_pay.setBounds(10, 115, 152, 20);
+		panel_currency.add(cmb_currencyTab_pay);
+		
+		JLabel lblAmount = new JLabel("Needed amount");
+		lblAmount.setForeground(Color.WHITE);
+		lblAmount.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblAmount.setBackground(Color.GRAY);
+		lblAmount.setBounds(172, 34, 153, 14);
+		panel_currency.add(lblAmount);
+		
+		JLabel lblPayForAmount = new JLabel("MAX pay for amount");
+		lblPayForAmount.setForeground(Color.WHITE);
+		lblPayForAmount.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblPayForAmount.setBackground(Color.GRAY);
+		lblPayForAmount.setBounds(172, 90, 152, 14);
+		panel_currency.add(lblPayForAmount);
+		
+		txt_currencyTab_neededAmount = new JTextField();
+		txt_currencyTab_neededAmount.setColumns(10);
+		txt_currencyTab_neededAmount.setBounds(172, 59, 153, 20);
+		panel_currency.add(txt_currencyTab_neededAmount);
+		
+		txt_currencyTab_MAXpay = new JTextField();
+		txt_currencyTab_MAXpay.setColumns(10);
+		txt_currencyTab_MAXpay.setBounds(172, 115, 153, 20);
+		panel_currency.add(txt_currencyTab_MAXpay);
 		lblLoading.setVisible(false);
 		
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.setSize(366, 378);
+		this.setSize(366, 343);
 		this.setLocationRelativeTo(null);
 		this.getContentPane().requestFocusInWindow();
 	    //FrameDragListener frameDragListener = new FrameDragListener(this);
@@ -463,6 +627,12 @@ public class MainFrame extends JDialog implements IHideable {
 		// Add Listeners
 		AmountTxtBoxListener amountListener = new AmountTxtBoxListener(this);
 		txt_amount_bulks.getDocument().addDocumentListener(amountListener);
+		
+		NeededAmountTxtBoxListener neededAmountListener = new NeededAmountTxtBoxListener(this);
+		txt_currencyTab_neededAmount.getDocument().addDocumentListener(neededAmountListener);
+		
+		MaxPayTxtBoxListener maxPayListener = new MaxPayTxtBoxListener(this);
+		txt_currencyTab_MAXpay.getDocument().addDocumentListener(maxPayListener);
 		
 		PricePerMapTxtBoxListener pricePerMapListener = new PricePerMapTxtBoxListener(this);
 		txtbox_pricePerMap.getDocument().addDocumentListener(pricePerMapListener);
@@ -482,22 +652,30 @@ public class MainFrame extends JDialog implements IHideable {
 		ExitButtonListener exitListener = new ExitButtonListener(this);
 		btn_exit.addActionListener(exitListener);
 		btn_exit_bulks.addActionListener(exitListener);
+		btn_exit_cur.addActionListener(exitListener);
 		
 		MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this);
 		btn_minimize.addActionListener(minimizeListener);
 		btn_minimize_bulks.addActionListener(minimizeListener);
+		btn_minimize_cur.addActionListener(minimizeListener);
 		
 		UpdateButtonListener updateListener = new UpdateButtonListener(this);
 		btn_update.addActionListener(updateListener);
 		
 		UpdateButtonBulksListener updateBulkListener = new UpdateButtonBulksListener(this);
-		btn_update_bulks.addActionListener(updateBulkListener);
+		btn_update_bulkbuyer.addActionListener(updateBulkListener);
+		
+		UpdateButtonCurrencyListener updateCurrencyListener = new UpdateButtonCurrencyListener(this);
+		btn_update_currency.addActionListener(updateCurrencyListener);
 		
 		NextButtonListener nextTradeListener = new NextButtonListener(this);
 		btn_nextTrade.addActionListener(nextTradeListener);
 		
 		NextButtonBulksListener nextTradeBulksListener = new NextButtonBulksListener(this);
 		btn_nextTrade_bulks.addActionListener(nextTradeBulksListener);
+		
+		NextButtonCurrencyListener nextCurrencyListener = new NextButtonCurrencyListener(this);
+		btn_nextTrade_currencyTab.addActionListener(nextCurrencyListener);
 		
 		CurrencyComboboxListener currencyListener = new CurrencyComboboxListener(this);
 		cmb_currency.addActionListener(currencyListener);
@@ -513,8 +691,12 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		MapComboboxListener mapListener = new MapComboboxListener(this);
 		cmb_map.addActionListener(mapListener);
+		
+		
 	}
 	
+	
+
 	public void setForegroundWindow(final String titleName){
         user32.EnumWindows((hWnd, arg1) -> {
             byte[] windowText = new byte[512];
@@ -893,11 +1075,11 @@ public class MainFrame extends JDialog implements IHideable {
 	}
 
 	public JButton getBtn_update_bulks() {
-		return btn_update_bulks;
+		return btn_update_bulkbuyer;
 	}
 
 	public void setBtn_update_bulks(JButton btn_update_bulks) {
-		this.btn_update_bulks = btn_update_bulks;
+		this.btn_update_bulkbuyer = btn_update_bulks;
 	}
 
 	public JButton getBtn_nextTrade_bulks() {
@@ -947,6 +1129,86 @@ public class MainFrame extends JDialog implements IHideable {
 	public void setChckbxShapedMap(JCheckBox chckbxShapedMap) {
 		this.chckbxShapedMap = chckbxShapedMap;
 	}
+	
+	public JComboBox getCmb_currencyTab_want() {
+		return cmb_currencyTab_want;
+	}
+
+	public void setCmb_currencyTab_want(JComboBox cmb_currencyTab_want) {
+		this.cmb_currencyTab_want = cmb_currencyTab_want;
+	}
+
+	public JComboBox getCmb_currencyTab_pay() {
+		return cmb_currencyTab_pay;
+	}
+
+	public void setCmb_currencyTab_pay(JComboBox cmb_currencyTab_pay) {
+		this.cmb_currencyTab_pay = cmb_currencyTab_pay;
+	}
+	
+	public boolean isValidMaxPayInput() {
+		return validMaxPayInput;
+	}
+
+	public void setValidMaxPayInput(boolean validMaxPayInput) {
+		this.validMaxPayInput = validMaxPayInput;
+	}
+
+	public boolean isValidAmountCurrencyInput() {
+		return validAmountCurrencyInput;
+	}
+
+	public void setValidAmountCurrencyInput(boolean validAmountCurrencyInput) {
+		this.validAmountCurrencyInput = validAmountCurrencyInput;
+	}
+	
+	public JTextField getTxt_currencyTab_neededAmount() {
+		return txt_currencyTab_neededAmount;
+	}
+
+	public void setTxt_currencyTab_neededAmount(JTextField txt_currencyTab_neededAmount) {
+		this.txt_currencyTab_neededAmount = txt_currencyTab_neededAmount;
+	}
+
+	public JTextField getTxt_currencyTab_MAXpay() {
+		return txt_currencyTab_MAXpay;
+	}
+
+	public void setTxt_currencyTab_MAXpay(JTextField txt_currencyTab_MAXpay) {
+		this.txt_currencyTab_MAXpay = txt_currencyTab_MAXpay;
+	}
+
+	public JButton getBtn_update_currency() {
+		return btn_update_currency;
+	}
+
+	public void setBtn_update_currency(JButton btn_update_currency) {
+		this.btn_update_currency = btn_update_currency;
+	}
+
+	public CurrencyOffers getCurrencyOffers() {
+		return currencyOffers;
+	}
+
+	public void setCurrencyOffers(CurrencyOffers currencyOffers) {
+		this.currencyOffers = currencyOffers;
+	}
+
+	public JButton getBtn_nextTrade_currencyTab() {
+		return btn_nextTrade_currencyTab;
+	}
+
+	public void setBtn_nextTrade_currencyTab(JButton btn_nextTrade_currencyTab) {
+		this.btn_nextTrade_currencyTab = btn_nextTrade_currencyTab;
+	}
+
+	public JLabel getLbl_tradeables_currencyTab() {
+		return lbl_tradeables_currencyTab;
+	}
+
+	public void setLbl_tradeables_currencyTab(JLabel lbl_tradeables_currencyTab) {
+		this.lbl_tradeables_currencyTab = lbl_tradeables_currencyTab;
+	}
 
 	public void loadMapsFromJson() {
 		String[] allMaps;
@@ -966,7 +1228,6 @@ public class MainFrame extends JDialog implements IHideable {
         JSONArray maps = json.getJSONArray("Maps");
         // convert json array into arraylist
         for(int i = 0; i < maps.length(); i++) {
-        	
         	allMapsAsList.add(maps.get(i).toString());
         }
         Collections.sort(allMapsAsList, String.CASE_INSENSITIVE_ORDER);
@@ -975,5 +1236,76 @@ public class MainFrame extends JDialog implements IHideable {
         for(int i = 0; i < allMapsAsList.size(); i++) {
         	getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
         }
+	}
+	
+	public void loadCurrencyFromJson() {
+		String[] currencys;
+		List<String> currencysAsList = new ArrayList<String>();
+		
+		String text = new Scanner(Main.class.getResourceAsStream("currencyPoeTrade.json")).useDelimiter("\\A").next();
+		byte[] bytes;
+		String currencysAsJson = "";
+		try {
+			bytes = text.getBytes("UTF-8");
+			currencysAsJson = new String(bytes, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		JSONObject json = new JSONObject(currencysAsJson);
+		JSONObject test = (JSONObject) json.get("Currency");
+		
+		
+		for( int i = 0; i < test.names().length(); i++) {
+			currencysAsList.add(test.names().get(i).toString());
+		}
+		
+		Collections.sort(currencysAsList, String.CASE_INSENSITIVE_ORDER);
+		getCmb_currencyTab_want().removeAllItems();
+		getCmb_currencyTab_pay().removeAllItems();
+        
+        for(int i = 0; i < currencysAsList.size(); i++) {
+        	getCmb_currencyTab_want().addItem( currencysAsList.get(i) );
+        	getCmb_currencyTab_pay().addItem( currencysAsList.get(i) );
+        }
+	}
+	
+	private void addEventsForDragging() {
+	    
+	    this.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mousePressed(MouseEvent e) {
+	            mouseClickPoint = e.getPoint(); // update the position
+	        }
+	    });
+	    
+	    this.addMouseMotionListener(new MouseAdapter() {
+	        @Override
+	        public void mouseDragged(MouseEvent e) {
+	            Point newPoint = e.getLocationOnScreen();
+	            newPoint.translate(-mouseClickPoint.x, -mouseClickPoint.y); // Moves the point by given values from its location
+	            setLocation(newPoint); // set the new location
+	        }
+	    });
+	    
+		
+	    tabbedPane.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mousePressed(MouseEvent e) {
+	            mouseClickPoint = e.getPoint(); // update the position
+	        }
+	    });
+	    
+	    tabbedPane.addMouseMotionListener(new MouseAdapter() {
+	        @Override
+	        public void mouseDragged(MouseEvent e) {
+	            Point newPoint = e.getLocationOnScreen();
+	            newPoint.translate(-mouseClickPoint.x, -mouseClickPoint.y); // Moves the point by given values from its location
+	            setLocation(newPoint); // set the new location
+	        }
+	    });
+	    
+	    
 	}
 }
