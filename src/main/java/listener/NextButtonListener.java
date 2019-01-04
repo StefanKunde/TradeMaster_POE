@@ -26,10 +26,10 @@ public class NextButtonListener implements ActionListener {
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			clipboard.setContents(stringSelection, null);
 			frame.getTradeableMaps().remove(0);
-			frame.getLbl_count().setText("Tradeables left: " + frame.getTradeableMaps().size());
+			frame.getSingleMapsPanel().getLbl_count().setText("Tradeables left: " + frame.getTradeableMaps().size());
 			frame.setForegroundWindow("Path of Exile");
 		} else {
-			frame.getLbl_count().setText("no tradeables left.");
+			frame.getSingleMapsPanel().getLbl_count().setText("no tradeables left.");
 		}
 		
 	}

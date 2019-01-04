@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 import gui.MainFrame;
 import gui.MinimizedFrame;
-import utility.User32;
 
 public class MaximizeButtonListener implements ActionListener {
 	

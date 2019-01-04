@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import org.json.JSONArray;
@@ -38,6 +37,7 @@ public class TierComboboxListener implements ActionListener {
 		System.out.println("selectedTier " + selectedTier);
 		if(selectedTier.startsWith("Tier ")) {
 	        //mapsAsJsonString = new String(Files.readAllBytes(Paths.get("/resources/maps.json")));
+			@SuppressWarnings("resource")
 			String text = new Scanner(Main.class.getResourceAsStream("maps.json")).useDelimiter("\\A").next();
 			
 			byte[] bytes;
@@ -61,17 +61,17 @@ public class TierComboboxListener implements ActionListener {
 	        
 	        
 	        String[] mapsAsArray = new String[mapsAsList.size()];
-	        frame.getCmb_map().removeAllItems();
+	        frame.getSingleMapsPanel().getCmb_map().removeAllItems();
 	        
 	        for(int i = 0; i < mapsAsList.size(); i++) {
-	        	frame.getCmb_map().addItem( mapsAsList.get(i) );
+	        	frame.getSingleMapsPanel().getCmb_map().addItem( mapsAsList.get(i) );
 	        }
 	        
 	        String segments[] = selectedTier.split(" ");
 	        frame.getSearchBuilder().setTier(segments[1]);
 	        
-	        frame.getCmb_map().setEnabled(true);
-	        frame.getBtn_update().setEnabled(true);
+	        frame.getSingleMapsPanel().getCmb_map().setEnabled(true);
+	        frame.getSingleMapsPanel().getBtn_update().setEnabled(true);
 		}
 	}
 

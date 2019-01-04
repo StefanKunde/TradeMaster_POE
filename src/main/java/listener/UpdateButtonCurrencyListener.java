@@ -3,10 +3,8 @@ package listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
 import java.util.Scanner;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.stefank.Main;
@@ -14,8 +12,6 @@ import com.stefank.Main;
 import connector.CurrencyPoeTradeFetcher;
 import gui.MainFrame;
 import handler.CurrencyPoeTradeHandler;
-import handler.JsonNinjaSearchData;
-import handler.PoeNinjaHandler;
 
 public class UpdateButtonCurrencyListener implements ActionListener {
 
@@ -27,23 +23,24 @@ public class UpdateButtonCurrencyListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		frame.getLbl_tradeables_bulks().setText("Loading...");
-		frame.getBtn_update_bulks().setEnabled(false);
+		frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Loading...");
+		frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(false);
 		
 		// Get currency I want from list
-		String wantedCurrency = frame.getCmb_currencyTab_want().getSelectedItem().toString();
+		String wantedCurrency = frame.getCurrencyBuyerPanel().getCmb_currencyTab_want().getSelectedItem().toString();
 		// Get currency I want to pay from list
-		String currencyToPayWith = frame.getCmb_currencyTab_pay().getSelectedItem().toString();
+		String currencyToPayWith = frame.getCurrencyBuyerPanel().getCmb_currencyTab_pay().getSelectedItem().toString();
 		
 		// Get amount I want 
-		int wantedAmount = Integer.valueOf( frame.getTxt_currencyTab_neededAmount().getText() );
+		int wantedAmount = Integer.valueOf( frame.getCurrencyBuyerPanel().getTxt_currencyTab_neededAmount().getText() );
 		// Get Max price i want to pay
-		int maxPrice = Integer.valueOf( frame.getTxt_currencyTab_MAXpay().getText() );
+		int maxPrice = Integer.valueOf( frame.getCurrencyBuyerPanel().getTxt_currencyTab_MAXpay().getText() );
 		
 		// Prepare request: Get ids from selected currencys
 		String wantedCurrencyID = "";
 		String currencyToPayWithID = "";
 		
+		@SuppressWarnings("resource")
 		String text = new Scanner(Main.class.getResourceAsStream("currencyPoeTrade.json")).useDelimiter("\\A").next();
 		byte[] bytes;
 		String mapsAsJsonString = "";
@@ -92,12 +89,12 @@ public class UpdateButtonCurrencyListener implements ActionListener {
 		frame.setCurrencyOffers(handler.getFilteredOffers());
 		
 		// display tradeables amount
-		frame.getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
+		frame.getCurrencyBuyerPanel().getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
 		
 		if(handler.getFilteredOffers().getAllOffersAsList().size() > 0) {
-			frame.getBtn_nextTrade_currencyTab().setEnabled(true);
+			frame.getCurrencyBuyerPanel().getBtn_nextTrade_currencyTab().setEnabled(true);
 		} else {
-			frame.getBtn_nextTrade_currencyTab().setEnabled(false);
+			frame.getCurrencyBuyerPanel().getBtn_nextTrade_currencyTab().setEnabled(false);
 		}
 	}
 

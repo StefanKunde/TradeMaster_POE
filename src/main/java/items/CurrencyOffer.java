@@ -15,7 +15,7 @@ public class CurrencyOffer {
 	public CurrencyOffer() {}
 	
 	public void calculatePriceByAmount(int wantedAmount) {
-		amountPrice = (int) ( (double)wantedAmount * (double)pricePerUnit);
+		this.amountPrice = (int) ( (double)wantedAmount * (double)pricePerUnit);
 	}
 	
 	public void calculatePricePerUnit() {

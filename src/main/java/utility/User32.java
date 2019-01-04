@@ -13,7 +13,8 @@ import com.sun.jna.win32.StdCallLibrary;
  * 07.12.2016
  */
 public interface User32 extends StdCallLibrary {
-    User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class);
+    @SuppressWarnings("deprecation")
+	User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class);
     boolean EnumWindows(WinUser.WNDENUMPROC lpEnumFunc, Pointer arg);
     WinDef.HWND SetFocus(WinDef.HWND hWnd);
     int GetWindowTextA(WinDef.HWND hWnd, byte[] lpString, int nMaxCount);

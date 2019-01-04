@@ -5,13 +5,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
-
 import com.sun.jna.Native;
 import com.sun.jna.PointerType;
-import com.sun.jna.platform.linux.LibC.Sysinfo;
-
-import gui.MainFrame;
 import gui.IHideable;
 import utility.User32;
 
@@ -30,6 +25,7 @@ public class WindowManager implements Runnable {
 	public void run() {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				System.out.println("running...");

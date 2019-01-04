@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 
 import gui.MainFrame;
 import items.CurrencyOffers;
-import items.TradeableBulk;
 
 public class NextButtonCurrencyListener implements ActionListener {
 
@@ -24,7 +23,7 @@ private MainFrame frame;
 		if(frame.getCurrencyOffers().getAllOffersAsList().size() > 0) {
 			
 			if(frame.getCurrencyOffers().getAllOffersAsList().size() == 1) {
-				frame.getBtn_nextTrade_currencyTab().setEnabled(false);
+				frame.getCurrencyBuyerPanel().getBtn_nextTrade_currencyTab().setEnabled(false);
 			}
 			
 			String tradeMessage = frame.getCurrencyOffers().getAllOffersAsList().get(0).getTradeMessage();
@@ -39,7 +38,7 @@ private MainFrame frame;
 			}
 			frame.setCurrencyOffers(tmpOffers);
 			
-			frame.getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
+			frame.getCurrencyBuyerPanel().getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
 			frame.setForegroundWindow("Path of Exile");
 		}
 	}

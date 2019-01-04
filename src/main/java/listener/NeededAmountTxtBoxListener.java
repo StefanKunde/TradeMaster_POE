@@ -29,12 +29,12 @@ private MainFrame frame;
 			frame.setValidAmountCurrencyInput(true);
 			
 			if(frame.isValidMaxPayInput()) {
-				frame.getBtn_update_currency().setEnabled(true);
+				frame.getCurrencyBuyerPanel().getBtn_update_currency().setEnabled(true);
 			}
 			System.out.println("NeededAmountTxtBoxListener true");
 		} else {
 			frame.setValidAmountCurrencyInput(false);
-			frame.getBtn_update_currency().setEnabled(false);
+			frame.getCurrencyBuyerPanel().getBtn_update_currency().setEnabled(false);
 			System.out.println("NeededAmountTxtBoxListener false");
 		}
 	}

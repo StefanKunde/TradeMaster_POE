@@ -1,14 +1,10 @@
 package handler;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 
-import connector.NinjaJsonObject;
 import connector.PoeNinjaFetcher;
-import items.Maps;
 import items.TradeableBulk;
 import jsonNinjaResult.Result;
 

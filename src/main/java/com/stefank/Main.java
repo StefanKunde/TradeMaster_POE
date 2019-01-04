@@ -3,9 +3,6 @@ package com.stefank;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.JFrame;
-
-import connector.PoeNinjaFetcher;
 import gui.MainFrame;
 
 

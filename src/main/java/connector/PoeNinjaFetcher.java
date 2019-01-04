@@ -3,21 +3,10 @@ package connector;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.codec.Charsets;
-import org.apache.http.Header;
-import org.apache.http.HeaderElement;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.GzipDecompressingEntity;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -25,15 +14,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import com.google.gson.Gson;
 
+@SuppressWarnings("deprecation")
 public class PoeNinjaFetcher {
 		
 	final String POE_SEARCHLINK = "https://www.pathofexile.com/api/trade/exchange/Betrayal";
@@ -73,6 +56,7 @@ public class PoeNinjaFetcher {
 	// HTTP POST request
 	public String sendPost(String jsonData) throws Exception {
 
+		@SuppressWarnings({ "resource" })
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost(POE_SEARCHLINK);
 

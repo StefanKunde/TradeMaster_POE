@@ -5,8 +5,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.TimeUnit;
-
 import gui.MainFrame;
 import items.TradeableBulk;
 
@@ -24,10 +22,10 @@ public class NextButtonBulksListener implements ActionListener {
 		if(frame.getTradeables().getFilteredTradeableItems().size() > 0) {
 			
 			if(frame.getTradeables().getFilteredTradeableItems().size() == 1) {
-				frame.getBtn_nextTrade_bulks().setEnabled(false);
+				frame.getPanelBulkMaps().getBtn_nextTrade_bulks().setEnabled(false);
 			}
 			
-			String bulkAmount = frame.getTxt_amount_bulks().getText();
+			String bulkAmount = frame.getPanelBulkMaps().getTxt_amount_bulks().getText();
 			String tradeMessage = frame.getTradeables().getFilteredTradeableItems().get(0).generateTradeMessage(Integer.valueOf(bulkAmount));
 			StringSelection stringSelection = new StringSelection(tradeMessage);
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -39,17 +37,17 @@ public class NextButtonBulksListener implements ActionListener {
 					tmpTradeables.getTradeableItems().add(frame.getTradeables().getFilteredTradeableItems().get(i));
 				}
 				frame.setTradeables(tmpTradeables);
-				frame.getLbl_tradeables_bulks().setText("Tradeables: " + tmpTradeables.getTradeableItems().size());
+				frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Tradeables: " + tmpTradeables.getTradeableItems().size());
 			}
 			
 			frame.setForegroundWindow("Path of Exile");
 		} else {
-			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
-			frame.getBtn_nextTrade_bulks().setEnabled(false);
+			frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
+			frame.getPanelBulkMaps().getBtn_nextTrade_bulks().setEnabled(false);
 		}
 		
 		if(frame.getTradeables().getFilteredTradeableItems().size() == 0) {
-			frame.getBtn_update_bulks().setEnabled(true);
+			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
 		}
 		
 	}

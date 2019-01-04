@@ -2,20 +2,9 @@ package listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JComboBox;
-
-import org.jsoup.nodes.Element;
-
 import gui.MainFrame;
 import handler.JsonNinjaSearchData;
 import handler.PoeNinjaHandler;
-import handler.PoeTradeHandler;
-import items.Map;
-import items.Maps;
-import items.TradeableBulk;
 
 	public class UpdateButtonBulksListener implements ActionListener {
 
@@ -27,11 +16,11 @@ import items.TradeableBulk;
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			frame.getLbl_tradeables_bulks().setText("Loading...");
-			frame.getBtn_update_bulks().setEnabled(false);
-			int bulkAmount = Integer.valueOf( frame.getTxt_amount_bulks().getText() );
-			boolean isElder = frame.getChckbxElderMap().isSelected();
-			String mapFromCmbBox = frame.getCmb_maps_bulks().getSelectedItem().toString();
+			frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Loading...");
+			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(false);
+			int bulkAmount = Integer.valueOf( frame.getPanelBulkMaps().getTxt_amount_bulks().getText() );
+			boolean isElder = frame.getPanelBulkMaps().getChckbxElderMap().isSelected();
+			String mapFromCmbBox = frame.getPanelBulkMaps().getCmb_maps_bulks().getSelectedItem().toString();
 			PoeNinjaHandler ninjaHandler = new PoeNinjaHandler(bulkAmount);
 			JsonNinjaSearchData searchData = new JsonNinjaSearchData();
 			
@@ -52,22 +41,22 @@ import items.TradeableBulk;
 			frame.setTradeables( ninjaHandler.getTradeableBulks() );
 			
 			// Filter by currency and price per map
-			if(frame.getTxtbox_pricePerMap().isEnabled() && frame.isValidPricePerMapInput()) {
+			if(frame.getPanelBulkMaps().getTxtbox_pricePerMap().isEnabled() && frame.isValidPricePerMapInput()) {
 				int pricePerMap;
 				String currency;
 				
-				pricePerMap = Integer.valueOf(frame.getTxtbox_pricePerMap().getText());
-				currency = (String )frame.getCmb_currency_bulks().getSelectedItem();
+				pricePerMap = Integer.valueOf(frame.getPanelBulkMaps().getTxtbox_pricePerMap().getText());
+				currency = (String )frame.getPanelBulkMaps().getCmb_currency_bulks().getSelectedItem();
 				System.out.println("Currency before filtering: "  + currency);
 				
 				frame.getTradeables().filterByCurrencyAndMaxPrice(currency, pricePerMap);
 			}
 			
-			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
+			frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
 			
 			
 			if(frame.getTradeables().getFilteredTradeableItems().size() > 0 ) {
-				frame.getBtn_nextTrade_bulks().setEnabled(true);
+				frame.getPanelBulkMaps().getBtn_nextTrade_bulks().setEnabled(true);
 			}
 		}
 
