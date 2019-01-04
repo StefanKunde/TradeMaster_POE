@@ -39,7 +39,8 @@ private MainFrame frame;
 			}
 			frame.setCurrencyOffers(tmpOffers);
 			
-			frame.getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());;
+			frame.getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
+			frame.setForegroundWindow("Path of Exile");
 		}
 	}
 

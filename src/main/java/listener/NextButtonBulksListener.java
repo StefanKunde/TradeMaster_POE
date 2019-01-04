@@ -41,6 +41,8 @@ public class NextButtonBulksListener implements ActionListener {
 				frame.setTradeables(tmpTradeables);
 				frame.getLbl_tradeables_bulks().setText("Tradeables: " + tmpTradeables.getTradeableItems().size());
 			}
+			
+			frame.setForegroundWindow("Path of Exile");
 		} else {
 			frame.getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
 			frame.getBtn_nextTrade_bulks().setEnabled(false);
@@ -49,6 +51,7 @@ public class NextButtonBulksListener implements ActionListener {
 		if(frame.getTradeables().getFilteredTradeableItems().size() == 0) {
 			frame.getBtn_update_bulks().setEnabled(true);
 		}
+		
 	}
 
 }
