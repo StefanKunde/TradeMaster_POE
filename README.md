@@ -31,7 +31,7 @@ Plans for future:
 See it in action:
 
 
-[![Watch the video](https://i.imgur.com/UicY83R.jpg)](https://youtu.be/SsuaaTCB5Fw)
+[![Watch the video](https://i.imgur.com/MFv8uM6.jpg)](https://youtu.be/SsuaaTCB5Fw)
 
 
 
