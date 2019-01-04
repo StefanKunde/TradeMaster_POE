@@ -1,4 +1,4 @@
-# Trademaster_POE beta v1.3
+# Trademaster_POE beta v1.4
 This is an overview application for Path of exile.
 You can search for single or even for bulks of maps with it.
 
@@ -12,6 +12,7 @@ Still in development.
 Works only in window mode of poe.
 
 Features:
++ Buy currency from ingame without leaving it. Amount feature included.
 + Look for maps you need
 + Set currency you whould like to pay with
 + Buy maps in bulks (i.e. elder maps, shaped maps, burials, ...)
@@ -19,16 +20,15 @@ Features:
 + Set a max price of the selected currency you are willing to pay for 1 map
 
 Plans for future:
-- view for trades
+- View for trades
 - Divination cards
 - Prophecies
 - automatically post trade messages
-- Add Currency support
 - Mod support for buying maps (i.e. filter out reflected maps)
 
 
 
-See it in action:
+See it in action (its the first version. No currency tab implemented in the video):
 
 
 [![Watch the video](https://i.imgur.com/UicY83R.jpg)](https://www.youtube.com/watch?v=V_wN7mJptdA)
@@ -44,4 +44,4 @@ Java (min 1.8)
 
 
 Download:
-https://github.com/StefanKunde/TradeMaster_POE/releases/download/v0.2-alpha/TradeMaster_POE.v1.2-beta.jar
+https://github.com/StefanKunde/TradeMaster_POE/releases/download/v1.3-beta/Trademaster_v1.3-beta.jar
