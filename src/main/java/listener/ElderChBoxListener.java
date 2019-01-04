@@ -18,11 +18,11 @@ public class ElderChBoxListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(frame.isLoadedElderMaps()) {
-			frame.getChckbxShapedMap().setEnabled(true);
+			frame.getPanelBulkMaps().getChckbxShapedMap().setEnabled(true);
 			frame.setLoadedShapedMaps(false);
 			frame.setLoadedElderMaps(false);
 		} else {
-			frame.getChckbxShapedMap().setEnabled(false);
+			frame.getPanelBulkMaps().getChckbxShapedMap().setEnabled(false);
 			frame.setLoadedElderMaps(true);
 			frame.loadMapsFromJson();
 		}

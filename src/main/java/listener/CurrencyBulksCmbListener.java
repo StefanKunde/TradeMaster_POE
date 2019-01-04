@@ -17,16 +17,16 @@ public class CurrencyBulksCmbListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String selectedCurrency = (String) ((JComboBox) e.getSource()).getSelectedItem();
+		String selectedCurrency = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
 		if(!selectedCurrency.equals("ANY")) {
-			frame.getTxtbox_pricePerMap().setEnabled(true);
+			frame.getPanelBulkMaps().getTxtbox_pricePerMap().setEnabled(true);
 		} else {
-			frame.getTxtbox_pricePerMap().setText("");
-			frame.getTxtbox_pricePerMap().setEnabled(false);
+			frame.getPanelBulkMaps().getTxtbox_pricePerMap().setText("");
+			frame.getPanelBulkMaps().getTxtbox_pricePerMap().setEnabled(false);
 		}
 		
 		if(frame.isValidAmountInput() && frame.isValidPricePerMapInput()) {
-			frame.getBtn_update_bulks().setEnabled(true);
+			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
 		}
 	}
 

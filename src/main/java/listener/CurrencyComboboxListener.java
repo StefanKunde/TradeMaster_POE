@@ -15,8 +15,8 @@ public class CurrencyComboboxListener implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(((JComboBox) e.getSource()).getSelectedItem());
-		String selectedCurrency = (String) ((JComboBox) e.getSource()).getSelectedItem();
+		System.out.println(((JComboBox<?>) e.getSource()).getSelectedItem());
+		String selectedCurrency = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
 		if(selectedCurrency.equals("ANY")) {
 			selectedCurrency = "";
 		}

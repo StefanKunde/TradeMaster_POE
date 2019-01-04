@@ -4,13 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import javax.swing.SwingUtilities;
 
-import com.stefank.Main;
-import com.stefank.WindowManager;
 import com.sun.jna.Native;
 import com.sun.jna.PointerType;
 
@@ -36,7 +31,8 @@ public class MinimizeButtonListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 			SwingUtilities.invokeLater(new Runnable() {
-	            @Override
+	            @SuppressWarnings("deprecation")
+				@Override
 	            public void run() {
 	            	System.out.println("Minimize..");
 	            	

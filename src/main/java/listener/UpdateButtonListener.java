@@ -38,12 +38,12 @@ public class UpdateButtonListener implements ActionListener {
 		
 		myMaps.filterByCurrency(frame.getCurrency());
 		
-		frame.getLbl_count().setText("Tradeables count: " + myMaps.getMaps().size());
-		frame.getLbl_count().setEnabled(true);
+		frame.getSingleMapsPanel().getLbl_count().setText("Tradeables count: " + myMaps.getMaps().size());
+		frame.getSingleMapsPanel().getLbl_count().setEnabled(true);
 		frame.setTradeableMaps(myMaps.getMaps());
 		
 		if(frame.getTradeableMaps().size() > 0) {
-			frame.getBtn_nextTrade().setEnabled( true);
+			frame.getSingleMapsPanel().getBtn_nextTrade().setEnabled( true);
 		}
 		
 	}

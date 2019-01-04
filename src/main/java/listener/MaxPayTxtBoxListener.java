@@ -28,13 +28,13 @@ private MainFrame frame;
 			frame.setValidMaxPayInput(true);
 			
 			if(frame.isValidAmountCurrencyInput()) {
-				frame.getBtn_update_currency().setEnabled(true);
+				frame.getCurrencyBuyerPanel().getBtn_update_currency().setEnabled(true);
 			}
 			
 			System.out.println("MaxPayTxtBoxListener true");
 		} else {
 			frame.setValidMaxPayInput(false);
-			frame.getBtn_update_currency().setEnabled(false);
+			frame.getCurrencyBuyerPanel().getBtn_update_currency().setEnabled(false);
 			System.out.println("MaxPayTxtBoxListener false");
 		}
 	}
