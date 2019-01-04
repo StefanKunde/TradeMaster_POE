@@ -28,10 +28,10 @@ Plans for future:
 
 
 
-See it in action (its the first version. No currency tab implemented in the video):
+See it in action:
 
 
-[![Watch the video](https://i.imgur.com/UicY83R.jpg)](https://www.youtube.com/watch?v=V_wN7mJptdA)
+[![Watch the video](https://i.imgur.com/UicY83R.jpg)](https://youtu.be/SsuaaTCB5Fw)
 
 
 
