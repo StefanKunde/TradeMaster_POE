@@ -10,12 +10,15 @@ This app is for all the people who feel the pain!
 
 
 Live market prices while trading for currencys:
+
 ![Price info](https://i.imgur.com/teQ3lG8.jpg)
 
 Buy maps in bulks:
+
 ![Buy maps in bulks](https://i.imgur.com/TDVu8iB.jpg)
 
 Buy single maps (white or corrupted):
+
 ![Buy single maps](https://i.imgur.com/f6pb41H.jpg)
 
 
