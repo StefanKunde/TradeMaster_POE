@@ -13,6 +13,7 @@ Works only in window mode of poe.
 
 Features:
 + Buy currency from ingame without leaving it. Amount feature included.
++ Current prices for currencys from poe ninja will be displayed
 + Look for maps you need
 + Set currency you whould like to pay with
 + Buy maps in bulks (i.e. elder maps, shaped maps, burials, ...)
