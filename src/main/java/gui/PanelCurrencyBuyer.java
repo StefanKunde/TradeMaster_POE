@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.SystemColor;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -32,6 +33,7 @@ public class PanelCurrencyBuyer extends JPanel {
 	JLabel lblTrademasterCurrency;
 	JLabel label_8;
 	JLabel lblWhatDoI;
+	JLabel lbl_priceCheck;
 	JComboBox<String> cmb_currencyTab_pay;
 	JComboBox<String> cmb_currencyTab_want;
 	JTextField txt_currencyTab_neededAmount;
@@ -87,6 +89,7 @@ public class PanelCurrencyBuyer extends JPanel {
 		btn_update_currency.setText("Update");
 		btn_update_currency.setEnabled(false);
 		btn_update_currency.setBounds(139, 186, 152, 43);
+		btn_update_currency.setLocation(172, 196);
 		
 		btn_nextTrade_currencyTab = new JButton();
 		btn_nextTrade_currencyTab.setText("Next Trade");
@@ -104,6 +107,7 @@ public class PanelCurrencyBuyer extends JPanel {
 		lbl_tradeables_currencyTab.setForeground(Color.WHITE);
 		lbl_tradeables_currencyTab.setEnabled(false);
 		lbl_tradeables_currencyTab.setBounds(154, 250, 128, 14);
+		lbl_tradeables_currencyTab.setLocation(172, 250);
 		
 		lblAmount = new JLabel("Needed amount");
 		lblAmount.setForeground(Color.WHITE);
@@ -141,6 +145,14 @@ public class PanelCurrencyBuyer extends JPanel {
 		lblWhatDoI.setBackground(Color.GRAY);
 		lblWhatDoI.setBounds(10, 90, 152, 14);
 		
+		lbl_priceCheck = new JLabel("Priceinfobox...");
+		lbl_priceCheck.setForeground(new Color(255, 235, 205));
+		lbl_priceCheck.setForeground(SystemColor.info);
+		lbl_priceCheck.setBounds(10, 158, 152, 66);
+		lbl_priceCheck.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lbl_priceCheck.setSize(314, 43);
+		lbl_priceCheck.setLocation(10, 146);
+		
 		// COMBOBOXES
 		cmb_currencyTab_pay = new JComboBox();
 		cmb_currencyTab_pay.setBounds(10, 115, 152, 20);
@@ -169,6 +181,7 @@ public class PanelCurrencyBuyer extends JPanel {
 		add(lblTrademasterCurrency);
 		add(label_8);
 		add(lblWhatDoI);
+		add(lbl_priceCheck);
 		add(cmb_currencyTab_pay);
 		add(cmb_currencyTab_want);
 		add(txt_currencyTab_neededAmount);
@@ -302,6 +315,16 @@ public class PanelCurrencyBuyer extends JPanel {
 	public void setTxt_currencyTab_MAXpay(JTextField txt_currencyTab_MAXpay) {
 		this.txt_currencyTab_MAXpay = txt_currencyTab_MAXpay;
 	}
+
+	public JLabel getLbl_priceCheck() {
+		return lbl_priceCheck;
+	}
+
+	public void setLbl_priceCheck(JLabel lbl_priceCheck) {
+		this.lbl_priceCheck = lbl_priceCheck;
+	}
+	
+	
 	
 	
 }

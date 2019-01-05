@@ -4,27 +4,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import gui.MainFrame;
+import items.PoeNinjaPrices;
 
 
 public class Main {
 	
 	public static void main(String[] args) 
 	{
+		PoeNinjaPrices prices = new PoeNinjaPrices();
+		prices.getPrices();
 		ExecutorService executor = Executors.newFixedThreadPool(3);
-		MainFrame mainFrame = new MainFrame();
+		MainFrame mainFrame = new MainFrame(prices);
 		executor.execute( new WindowManager(mainFrame));
-		
-//		PoeNinjaFetcher fetcher = new PoeNinjaFetcher();
-//		try {
-//			String responseFromPost = fetcher.sendPost("https://www.pathofexile.com/api/trade/exchange/Betrayal", null);
-//			String searchLink = fetcher.generateSearchString(responseFromPost);
-//			String responseSearch = fetcher.sendGet(searchLink);
-//			
-//			System.out.println("Response: " + responseSearch);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
 	}
 }
