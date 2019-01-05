@@ -30,7 +30,7 @@ public class CurrencyOffer {
 		int priceForAll = (int) ((double)wantedAmount * (double)pricePerUnit);
 		String message = "";
 		message += "@" + nickname + " ";
-		message += "Hey buddy! I'd like to buy your " + wantedAmount + " ";
+		message += "Hi, I'd like to buy your " + wantedAmount + " ";
 		message += sellCurrency + " ";
 		message += "for my " + priceForAll + " ";
 		message += buyCurrency + " in Betrayal.";

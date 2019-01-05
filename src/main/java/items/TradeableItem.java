@@ -23,7 +23,7 @@ public class TradeableItem {
 		int priceForBulk = amount * getPricePerMap();
 		
 		message += "@" + getUsername() + " ";
-		message += "Hey buddy! I'd like to buy your " + amount + " ";
+		message += "Hi, I'd like to buy your " + amount + " ";
 		message += getItemToSell() + " ";
 		message += "(T" + getMapTier()+ ") for my ";
 		message += priceForBulk + " ";
