@@ -26,11 +26,11 @@ public class ShapedChBoxListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(frame.isLoadedShapedMaps()) {
-			frame.getChckbxElderMap().setEnabled(true);
+			frame.getPanelBulkMaps().getChckbxElderMap().setEnabled(true);
 			frame.setLoadedElderMaps(false);
 			frame.setLoadedShapedMaps(false);
 		} else {
-			frame.getChckbxElderMap().setEnabled(false);
+			frame.getPanelBulkMaps().getChckbxElderMap().setEnabled(false);
 			frame.setLoadedShapedMaps(true);
 			loadMapsFromJson("shapedMaps.json");
 		}
@@ -39,6 +39,7 @@ public class ShapedChBoxListener implements ActionListener {
 	private void loadMapsFromJson(String fileName) {
 		String[] allMaps;
 		List<String> allMapsAsList = new ArrayList<String>();
+		@SuppressWarnings("resource")
 		String text = new Scanner(Main.class.getResourceAsStream(fileName)).useDelimiter("\\A").next();
 		byte[] bytes;
 		String mapsAsJsonString = "";
@@ -57,10 +58,10 @@ public class ShapedChBoxListener implements ActionListener {
         	allMapsAsList.add(maps.get(i).toString());
         }
         Collections.sort(allMapsAsList, String.CASE_INSENSITIVE_ORDER);
-        frame.getCmb_maps_bulks().removeAllItems();
+        frame.getPanelBulkMaps().getCmb_maps_bulks().removeAllItems();
         
         for(int i = 0; i < allMapsAsList.size(); i++) {
-        	frame.getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
+        	frame.getPanelBulkMaps().getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
         }
 	}
 

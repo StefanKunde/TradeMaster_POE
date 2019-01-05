@@ -2,36 +2,25 @@ package gui;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
 import com.stefank.Main;
 
 import listener.MaximizeButtonListener;
 
-import java.awt.BorderLayout;
 import java.awt.Image;
 
-import javax.swing.JPanel;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
-import java.awt.event.ActionEvent;
-import java.awt.Window.Type;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dialog.ModalExclusionType;
-import javax.swing.SwingConstants;
 
 public class MinimizedFrame extends JFrame implements IHideable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField txtTest;
 	private boolean userWantsMinimize;
 	private boolean isVisible;
@@ -50,7 +39,7 @@ public class MinimizedFrame extends JFrame implements IHideable {
 		
 		this.mainFrame = mainFrame;
 		
-		this.setDefaultLookAndFeelDecorated(true);
+		JFrame.setDefaultLookAndFeelDecorated(true);
 		
 		JButton btnMaximize = new JButton("");
 		btnMaximize.setLocation(14, 14);

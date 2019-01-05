@@ -1,8 +1,5 @@
 package listener;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -29,10 +26,10 @@ public class AmountTxtBoxListener implements DocumentListener {
 		
 		if(isNumeric(userInput) && Integer.valueOf(userInput) >= 1 && Integer.valueOf(userInput) <= 100) { // between 1 and 100
 			frame.setValidAmountInput(true);
-			frame.getBtn_update_bulks().setEnabled(true);
+			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
 		} else {
 			frame.setValidAmountInput(false);
-			frame.getBtn_update_bulks().setEnabled(false);
+			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(false);
 		}
 	}
 

@@ -17,14 +17,14 @@ public class WhiteCheckBoxListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if( ((JCheckBox) e.getSource()).isSelected()) {
-			frame.getChckbx_corrupted().setSelected(false);
-			frame.getChckbx_corrupted().setEnabled(false);
+			frame.getSingleMapsPanel().getChckbx_corrupted().setSelected(false);
+			frame.getSingleMapsPanel().getChckbx_corrupted().setEnabled(false);
 			
 			frame.getSearchBuilder().setRarity("normal");
 			frame.getSearchBuilder().setCorrupted(false);
 			
 		} else {
-			frame.getChckbx_corrupted().setEnabled(true);
+			frame.getSingleMapsPanel().getChckbx_corrupted().setEnabled(true);
 		}
 	}
 

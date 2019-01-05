@@ -46,7 +46,7 @@ public class Map {
 	}
 	
 	public String generateTradeText() {
-		String tradeText = "@" + this.ign + " Hey buddy, I'd like to buy your " 
+		String tradeText = "@" + this.ign + " Hi, I'd like to buy your " 
 							+ this.name + " (T" + this.data_map_tier + ") listed for "
 							+ this.priceAmount + " " + this.paymentCurrency + " in " + this.league
 							+ " (stash tab \"" + this.data_tab + "\"; position: left " + this.data_x + ", top " + this.data_y + ")";

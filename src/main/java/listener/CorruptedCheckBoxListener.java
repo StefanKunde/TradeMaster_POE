@@ -17,13 +17,13 @@ import gui.MainFrame;
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if( ((JCheckBox) e.getSource()).isSelected()) {
-				frame.getChckbx_white().setSelected(false);
-				frame.getChckbx_white().setEnabled(false);
+				frame.getSingleMapsPanel().getChckbx_white().setSelected(false);
+				frame.getSingleMapsPanel().getChckbx_white().setEnabled(false);
 				
 				frame.getSearchBuilder().setRarity("rare");
 				frame.getSearchBuilder().setCorrupted(true);
 			} else {
-				frame.getChckbx_white().setEnabled(true);
+				frame.getSingleMapsPanel().getChckbx_white().setEnabled(true);
 			}
 		}
 
