@@ -1,47 +1,52 @@
 # Trademaster_POE beta v1.4
-This is an overview application for Path of exile.
-You can search for single or even for bulks of maps with it.
 
-You know the pain when you need to buy a map!
+This is an overview application for the game Path of exile.
+You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
+So just paste it in and fire it up!
+
+You know the pain when you need to trade in this game, dont you?
 This app is for all the people who feel the pain!
 
-Warn:
-PainlessMapTrader is still in the alpha. Its normaly working, but there are some bugs in it. 
-Still in development.
 
-Works only in window mode of poe.
+
+Live market prices while trading for currencys:
+![Price info](https://i.imgur.com/teQ3lG8.jpg)
+
+Buy maps in bulks:
+![Buy maps in bulks](https://i.imgur.com/TDVu8iB.jpg)
+
+Buy single maps (white or corrupted):
+![Buy single maps](https://i.imgur.com/f6pb41H.jpg)
+
 
 Features:
 + Buy currency from ingame without leaving it. Amount feature included.
 + Current prices for currencys from poe ninja will be displayed
 + Look for maps you need
 + Set currency you whould like to pay with
-+ Buy maps in bulks (i.e. elder maps, shaped maps, burials, ...)
++ Buy items in bulks (maps as well!)
++ Set a max price of the selected currency you are willing to pay
++ Overlaywindow for Path of exile
 + Minimize main window with little icon to reopen it
-+ Set a max price of the selected currency you are willing to pay for 1 map
+
 
 Plans for future:
-- View for trades
-- Divination cards
-- Prophecies
-- automatically post trade messages
-- Mod support for buying maps (i.e. filter out reflected maps)
-
-
+- Divination card support
+- Prophecies support
 
 See it in action:
-
 
 [![Watch the video](https://i.imgur.com/MFv8uM6.jpg)](https://youtu.be/SsuaaTCB5Fw)
 
 
 
-
-
 Requirements:
-Java (min 1.8)
+- Java (min 1.8)
+- Works only in window mode of poe.
 
-
+Warn:
+TradeMaster is still in the beta and under development.
+Dont blame me for bugs. Report them whould be great!
 
 
 Download:
