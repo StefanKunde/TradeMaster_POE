@@ -1,12 +1,17 @@
 package listener;
 
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import config.Config;
 import gui.MainFrame;
+import helper.RobotHelper;
 import items.CurrencyOffers;
 
 public class NextButtonCurrencyListener implements ActionListener {
@@ -40,6 +45,10 @@ private MainFrame frame;
 			
 			frame.getCurrencyBuyerPanel().getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
 			frame.setForegroundWindow("Path of Exile");
+			
+			if(Config.isUseAutomatedTrading()) {
+				RobotHelper.sendClipboardTextToChat();
+			}
 		}
 	}
 

@@ -41,6 +41,7 @@ public class PanelSingleMaps extends JPanel {
 	JComboBox<?> cmb_currency;
 	JCheckBox chckbx_corrupted;
 	JCheckBox chckbx_white;
+	JCheckBox chckbxAutomateTrading;
 	
 	public PanelSingleMaps() {
 		init();
@@ -164,6 +165,12 @@ public class PanelSingleMaps extends JPanel {
 		chckbx_white.setBounds(18, 122, 87, 23);
 		chckbx_white.setBackground(UIManager.getColor("Button.background"));
 		
+		chckbxAutomateTrading = new JCheckBox("Automatically send offers?");
+		chckbxAutomateTrading.setForeground(new Color(255, 255, 255));
+		chckbxAutomateTrading.setBackground(new Color(255, 0, 0));
+		chckbxAutomateTrading.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		chckbxAutomateTrading.setBounds(10, 227, 134, 23);
+		
 		add(lblCurrency);
 		add(btn_update);
 		add(btn_exit);
@@ -178,6 +185,7 @@ public class PanelSingleMaps extends JPanel {
 		add(lblLoading);
 		add(chckbx_white);
 		add(chckbx_corrupted);
+		add(chckbxAutomateTrading);
 		add(lblMadeByEzkk);
 		add(lblMaptradoV);
 		add(label_1);
@@ -317,5 +325,9 @@ public class PanelSingleMaps extends JPanel {
 
 	public void setChckbx_white(JCheckBox chckbx_white) {
 		this.chckbx_white = chckbx_white;
+	}
+
+	public JCheckBox getChckbxAutomateTrading() {
+		return chckbxAutomateTrading;
 	}
 }

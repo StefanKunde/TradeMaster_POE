@@ -40,6 +40,7 @@ public class PanelBulkMaps extends JPanel {
 	JTextField txt_amount_bulks;
 	JCheckBox chckbxShapedMap;
 	JCheckBox chckbxElderMap;
+	JCheckBox chckbxAutomateTrading;
 
 	public PanelBulkMaps() {
 		init();
@@ -90,6 +91,7 @@ public class PanelBulkMaps extends JPanel {
 		btn_update_bulkbuyer.setText("Update");
 		btn_update_bulkbuyer.setEnabled(false);
 		btn_update_bulkbuyer.setBounds(139, 186, 152, 43);
+		btn_update_bulkbuyer.setLocation(156, 186);
 		
 		btn_nextTrade_bulks = new JButton();
 		btn_nextTrade_bulks.setText("Next Trade");
@@ -170,6 +172,12 @@ public class PanelBulkMaps extends JPanel {
 		chckbxElderMap.setBackground(new Color(188, 143, 143));
 		chckbxElderMap.setBounds(186, 145, 153, 23);
 		
+		chckbxAutomateTrading = new JCheckBox("Automatically send offers?");
+		chckbxAutomateTrading.setForeground(new Color(255, 255, 255));
+		chckbxAutomateTrading.setBackground(new Color(255, 0, 0));
+		chckbxAutomateTrading.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		chckbxAutomateTrading.setBounds(10, 227, 134, 23);
+		
 		add(btn_minimize_bulks);
 		add(btn_exit_bulks);
 		add(btn_update_bulkbuyer);
@@ -188,6 +196,7 @@ public class PanelBulkMaps extends JPanel {
 		add(txt_amount_bulks);
 		add(chckbxShapedMap);
 		add(chckbxElderMap);
+		add(chckbxAutomateTrading);
 	}
 
 	public String[] getCurrencys() {
@@ -340,5 +349,9 @@ public class PanelBulkMaps extends JPanel {
 
 	public void setChckbxElderMap(JCheckBox chckbxElderMap) {
 		this.chckbxElderMap = chckbxElderMap;
+	}
+
+	public JCheckBox getChckbxAutomateTrading() {
+		return chckbxAutomateTrading;
 	}
 }

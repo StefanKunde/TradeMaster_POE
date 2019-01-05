@@ -5,7 +5,10 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import config.Config;
 import gui.MainFrame;
+import helper.RobotHelper;
 import items.TradeableBulk;
 
 public class NextButtonBulksListener implements ActionListener {
@@ -41,6 +44,10 @@ public class NextButtonBulksListener implements ActionListener {
 			}
 			
 			frame.setForegroundWindow("Path of Exile");
+			if(Config.isUseAutomatedTrading()) {
+				RobotHelper.sendClipboardTextToChat();
+			}
+			
 		} else {
 			frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
 			frame.getPanelBulkMaps().getBtn_nextTrade_bulks().setEnabled(false);
