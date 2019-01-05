@@ -14,11 +14,14 @@ import com.sun.jna.Native;
 import connector.SearchParameter;
 import items.CurrencyOffers;
 import items.Map;
+import items.PoeNinjaPrices;
 import items.TradeableBulk;
 import listener.AmountTxtBoxListener;
 import listener.CorruptedCheckBoxListener;
 import listener.CurrencyBulksCmbListener;
 import listener.CurrencyComboboxListener;
+import listener.CurrencyTabCmbBoxPayListener;
+import listener.CurrencyTabCmbBoxWantListener;
 import listener.ElderChBoxListener;
 import listener.ExitButtonListener;
 import listener.MapCmbBoxBulksListener;
@@ -53,9 +56,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.JTextPane;
+import javax.swing.JLabel;
+import java.awt.SystemColor;
 
 public class MainFrame extends JDialog implements IHideable {
 	private static final long serialVersionUID = 1L;
+	PoeNinjaPrices poeNinjaPrices;
 	private static final Charset UTF_8 = Charset.forName("UTF-8");
 	private static final Charset ISO = Charset.forName("ISO-8859-1");
 	String[] currencys = { "ANY", "chaos", "alch", "chisel", "vaal", "fuse" };
@@ -86,7 +95,8 @@ public class MainFrame extends JDialog implements IHideable {
 	PanelBulkMaps panelBulkMaps;
 	PanelCurrencyBuyer currencyBuyerPanel;
 	
-	public MainFrame() {
+	public MainFrame(PoeNinjaPrices poeNinjaPrices) {
+		this.poeNinjaPrices = poeNinjaPrices;
 		tradeables = new TradeableBulk();
 		maps = new ArrayList<Map>();
 		tradeableMaps = new ArrayList<Map>();
@@ -94,6 +104,7 @@ public class MainFrame extends JDialog implements IHideable {
 		singleMapsPanel = new PanelSingleMaps();
 		panelBulkMaps = new PanelBulkMaps();
 		currencyBuyerPanel = new PanelCurrencyBuyer();
+		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		initFrame();
@@ -206,6 +217,12 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		MapComboboxListener mapListener = new MapComboboxListener(this);
 		singleMapsPanel.getCmb_map().addActionListener(mapListener);
+		
+		CurrencyTabCmbBoxWantListener wantListener = new CurrencyTabCmbBoxWantListener(this);
+		currencyBuyerPanel.getCmb_currencyTab_want().addActionListener(wantListener);
+		
+		CurrencyTabCmbBoxPayListener payListener = new CurrencyTabCmbBoxPayListener(this);
+		currencyBuyerPanel.getCmb_currencyTab_pay().addActionListener(payListener);
 	}
 	
 	public void setForegroundWindow(final String titleName){
@@ -490,5 +507,9 @@ public class MainFrame extends JDialog implements IHideable {
 
 	public PanelCurrencyBuyer getCurrencyBuyerPanel() {
 		return currencyBuyerPanel;
+	}
+
+	public PoeNinjaPrices getPoeNinjaPrices() {
+		return poeNinjaPrices;
 	}
 }
