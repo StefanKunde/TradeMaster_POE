@@ -25,6 +25,8 @@ Buy single maps (white or corrupted):
 Features:
 + Buy currency from ingame without leaving it. Amount feature included.
 + Current prices for currencys from poe ninja will be displayed
++ Option for automatically sending trade offers (deactivated by default -> use on your own risk)
++ Supported currencys to buy: All orbs, all fragments, all mortals, all sets, all breachstoned and splitters, all scarabs, all fossils,   all resonators and more...
 + Look for maps you need
 + Set currency you whould like to pay with
 + Buy items in bulks (maps as well!)
