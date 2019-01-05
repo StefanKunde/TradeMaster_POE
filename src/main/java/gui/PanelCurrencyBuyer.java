@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +39,7 @@ public class PanelCurrencyBuyer extends JPanel {
 	JComboBox<String> cmb_currencyTab_want;
 	JTextField txt_currencyTab_neededAmount;
 	JTextField txt_currencyTab_MAXpay;
+	JCheckBox chckbxAutomateTrading;
 	
 
 	public PanelCurrencyBuyer() {
@@ -160,6 +162,13 @@ public class PanelCurrencyBuyer extends JPanel {
 		cmb_currencyTab_want = new JComboBox();
 		cmb_currencyTab_want.setBounds(10, 59, 152, 20);
 		
+		// CHECKBOXES
+		chckbxAutomateTrading = new JCheckBox("Automatically send offers?");
+		chckbxAutomateTrading.setForeground(new Color(255, 255, 255));
+		chckbxAutomateTrading.setBackground(new Color(255, 0, 0));
+		chckbxAutomateTrading.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		chckbxAutomateTrading.setBounds(10, 227, 134, 23);
+		
 		// TEXTBOXES
 		txt_currencyTab_neededAmount = new JTextField();
 		txt_currencyTab_neededAmount.setColumns(10);
@@ -184,6 +193,7 @@ public class PanelCurrencyBuyer extends JPanel {
 		add(lbl_priceCheck);
 		add(cmb_currencyTab_pay);
 		add(cmb_currencyTab_want);
+		add(chckbxAutomateTrading);
 		add(txt_currencyTab_neededAmount);
 		add(txt_currencyTab_MAXpay);
 	}
@@ -323,8 +333,8 @@ public class PanelCurrencyBuyer extends JPanel {
 	public void setLbl_priceCheck(JLabel lbl_priceCheck) {
 		this.lbl_priceCheck = lbl_priceCheck;
 	}
-	
-	
-	
-	
+
+	public JCheckBox getChckbxAutomateTrading() {
+		return chckbxAutomateTrading;
+	}
 }

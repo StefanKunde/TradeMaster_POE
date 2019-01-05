@@ -17,6 +17,7 @@ import items.Map;
 import items.PoeNinjaPrices;
 import items.TradeableBulk;
 import listener.AmountTxtBoxListener;
+import listener.AutomateTradesChkBoxListener;
 import listener.CorruptedCheckBoxListener;
 import listener.CurrencyBulksCmbListener;
 import listener.CurrencyComboboxListener;
@@ -61,6 +62,7 @@ import javax.swing.Box;
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
+import javax.swing.JCheckBox;
 
 public class MainFrame extends JDialog implements IHideable {
 	private static final long serialVersionUID = 1L;
@@ -223,6 +225,11 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		CurrencyTabCmbBoxPayListener payListener = new CurrencyTabCmbBoxPayListener(this);
 		currencyBuyerPanel.getCmb_currencyTab_pay().addActionListener(payListener);
+		
+		AutomateTradesChkBoxListener automateTradeChBxListener = new AutomateTradesChkBoxListener(this);
+		panelBulkMaps.getChckbxAutomateTrading().addActionListener(automateTradeChBxListener);
+		currencyBuyerPanel.getChckbxAutomateTrading().addActionListener(automateTradeChBxListener);
+		singleMapsPanel.getChckbxAutomateTrading().addActionListener(automateTradeChBxListener);
 	}
 	
 	public void setForegroundWindow(final String titleName){

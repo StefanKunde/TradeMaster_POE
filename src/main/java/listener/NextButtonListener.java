@@ -6,7 +6,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import config.Config;
 import gui.MainFrame;
+import helper.RobotHelper;
 
 
 public class NextButtonListener implements ActionListener {
@@ -28,6 +30,9 @@ public class NextButtonListener implements ActionListener {
 			frame.getTradeableMaps().remove(0);
 			frame.getSingleMapsPanel().getLbl_count().setText("Tradeables left: " + frame.getTradeableMaps().size());
 			frame.setForegroundWindow("Path of Exile");
+			if(Config.isUseAutomatedTrading()) {
+				RobotHelper.sendClipboardTextToChat();
+			}
 		} else {
 			frame.getSingleMapsPanel().getLbl_count().setText("no tradeables left.");
 		}
