@@ -45,4 +45,4 @@ Java (min 1.8)
 
 
 Download:
-https://github.com/StefanKunde/TradeMaster_POE/releases/download/v1.3-beta/Trademaster_v1.3-beta.jar
+https://github.com/StefanKunde/TradeMaster_POE/releases/download/v1.4-beta/Trademaster_v1.4-beta.jar
