@@ -26,7 +26,7 @@ public class CurrencyBulksCmbListener implements ActionListener {
 		}
 		
 		if(frame.isValidAmountInput() && frame.isValidPricePerMapInput()) {
-			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
+			frame.getPanelBulkMaps().getUpdateButton().setEnabled(true);
 		}
 	}
 

@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import listener.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,30 +18,6 @@ import items.CurrencyOffers;
 import items.Map;
 import items.PoeNinjaPrices;
 import items.TradeableBulk;
-import listener.AmountTxtBoxListener;
-import listener.AutomateTradesChkBoxListener;
-import listener.CorruptedCheckBoxListener;
-import listener.CurrencyBulksCmbListener;
-import listener.CurrencyComboboxListener;
-import listener.CurrencyTabCmbBoxPayListener;
-import listener.CurrencyTabCmbBoxWantListener;
-import listener.ElderChBoxListener;
-import listener.ExitButtonListener;
-import listener.MapCmbBoxBulksListener;
-import listener.MapComboboxListener;
-import listener.MaxPayTxtBoxListener;
-import listener.MinimizeButtonListener;
-import listener.NeededAmountTxtBoxListener;
-import listener.NextButtonBulksListener;
-import listener.NextButtonCurrencyListener;
-import listener.NextButtonListener;
-import listener.PricePerMapTxtBoxListener;
-import listener.ShapedChBoxListener;
-import listener.TierComboboxListener;
-import listener.UpdateButtonBulksListener;
-import listener.UpdateButtonCurrencyListener;
-import listener.UpdateButtonListener;
-import listener.WhiteCheckBoxListener;
 import utility.User32;
 import javax.swing.JDialog;
 import java.awt.Color;
@@ -65,6 +43,8 @@ import java.awt.SystemColor;
 import javax.swing.JCheckBox;
 
 public class MainFrame extends JDialog implements IHideable {
+    public static final String[] AVAILABLE_LEAGUES = new String[]{"Standard", "Hardcore", "Betrayal", "Hardcore Betrayal"};
+
 	private static final long serialVersionUID = 1L;
 	PoeNinjaPrices poeNinjaPrices;
 	private static final Charset UTF_8 = Charset.forName("UTF-8");
@@ -93,12 +73,14 @@ public class MainFrame extends JDialog implements IHideable {
 	boolean userWantsMinimize = false;
 	private JTabbedPane tabbedPane;
 	
-	PanelSingleMaps singleMapsPanel;
-	PanelBulkMaps panelBulkMaps;
-	PanelCurrencyBuyer currencyBuyerPanel;
-	
+	private PanelSingleMaps singleMapsPanel;
+	private PanelBulkMaps panelBulkMaps;
+	private PanelCurrencyBuyer currencyBuyerPanel;
+	private PanelSettings settingsPanel;
+
 	public MainFrame(PoeNinjaPrices poeNinjaPrices) {
 		this.poeNinjaPrices = poeNinjaPrices;
+
 		tradeables = new TradeableBulk();
 		maps = new ArrayList<Map>();
 		tradeableMaps = new ArrayList<Map>();
@@ -106,7 +88,8 @@ public class MainFrame extends JDialog implements IHideable {
 		singleMapsPanel = new PanelSingleMaps();
 		panelBulkMaps = new PanelBulkMaps();
 		currencyBuyerPanel = new PanelCurrencyBuyer();
-		
+		settingsPanel = new PanelSettings();
+
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		initFrame();
@@ -121,13 +104,7 @@ public class MainFrame extends JDialog implements IHideable {
 	private void initFrame() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e1  ) {
 			e1.printStackTrace();
 		}
 		
@@ -136,6 +113,8 @@ public class MainFrame extends JDialog implements IHideable {
 		tabbedPane.add("Buy single maps", singleMapsPanel);
 		tabbedPane.addTab("Buy bulks of maps", null, panelBulkMaps, null);
 		tabbedPane.addTab("Currency", null, currencyBuyerPanel, null);
+
+		tabbedPane.addTab("Settings", null, settingsPanel, null);
 		
 		this.setPreferredSize(new Dimension(400, 200));
 		this.setForeground(Color.GRAY);
@@ -154,7 +133,7 @@ public class MainFrame extends JDialog implements IHideable {
 		
 		// Add Listeners
 		AmountTxtBoxListener amountListener = new AmountTxtBoxListener(this);
-		getPanelBulkMaps().getTxt_amount_bulks().getDocument().addDocumentListener(amountListener);
+		panelBulkMaps.getTxt_amount_bulks().getDocument().addDocumentListener(amountListener);
 		
 		NeededAmountTxtBoxListener neededAmountListener = new NeededAmountTxtBoxListener(this);
 		currencyBuyerPanel.getTxt_currencyTab_neededAmount().getDocument().addDocumentListener(neededAmountListener);
@@ -163,7 +142,7 @@ public class MainFrame extends JDialog implements IHideable {
 		currencyBuyerPanel.getTxt_currencyTab_MAXpay().getDocument().addDocumentListener(maxPayListener);
 		
 		PricePerMapTxtBoxListener pricePerMapListener = new PricePerMapTxtBoxListener(this);
-		getPanelBulkMaps().getTxtbox_pricePerMap().getDocument().addDocumentListener(pricePerMapListener);
+		panelBulkMaps.getTxtbox_pricePerMap().getDocument().addDocumentListener(pricePerMapListener);
 		
 		CorruptedCheckBoxListener corruptedBoxListener = new CorruptedCheckBoxListener(this);
 		singleMapsPanel.getChckbx_corrupted().addActionListener(corruptedBoxListener);
@@ -172,35 +151,40 @@ public class MainFrame extends JDialog implements IHideable {
 		singleMapsPanel.getChckbx_white().addActionListener(whiteBoxListener);
 		
 		ShapedChBoxListener shapedCbListener = new ShapedChBoxListener(this);
-		getPanelBulkMaps().getChckbxShapedMap().addActionListener(shapedCbListener);
+		panelBulkMaps.getChckbxShapedMap().addActionListener(shapedCbListener);
 		
 		ElderChBoxListener elderCbListener = new ElderChBoxListener(this);
-		getPanelBulkMaps().getChckbxElderMap().addActionListener(elderCbListener);
+		panelBulkMaps.getChckbxElderMap().addActionListener(elderCbListener);
 		
 		ExitButtonListener exitListener = new ExitButtonListener(this);
-		singleMapsPanel.getBtn_exit().addActionListener(exitListener);
-		getPanelBulkMaps().getBtn_exit_bulks().addActionListener(exitListener);
-		currencyBuyerPanel.getBtn_exit_cur().addActionListener(exitListener);
+		singleMapsPanel.getBtnExit().addActionListener(exitListener);
+		settingsPanel.getBtnExit().addActionListener(exitListener);
+		panelBulkMaps.getBtnExit().addActionListener(exitListener);
+		currencyBuyerPanel.getBtnExit().addActionListener(exitListener);
 		
 		MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this);
-		singleMapsPanel.getBtn_minimize().addActionListener(minimizeListener);
-		getPanelBulkMaps().getBtn_minimize_bulks().addActionListener(minimizeListener);
-		currencyBuyerPanel.getBtn_minimize_cur().addActionListener(minimizeListener);
+		singleMapsPanel.getBtnMinimize().addActionListener(minimizeListener);
+		settingsPanel.getBtnMinimize().addActionListener(minimizeListener);
+		panelBulkMaps.getBtnMinimize().addActionListener(minimizeListener);
+		currencyBuyerPanel.getBtnMinimize().addActionListener(minimizeListener);
 		
 		UpdateButtonListener updateListener = new UpdateButtonListener(this);
-		singleMapsPanel.getBtn_update().addActionListener(updateListener);
+		singleMapsPanel.getUpdateButton().addActionListener(updateListener);
 		
 		UpdateButtonBulksListener updateBulkListener = new UpdateButtonBulksListener(this);
-		getPanelBulkMaps().getBtn_update_bulkbuyer().addActionListener(updateBulkListener);
+		panelBulkMaps.getUpdateButton().addActionListener(updateBulkListener);
 		
 		UpdateButtonCurrencyListener updateCurrencyListener = new UpdateButtonCurrencyListener(this);
-		currencyBuyerPanel.getBtn_update_currency().addActionListener(updateCurrencyListener);
-		
+		currencyBuyerPanel.getUpdateButton().addActionListener(updateCurrencyListener);
+
+		UpdateSettingsListener updateSettingsListener = new UpdateSettingsListener(this);
+		settingsPanel.getUpdateButton().addActionListener(updateSettingsListener);
+
 		NextButtonListener nextTradeListener = new NextButtonListener(this);
 		singleMapsPanel.getBtn_nextTrade().addActionListener(nextTradeListener);
 		
 		NextButtonBulksListener nextTradeBulksListener = new NextButtonBulksListener(this);
-		getPanelBulkMaps().getBtn_nextTrade_bulks().addActionListener(nextTradeBulksListener);
+		panelBulkMaps.getBtn_nextTrade_bulks().addActionListener(nextTradeBulksListener);
 		
 		NextButtonCurrencyListener nextCurrencyListener = new NextButtonCurrencyListener(this);
 		currencyBuyerPanel.getBtn_nextTrade_currencyTab().addActionListener(nextCurrencyListener);
@@ -209,17 +193,20 @@ public class MainFrame extends JDialog implements IHideable {
 		singleMapsPanel.getCmb_currency().addActionListener(currencyListener);
 		
 		CurrencyBulksCmbListener currencyBulksCmbListener = new CurrencyBulksCmbListener(this);
-		getPanelBulkMaps().getCmb_currency_bulks().addActionListener(currencyBulksCmbListener);
+		panelBulkMaps.getCmb_currency_bulks().addActionListener(currencyBulksCmbListener);
 		
 		MapCmbBoxBulksListener mapCmbListener = new MapCmbBoxBulksListener(this);
-		getPanelBulkMaps().getCmb_maps_bulks().addActionListener(mapCmbListener);
+		panelBulkMaps.getCmb_maps_bulks().addActionListener(mapCmbListener);
 		
 		TierComboboxListener tierListener = new TierComboboxListener(this);
 		singleMapsPanel.getCmb_tier().addActionListener(tierListener);
 		
 		MapComboboxListener mapListener = new MapComboboxListener(this);
 		singleMapsPanel.getCmb_map().addActionListener(mapListener);
-		
+
+        LeagueChangeListener leagueChangeListener = new LeagueChangeListener(this);
+        settingsPanel.getLeagueSelection().addItemListener(leagueChangeListener);
+
 		CurrencyTabCmbBoxWantListener wantListener = new CurrencyTabCmbBoxWantListener(this);
 		currencyBuyerPanel.getCmb_currencyTab_want().addActionListener(wantListener);
 		
@@ -270,10 +257,10 @@ public class MainFrame extends JDialog implements IHideable {
         	allMapsAsList.add(maps.get(i).toString());
         }
         Collections.sort(allMapsAsList, String.CASE_INSENSITIVE_ORDER);
-        getPanelBulkMaps().getCmb_maps_bulks().removeAllItems();
+        panelBulkMaps.getCmb_maps_bulks().removeAllItems();
         
         for(int i = 0; i < allMapsAsList.size(); i++) {
-        	getPanelBulkMaps().getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
+        	panelBulkMaps.getCmb_maps_bulks().addItem( allMapsAsList.get(i) );
         }
 	}
 	
@@ -516,7 +503,13 @@ public class MainFrame extends JDialog implements IHideable {
 		return currencyBuyerPanel;
 	}
 
-	public PoeNinjaPrices getPoeNinjaPrices() {
-		return poeNinjaPrices;
-	}
+	public PoeNinjaPrices getPoeNinjaPrices() {return poeNinjaPrices;};
+
+    public PanelSettings getSettingsPanel() {
+        return settingsPanel;
+    }
+
+    public void setPoeNinjaPrices(PoeNinjaPrices poeNinjaPrices) {
+        this.poeNinjaPrices = poeNinjaPrices;
+    }
 }

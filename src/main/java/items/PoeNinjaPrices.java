@@ -10,22 +10,14 @@ import handler.PoeNinjaPriceCheckHandler;
 
 public class PoeNinjaPrices {
 	
-	List<PoeNinjaPriceItem> priceItemList;
+	private List<PoeNinjaPriceItem> priceItemList;
 	
 	public PoeNinjaPrices() {
-		priceItemList = new ArrayList<PoeNinjaPriceItem>();
-	}
-	
-	public void addPriceItem(PoeNinjaPriceItem item) {
-		priceItemList.add(item);
+		priceItemList = new ArrayList<>();
 	}
 
 	public List<PoeNinjaPriceItem> getPriceItemList() {
 		return priceItemList;
-	}
-
-	public void setPriceItemList(List<PoeNinjaPriceItem> priceItemList) {
-		this.priceItemList = priceItemList;
 	}
 
 	public void getPrices() {
@@ -34,13 +26,10 @@ public class PoeNinjaPrices {
 		try {
 			pricesAsJsonText = fetcher.sendGet();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		PoeNinjaPriceCheckHandler handler = new PoeNinjaPriceCheckHandler(pricesAsJsonText);
 		priceItemList = handler.getPriceItemList();
-		
-		
 	}
 }

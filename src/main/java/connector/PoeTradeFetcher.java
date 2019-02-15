@@ -22,126 +22,114 @@ import org.jsoup.select.Elements;
 
 @SuppressWarnings("deprecation")
 public class PoeTradeFetcher {
-	
-	final String POE_SEARCHLINK = "http://poe.trade/search";
-	final String POE_SEARCHLINK_FOR_RESULT = "http://poe.trade/search/";
 
-	private final String USER_AGENT = "Mozilla/5.0";
-	// HTTP GET request
-	public String sendGet(String url) throws Exception {
+    final String POE_SEARCHLINK = "http://poe.trade/search";
 
-		@SuppressWarnings({ "resource" })
-		HttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet(url);
+    private final String USER_AGENT = "Mozilla/5.0";
 
-		// add request header
-		request.addHeader("User-Agent", USER_AGENT);
-		request.addHeader("accep", USER_AGENT);
+    // HTTP GET request
+    public String sendGet(String url) throws Exception {
 
-		HttpResponse response = client.execute(request);
-		HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
-		
+        @SuppressWarnings({"resource"})
+        HttpClient client = new DefaultHttpClient();
+        HttpGet request = new HttpGet(url);
 
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + 
-                       response.getStatusLine().getStatusCode());
-		
-		
-		BufferedReader rd = new BufferedReader(
-                       new InputStreamReader(entity.getContent()));
-		
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		rd.close();
-		EntityUtils.consume(entity);
-		
-		String resultString = result.toString();
-		
-		return resultString;
-		
+        // add request header
+        request.addHeader("User-Agent", USER_AGENT);
+        request.addHeader("accept", USER_AGENT);
 
-	}
+        HttpResponse response = client.execute(request);
+        HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
 
-	// HTTP POST request
-	public String sendPost(String url, List<NameValuePair> postData) throws Exception {
+        System.out.println("\nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
-		@SuppressWarnings({ "resource" })
-		HttpClient client = new DefaultHttpClient();
-		HttpPost post = new HttpPost(url);
+        StringBuilder result = new StringBuilder();
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+        } finally {
+            EntityUtils.consume(entity);
+        }
 
-		// add header
-		post.setHeader("User-Agent", USER_AGENT);
-		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+        return result.toString();
 
-		post.setEntity(new UrlEncodedFormEntity(postData));
-		
-		System.out.println("Post data: " + postData);
 
-		HttpResponse response = client.execute(post);
-		//HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + post.getEntity());
-		System.out.println("Response Code : " + 
-                                    response.getStatusLine().getStatusCode());
+    }
 
-		BufferedReader rd = new BufferedReader(
-                        new InputStreamReader(response.getEntity().getContent()));
+    // HTTP POST request
+    public String sendPost(String url, List<NameValuePair> postData) throws Exception {
 
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		rd.close();
-		
-		String resultText = result.toString();
+        @SuppressWarnings({"resource"})
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(url);
 
-		return resultText;
+        // add header
+        post.setHeader("User-Agent", USER_AGENT);
+        post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-	}
-	
-	
-	private String getRequestLinkForSearchData(List<NameValuePair> searchData) {
-		
-		String response = "";
-		try {
-			response = this.sendPost(this.POE_SEARCHLINK, searchData);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String requestLink = this.filterLinkFromResponse(response);
-		
-		return requestLink;
-		
-	}
-	
-	public String getAllMapsFromRequestAsHtml(List<NameValuePair> searchData) {
-		String response = "";
-		String requestLink = this.getRequestLinkForSearchData(searchData);
-		try {
-			response = this.sendGet(requestLink);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return response;
-	}
-	
-	private String filterLinkFromResponse(String response) {
-		String requestLinkFromResponse = "";
-		
-		Document doc = Jsoup.parse(response);
-		System.out.println(doc.title());
-		Elements body = doc.select("a");
-		for (Element headline : body) {
-			requestLinkFromResponse = headline.html();
-		}
-		
-		System.out.println("requestLinkFromResponse: " + requestLinkFromResponse);
-		return requestLinkFromResponse;
-	}
+        post.setEntity(new UrlEncodedFormEntity(postData));
+
+        System.out.println("Post data: " + postData);
+
+        HttpResponse response = client.execute(post);
+        //HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
+        System.out.println("\nSending 'POST' request to URL : " + url);
+        System.out.println("Post parameters : " + post.getEntity());
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+        StringBuilder result = new StringBuilder();
+        try (BufferedReader rd = new BufferedReader(
+                new InputStreamReader(response.getEntity().getContent()))) {
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+        }
+        return result.toString();
+    }
+
+
+    private String getRequestLinkForSearchData(List<NameValuePair> searchData) {
+
+        String response = "";
+        try {
+            response = this.sendPost(this.POE_SEARCHLINK, searchData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String requestLink = this.filterLinkFromResponse(response);
+
+        return requestLink;
+
+    }
+
+    public String getAllMapsFromRequestAsHtml(List<NameValuePair> searchData) {
+        String response = "";
+        String requestLink = this.getRequestLinkForSearchData(searchData);
+        try {
+            response = this.sendGet(requestLink);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
+    private String filterLinkFromResponse(String response) {
+        String requestLinkFromResponse = "";
+
+        Document doc = Jsoup.parse(response);
+        System.out.println(doc.title());
+        Elements body = doc.select("a");
+        for (Element headline : body) {
+            requestLinkFromResponse = headline.html();
+        }
+
+        System.out.println("requestLinkFromResponse: " + requestLinkFromResponse);
+        return requestLinkFromResponse;
+    }
 
 }

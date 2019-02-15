@@ -16,8 +16,8 @@ import handler.PoeNinjaHandler;
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Loading...");
-			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(false);
+			frame.getPanelBulkMaps().getTradeables().setText("Loading...");
+			frame.getPanelBulkMaps().getUpdateButton().setEnabled(false);
 			int bulkAmount = Integer.valueOf( frame.getPanelBulkMaps().getTxt_amount_bulks().getText() );
 			boolean isElder = frame.getPanelBulkMaps().getChckbxElderMap().isSelected();
 			String mapFromCmbBox = frame.getPanelBulkMaps().getCmb_maps_bulks().getSelectedItem().toString();
@@ -52,7 +52,7 @@ import handler.PoeNinjaHandler;
 				frame.getTradeables().filterByCurrencyAndMaxPrice(currency, pricePerMap);
 			}
 			
-			frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
+			frame.getPanelBulkMaps().getTradeables().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
 			
 			
 			if(frame.getTradeables().getFilteredTradeableItems().size() > 0 ) {

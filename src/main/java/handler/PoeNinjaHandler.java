@@ -40,10 +40,8 @@ public class PoeNinjaHandler {
 	public void handleBulkRequests() {
 		String responseFromPost;
 		String searchLink;
-		String responseSearch = "";
 		try {
 			responseFromPost = poeConnector.sendPost(this.jsonSearchString);
-			
 			poeConnector.storeResultsFromResponseAsList(responseFromPost);
 			
 			Gson gson = new Gson();

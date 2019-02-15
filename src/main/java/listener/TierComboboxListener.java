@@ -71,7 +71,7 @@ public class TierComboboxListener implements ActionListener {
 	        frame.getSearchBuilder().setTier(segments[1]);
 	        
 	        frame.getSingleMapsPanel().getCmb_map().setEnabled(true);
-	        frame.getSingleMapsPanel().getBtn_update().setEnabled(true);
+	        frame.getSingleMapsPanel().getUpdateButton().setEnabled(true);
 		}
 	}
 

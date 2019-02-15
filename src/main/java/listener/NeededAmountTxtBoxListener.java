@@ -54,7 +54,7 @@ private MainFrame frame;
 			frame.setValidAmountCurrencyInput(true);
 			
 			if(frame.isValidMaxPayInput()) {
-				frame.getCurrencyBuyerPanel().getBtn_update_currency().setEnabled(true);
+				frame.getCurrencyBuyerPanel().getUpdateButton().setEnabled(true);
 			}
 			
 			// Get currency ID from selected Item
@@ -147,7 +147,7 @@ private MainFrame frame;
 			
 		} else {
 			frame.setValidAmountCurrencyInput(false);
-			frame.getCurrencyBuyerPanel().getBtn_update_currency().setEnabled(false);
+			frame.getCurrencyBuyerPanel().getUpdateButton().setEnabled(false);
 		}
 		
 	}

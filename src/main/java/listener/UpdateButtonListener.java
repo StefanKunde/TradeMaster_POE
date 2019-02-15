@@ -38,8 +38,8 @@ public class UpdateButtonListener implements ActionListener {
 		
 		myMaps.filterByCurrency(frame.getCurrency());
 		
-		frame.getSingleMapsPanel().getLbl_count().setText("Tradeables count: " + myMaps.getMaps().size());
-		frame.getSingleMapsPanel().getLbl_count().setEnabled(true);
+		frame.getSingleMapsPanel().getTradeables().setText("Tradeables count: " + myMaps.getMaps().size());
+		frame.getSingleMapsPanel().getTradeables().setEnabled(true);
 		frame.setTradeableMaps(myMaps.getMaps());
 		
 		if(frame.getTradeableMaps().size() > 0) {

@@ -43,7 +43,7 @@ private MainFrame frame;
 			}
 			frame.setCurrencyOffers(tmpOffers);
 			
-			frame.getCurrencyBuyerPanel().getLbl_tradeables_currencyTab().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
+			frame.getCurrencyBuyerPanel().getTradeables().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
 			frame.setForegroundWindow("Path of Exile");
 			
 			if(Config.isUseAutomatedTrading()) {

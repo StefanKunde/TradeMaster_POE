@@ -15,7 +15,7 @@ import utility.User32;
 public class WindowManager implements Runnable {
 
 	private User32 user32 = User32.INSTANCE;
-	JDialog myFrame;
+	private JDialog myFrame;
 	
 	public WindowManager(JDialog frame) {
 		this.myFrame = frame;
@@ -28,8 +28,6 @@ public class WindowManager implements Runnable {
 			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
-				System.out.println("running...");
-				System.out.println("My Frame title: " + myFrame.getTitle());
                 byte[] windowText = new byte[512];
                 PointerType hwnd = user32.GetForegroundWindow();
                 User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);

@@ -26,10 +26,10 @@ public class AmountTxtBoxListener implements DocumentListener {
 		
 		if(isNumeric(userInput) && Integer.valueOf(userInput) >= 1 && Integer.valueOf(userInput) <= 100) { // between 1 and 100
 			frame.setValidAmountInput(true);
-			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
+			frame.getPanelBulkMaps().getUpdateButton().setEnabled(true);
 		} else {
 			frame.setValidAmountInput(false);
-			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(false);
+			frame.getPanelBulkMaps().getUpdateButton().setEnabled(false);
 		}
 	}
 

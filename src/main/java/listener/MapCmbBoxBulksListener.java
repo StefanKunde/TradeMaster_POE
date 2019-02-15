@@ -16,7 +16,7 @@ public class MapCmbBoxBulksListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(frame.isValidAmountInput()) {
-			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
+			frame.getPanelBulkMaps().getUpdateButton().setEnabled(true);
 		}
 	}
 }

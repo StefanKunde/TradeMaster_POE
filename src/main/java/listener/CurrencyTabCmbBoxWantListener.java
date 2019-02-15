@@ -34,7 +34,6 @@ private MainFrame frame;
 			bytes = text.getBytes("UTF-8");
 			mapsAsJsonString = new String(bytes, "UTF-8");
 		} catch (UnsupportedEncodingException event) {
-			// TODO Auto-generated catch block
 			event.printStackTrace();
 		}
         JSONObject json = new JSONObject(mapsAsJsonString);

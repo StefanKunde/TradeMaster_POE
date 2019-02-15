@@ -2,6 +2,8 @@ package connector;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
+import config.Config;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -13,61 +15,44 @@ import org.apache.http.util.EntityUtils;
 @SuppressWarnings("deprecation")
 public class CurrencyPoeTradeFetcher {
 
-	final String POE_SEARCHLINK = "http://currency.poe.trade/search?league=Betrayal&online=x&stock=";
+    private static final String POE_SEARCHLINK = "http://currency.poe.trade/search?league=%s&online=x&stock=%s&want=%s&have=%s";
 
-	private final String USER_AGENT = "Mozilla/5.0";
-	
-	
-	// HTTP GET request
-	public String sendGet(String wantedCurrencyID, String currencyToPayWithID) throws Exception {
+    private final String USER_AGENT = "Mozilla/5.0";
 
-		String url = generateSearchUrl(wantedCurrencyID, currencyToPayWithID);
-		
-		@SuppressWarnings({ "resource" })
-		HttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet(url);
+    // HTTP GET request
+    public String sendGet(String wantedStock, String wantedCurrencyID, String currencyToPayWithID) throws Exception {
 
-		// add request header
-		request.addHeader("User-Agent", USER_AGENT);
-		request.addHeader("accept", USER_AGENT);
+        String url = generateSearchUrl(wantedStock, wantedCurrencyID, currencyToPayWithID);
 
-		HttpResponse response = client.execute(request);
-		HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
-		
+        @SuppressWarnings({"resource"})
+        HttpClient client = new DefaultHttpClient();
+        HttpGet request = new HttpGet(url);
 
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + 
-                       response.getStatusLine().getStatusCode());
-		
-		
-		BufferedReader rd = new BufferedReader(
-                       new InputStreamReader(entity.getContent()));
-		
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		rd.close();
-		EntityUtils.consume(entity);
-		
-		String resultString = result.toString();
-		
-		return resultString;
-		
+        // add request header
+        request.addHeader("User-Agent", USER_AGENT);
+        request.addHeader("accept", USER_AGENT);
 
-	}
+        HttpResponse response = client.execute(request);
+        HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
 
+        System.out.println("\nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
-	private String generateSearchUrl(String wantedCurrencyID, String currencyToPayWithID) {
-		String url = "";
-		
-		url += POE_SEARCHLINK;
-		url += "&want=" + wantedCurrencyID;
-		url += "&have=" + currencyToPayWithID;
-		
-		System.out.println(url);
-		return url;
-	}
+        StringBuffer result = new StringBuffer();
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+        } finally {
+            EntityUtils.consume(entity);
+        }
+
+        return result.toString();
+    }
+
+    private String generateSearchUrl(String wantedStock, String wantedCurrencyID, String currencyToPayWithID) {
+        return String.format(POE_SEARCHLINK, Config.getEncodedLeagueSelection(), wantedStock, wantedCurrencyID, currencyToPayWithID);
+    }
 
 }

@@ -28,7 +28,7 @@ public class PricePerMapTxtBoxListener implements DocumentListener {
 			frame.setValidPricePerMapInput(true);
 			
 			if(frame.isValidAmountInput()) {
-				frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
+				frame.getPanelBulkMaps().getUpdateButton().setEnabled(true);
 			}
 			
 		} else {
