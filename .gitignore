@@ -9,6 +9,8 @@
 .project
 bin/
 target/
+.idea/
+.metadata/
 .classpath
 build.fxbuild
 
