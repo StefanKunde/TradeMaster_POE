@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import javax.swing.JComboBox;
 
+import io.sentry.Sentry;
 import org.json.JSONObject;
 
 import com.stefank.Main;
@@ -34,7 +35,7 @@ private MainFrame frame;
 			bytes = text.getBytes("UTF-8");
 			mapsAsJsonString = new String(bytes, "UTF-8");
 		} catch (UnsupportedEncodingException event) {
-			event.printStackTrace();
+			Sentry.capture(event);
 		}
         JSONObject json = new JSONObject(mapsAsJsonString);
         JSONObject currencys = (JSONObject) json.get("Currency");

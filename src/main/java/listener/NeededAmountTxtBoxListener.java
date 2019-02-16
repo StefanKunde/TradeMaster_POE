@@ -8,6 +8,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
+import io.sentry.Sentry;
 import org.json.JSONObject;
 
 import com.stefank.Main;
@@ -45,8 +46,7 @@ private MainFrame frame;
 		try {
 			userInput = e.getDocument().getText(0, e.getDocument().getLength());
 		} catch (BadLocationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Sentry.capture(e1);
 		}
 		//boolean validMaxPayInput = false;
 		//boolean validAmountCurrencyInput = false;
@@ -65,8 +65,7 @@ private MainFrame frame;
 				bytes = text.getBytes("UTF-8");
 				mapsAsJsonString = new String(bytes, "UTF-8");
 			} catch (UnsupportedEncodingException event) {
-				// TODO Auto-generated catch block
-				event.printStackTrace();
+				Sentry.capture(event);
 			}
 	        JSONObject json = new JSONObject(mapsAsJsonString);
 	        JSONObject currencys = (JSONObject) json.get("Currency");

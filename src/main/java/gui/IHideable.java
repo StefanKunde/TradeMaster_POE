@@ -2,8 +2,8 @@ package gui;
 
 public interface IHideable {
 	
-	public void setFrameVisible();
-	public boolean isUserWantsMinimize();
-	public void setFrameInvisible();
-	public boolean isFrameVisible();
+	void setFrameVisible();
+	boolean isUserWantsMinimize();
+	void setFrameInvisible();
+	boolean isFrameVisible();
 }

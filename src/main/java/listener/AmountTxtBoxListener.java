@@ -5,6 +5,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import gui.MainFrame;
+import io.sentry.Sentry;
 
 public class AmountTxtBoxListener implements DocumentListener {
 
@@ -20,8 +21,7 @@ public class AmountTxtBoxListener implements DocumentListener {
 		try {
 			userInput = e.getDocument().getText(0, e.getDocument().getLength());
 		} catch (BadLocationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Sentry.capture(e1);
 		}
 		
 		if(isNumeric(userInput) && Integer.valueOf(userInput) >= 1 && Integer.valueOf(userInput) <= 100) { // between 1 and 100

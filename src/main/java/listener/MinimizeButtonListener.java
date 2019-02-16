@@ -50,11 +50,11 @@ public class MinimizeButtonListener implements ActionListener {
                             User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
 
                             String acticeWindowTitle = Native.toString(windowText);
-                            System.out.println("From MinimizeButtonListener: " + minFrame.getTitle());
+//                            System.out.println("From MinimizeButtonListener: " + minFrame.getTitle());
                             if (Native.toString(windowText).equals("Path of Exile")) {
                                 if (!((IHideable) minFrame).isFrameVisible() && !((IHideable) minFrame).isUserWantsMinimize()) {
                                     minFrame.show();
-                                    System.out.println("show window!");
+//                                    System.out.println("show window!");
                                 }
                             } else {
 

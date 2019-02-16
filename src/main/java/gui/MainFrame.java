@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import io.sentry.Sentry;
 import listener.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,31 +47,31 @@ public class MainFrame extends JDialog implements IHideable {
     public static final String[] AVAILABLE_LEAGUES = new String[]{"Standard", "Hardcore", "Betrayal", "Hardcore Betrayal"};
 
 	private static final long serialVersionUID = 1L;
-	PoeNinjaPrices poeNinjaPrices;
+	private PoeNinjaPrices poeNinjaPrices;
 	private static final Charset UTF_8 = Charset.forName("UTF-8");
 	private static final Charset ISO = Charset.forName("ISO-8859-1");
-	String[] currencys = { "ANY", "chaos", "alch", "chisel", "vaal", "fuse" };
+	private String[] currencys = { "ANY", "chaos", "alch", "chisel", "vaal", "fuse" };
 	private Point mouseClickPoint; // Will reference to the last pressing (not clicking) position
 	private User32 user32 = User32.INSTANCE;
-	TradeableBulk tradeables;
-	CurrencyOffers currencyOffers;
-	
-	boolean isVisible;
-	List<Map> maps;
-	List<Map> tradeableMaps;
-	SearchParameter searchBuilder;
-	String currency = "";
-	String mapName = "";
-	boolean selectedCurrency = false;
-	boolean selectedTier = false;
-	boolean selectedMap = false;
-	boolean validAmountInput = false;
-	boolean validPricePerMapInput = false;
-	boolean loadedShapedMaps = false;
-	boolean loadedElderMaps = false;
-	boolean validMaxPayInput = false;
-	boolean validAmountCurrencyInput = false;
-	boolean userWantsMinimize = false;
+	private TradeableBulk tradeables;
+	private CurrencyOffers currencyOffers;
+
+    private  boolean isVisible;
+    private List<Map> maps;
+    private List<Map> tradeableMaps;
+    private SearchParameter searchBuilder;
+    private String currency = "";
+    private String mapName = "";
+    private boolean selectedCurrency = false;
+    private boolean selectedTier = false;
+    private boolean selectedMap = false;
+    private boolean validAmountInput = false;
+    private boolean validPricePerMapInput = false;
+    private boolean loadedShapedMaps = false;
+    private boolean loadedElderMaps = false;
+    private boolean validMaxPayInput = false;
+    private boolean validAmountCurrencyInput = false;
+    private boolean userWantsMinimize = false;
 	private JTabbedPane tabbedPane;
 	
 	private PanelSingleMaps singleMapsPanel;
@@ -105,7 +106,7 @@ public class MainFrame extends JDialog implements IHideable {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e1  ) {
-			e1.printStackTrace();
+            Sentry.capture(e1);
 		}
 		
 		tabbedPane.setBackground(new Color(32, 178, 170));
@@ -247,8 +248,7 @@ public class MainFrame extends JDialog implements IHideable {
 			bytes = text.getBytes("UTF-8");
 			mapsAsJsonString = new String(bytes, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            Sentry.capture(e);
 		}
         JSONObject json = new JSONObject(mapsAsJsonString);
         JSONArray maps = json.getJSONArray("Maps");
@@ -275,8 +275,7 @@ public class MainFrame extends JDialog implements IHideable {
 			bytes = text.getBytes("UTF-8");
 			currencysAsJson = new String(bytes, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            Sentry.capture(e);
 		}
 		
 		JSONObject json = new JSONObject(currencysAsJson);

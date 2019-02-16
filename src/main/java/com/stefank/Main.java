@@ -1,20 +1,27 @@
 package com.stefank;
 
+import gui.MainFrame;
+import io.sentry.Sentry;
+import io.sentry.SentryClient;
+import io.sentry.SentryClientFactory;
+import items.PoeNinjaPrices;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import gui.MainFrame;
-import items.PoeNinjaPrices;
-
 
 public class Main {
-	
-	public static void main(String[] args) 
-	{
-		PoeNinjaPrices prices = new PoeNinjaPrices();
-		prices.getPrices();
-		ExecutorService executor = Executors.newFixedThreadPool(3);
-		MainFrame mainFrame = new MainFrame(prices);
-		executor.execute( new WindowManager(mainFrame));
-	}
+
+    public static void main(String... args) {
+        initSentry();
+        PoeNinjaPrices prices = new PoeNinjaPrices();
+        prices.getPrices();
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        MainFrame mainFrame = new MainFrame(prices);
+        executor.execute(new WindowManager(mainFrame));
+    }
+
+    private static void initSentry() {
+        Sentry.init();
+    }
 }

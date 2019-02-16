@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import io.sentry.Sentry;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -98,7 +99,7 @@ public class PoeTradeFetcher {
         try {
             response = this.sendPost(this.POE_SEARCHLINK, searchData);
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.capture(e);
         }
         String requestLink = this.filterLinkFromResponse(response);
 
@@ -112,7 +113,7 @@ public class PoeTradeFetcher {
         try {
             response = this.sendGet(requestLink);
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.capture(e);
         }
 
         return response;

@@ -1,5 +1,7 @@
 package helper;
 
+import io.sentry.Sentry;
+
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
@@ -37,12 +39,10 @@ public class RobotHelper {
 				Thread.sleep(32); 
 				robot.keyRelease(KeyEvent.VK_ENTER); 
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				Sentry.capture(e1);
 			} 
 		} catch (AWTException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Sentry.capture(e1);
 		}
 	}
 

@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import com.stefank.Main;
 
+import io.sentry.Sentry;
 import listener.MaximizeButtonListener;
 
 import java.awt.Image;
@@ -16,15 +17,12 @@ import java.awt.Font;
 import java.awt.Color;
 
 public class MinimizedFrame extends JFrame implements IHideable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private JTextField txtTest;
 	private boolean userWantsMinimize;
 	private boolean isVisible;
-	MainFrame mainFrame;
+	private MainFrame mainFrame;
 	
 	
 	public MinimizedFrame(MainFrame mainFrame)  {
@@ -51,8 +49,7 @@ public class MinimizedFrame extends JFrame implements IHideable {
 		try {
 			maximizeIcon = ImageIO.read(Main.class.getResourceAsStream("maximize.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Sentry.capture(e);
 		}
 		btnMaximize.setIcon(new ImageIcon(maximizeIcon));
 		btnMaximize.setFocusPainted(false);

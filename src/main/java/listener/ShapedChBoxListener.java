@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import io.sentry.Sentry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,8 +48,7 @@ public class ShapedChBoxListener implements ActionListener {
 			bytes = text.getBytes("UTF-8");
 			mapsAsJsonString = new String(bytes, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Sentry.capture(e);
 		}
         JSONObject json = new JSONObject(mapsAsJsonString);
         JSONArray maps = json.getJSONArray("maps");

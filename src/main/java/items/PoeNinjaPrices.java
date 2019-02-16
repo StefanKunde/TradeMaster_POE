@@ -7,6 +7,7 @@ import connector.CurrencyPoeTradeFetcher;
 import connector.PoeNinjaPriceFetcher;
 import handler.CurrencyPoeTradeHandler;
 import handler.PoeNinjaPriceCheckHandler;
+import io.sentry.Sentry;
 
 public class PoeNinjaPrices {
 	
@@ -26,7 +27,7 @@ public class PoeNinjaPrices {
 		try {
 			pricesAsJsonText = fetcher.sendGet();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Sentry.capture(e);
 		}
 		
 		PoeNinjaPriceCheckHandler handler = new PoeNinjaPriceCheckHandler(pricesAsJsonText);

@@ -1,6 +1,7 @@
 package gui;
 
 import com.stefank.Main;
+import io.sentry.Sentry;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -36,7 +37,7 @@ public abstract class PanelBase extends JPanel {
             cancelIcon = ImageIO.read(Main.class.getResourceAsStream("cancel.png"));
             minimizeIcon = ImageIO.read(Main.class.getResourceAsStream("minimize.png"));
         } catch (IOException e) {
-            e.printStackTrace();
+            Sentry.capture(e);
         }
 
         setLayout(null);

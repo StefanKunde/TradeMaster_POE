@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 
 import connector.PoeNinjaFetcher;
+import io.sentry.Sentry;
 import items.TradeableBulk;
 import jsonNinjaResult.Result;
 
@@ -56,8 +57,7 @@ public class PoeNinjaHandler {
 			}
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Sentry.capture(e);
 		}
 		
 		this.tradeables.generateTradebleItems(this.minBulk);

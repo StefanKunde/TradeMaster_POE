@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
+import io.sentry.Sentry;
 import org.json.JSONObject;
 
 import com.stefank.Main;
@@ -49,7 +50,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
             bytes = text.getBytes("UTF-8");
             mapsAsJsonString = new String(bytes, "UTF-8");
         } catch (UnsupportedEncodingException event) {
-            event.printStackTrace();
+            Sentry.capture(event);
         }
         JSONObject json = new JSONObject(mapsAsJsonString);
         JSONObject currencys = (JSONObject) json.get("Currency");
@@ -69,7 +70,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
         try {
             response = tradeFetcher.sendGet(wantedAmountString, wantedCurrencyID, currencyToPayWithID);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            Sentry.capture(e1);
         }
 
         // Load all offers from html response
