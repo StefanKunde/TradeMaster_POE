@@ -25,7 +25,7 @@ public class WindowManager implements Runnable {
     public void run() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
-            @SuppressWarnings("deprecation")
+
             @Override
             public void run() {
                 byte[] windowText = new byte[512];
@@ -36,19 +36,18 @@ public class WindowManager implements Runnable {
 
                 if (Native.toString(windowText).equals("Path of Exile")) {
                     if (!((IHideable) myFrame).isFrameVisible() && !((IHideable) myFrame).isUserWantsMinimize()) {
-                        myFrame.show();
+                        myFrame.setVisible(true);
                     }
                 } else {
-
                     boolean isActiveWindowMain = acticeWindowTitle.equals("MapTrado Main");
                     boolean isActiveWindowMini = acticeWindowTitle.equals("MapTrado Mini");
 
-                    if (!isActiveWindowMain && !isActiveWindowMini) {
+                    if (!isActiveWindowMain && !isActiveWindowMini && myFrame.isVisible()) {
                         ((IHideable) myFrame).setFrameInvisible();
-                        myFrame.hide();
+                        myFrame.setVisible(false);
                     }
-                    if (((IHideable) myFrame).isUserWantsMinimize()) {
-                        myFrame.hide();
+                    if (((IHideable) myFrame).isUserWantsMinimize() && ((IHideable) myFrame).isFrameVisible()) {
+                        myFrame.setVisible(false);
                     }
                 }
             }

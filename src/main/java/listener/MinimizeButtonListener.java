@@ -23,7 +23,6 @@ public class MinimizeButtonListener implements ActionListener {
     private User32 user32 = User32.INSTANCE;
     private MainFrame myMainFrame;
     private MinimizedFrame minFrame;
-    public boolean userWantsMinimize;
     private boolean startedThread = false;
 
     public MinimizeButtonListener(MainFrame frame) {
@@ -34,53 +33,54 @@ public class MinimizeButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                LOG.debug("Minimize..");
+        SwingUtilities.invokeLater(() -> {
 
-                myMainFrame.setUserWantsMinimize(true);
-                myMainFrame.setFrameInvisible();
+            LOG.debug("Minimize..");
 
-                if (!startedThread) {
-                    LOG.debug("started thread!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            byte[] windowText = new byte[512];
-                            PointerType hwnd = user32.GetForegroundWindow();
-                            User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
+            myMainFrame.setUserWantsMinimize(true);
+            myMainFrame.setFrameInvisible();
 
-                            String acticeWindowTitle = Native.toString(windowText);
-                            if (Native.toString(windowText).equals("Path of Exile")) {
-                                if (!(minFrame).isFrameVisible() && !(minFrame).isUserWantsMinimize()) {
-                                    minFrame.setVisible(true);
-                                }
+            if (!startedThread) {
+                LOG.debug("### Minimized Frame Thread Started ####");
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        byte[] windowText = new byte[512];
+                        PointerType hwnd = user32.GetForegroundWindow();
+                        User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
+
+                        String acticeWindowTitle = Native.toString(windowText);
+
+                        if (Native.toString(windowText).equals("Path of Exile")) {
+                            if (!minFrame.isUserWantsMinimize() && !minFrame.isFrameVisible()) {
+                                minFrame.setVisible(true);
+                            }
+                        } else {
+
+                            boolean isActiveWindowMain = acticeWindowTitle.equals("MapTrado Main");
+                            boolean isActiveWindowMini = acticeWindowTitle.equals("MapTrado Mini");
+
+                            if (!isActiveWindowMain && !isActiveWindowMini) {
+                                minFrame.setFrameInvisible();
+                                minFrame.setVisible(false);
                             } else {
-
-                                boolean isActiveWindowMain = acticeWindowTitle.equals("MapTrado Main");
-                                boolean isActiveWindowMini = acticeWindowTitle.equals("MapTrado Mini");
-
-                                if (!isActiveWindowMain && !isActiveWindowMini) {
-                                    (minFrame).setFrameInvisible();
-                                    minFrame.setVisible(true);
-                                }
-                                if ((minFrame).isUserWantsMinimize()) {
+                                if (minFrame.isUserWantsMinimize()) {
                                     minFrame.setVisible(true);
                                 }
                             }
+
                         }
+                    }
 
-                    }, 0, 700);
-                } else {
-                    minFrame.setFrameVisible();
-                    minFrame.setUserWantsMinimize(false);
-                    minFrame.setVisible(true);
-                }
-
-                startedThread = true;
+                }, 0, 700);
+            } else {
+                minFrame.setFrameVisible();
+                minFrame.setUserWantsMinimize(false);
+                minFrame.setVisible(true);
             }
+
+            startedThread = true;
         });
     }
 }
