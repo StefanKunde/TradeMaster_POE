@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>TradeHelpers</groupId>
     <artifactId>TradeHelpers</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <organization>
         <name>MyCompany</name>
@@ -50,13 +50,6 @@
             <artifactId>gson</artifactId>
             <version>2.3</version>
         </dependency>
-
-        <dependency>
-            <groupId>io.sentry</groupId>
-            <artifactId>sentry</artifactId>
-            <version>1.7.20</version>
-        </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

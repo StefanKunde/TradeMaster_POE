@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
-import io.sentry.Sentry;
 import org.json.JSONObject;
 
 import com.stefank.Main;
@@ -13,8 +12,12 @@ import com.stefank.Main;
 import connector.CurrencyPoeTradeFetcher;
 import gui.MainFrame;
 import handler.CurrencyPoeTradeHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UpdateButtonCurrencyListener implements ActionListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateButtonCurrencyListener.class);
 
     private MainFrame frame;
 
@@ -50,7 +53,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
             bytes = text.getBytes("UTF-8");
             mapsAsJsonString = new String(bytes, "UTF-8");
         } catch (UnsupportedEncodingException event) {
-            Sentry.capture(event);
+            LOG.error("UpdatingButtonCurrencyListener::Mapping json resource", event);
         }
         JSONObject json = new JSONObject(mapsAsJsonString);
         JSONObject currencys = (JSONObject) json.get("Currency");
@@ -70,7 +73,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
         try {
             response = tradeFetcher.sendGet(wantedAmountString, wantedCurrencyID, currencyToPayWithID);
         } catch (Exception e1) {
-            Sentry.capture(e1);
+            LOG.error("", e1);
         }
 
         // Load all offers from html response
@@ -82,7 +85,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
         handler.getFilteredOffers().generateTradeMessages(wantedAmount);
 
         for (int i = 0; i < handler.getFilteredOffers().getAllOffersAsList().size(); i++) {
-            System.out.println(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
+            LOG.debug(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
         }
 
         // Add tradeables to Nextbutton

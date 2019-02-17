@@ -1,69 +1,52 @@
 package connector;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.gson.Gson;
 import config.Config;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import com.google.gson.Gson;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("deprecation")
-public class PoeNinjaFetcher {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PoeNinjaFetcher extends BaseConnector {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaFetcher.class);
 
     final String POE_SEARCHLINK = "https://www.pathofexile.com/api/trade/exchange/%s";
     final String POE_SEARCHLINK_FOR_RESULT = "https://www.pathofexile.com/api/trade/fetch/";
-    private final String USER_AGENT = "Mozilla/5.0";
     private String idFromPostRequest = "";
     private List<String> resultList;
 
-
     public PoeNinjaFetcher() {
-        resultList = new ArrayList<String>();
+        resultList = new ArrayList<>();
     }
 
     // HTTP GET request
     public String sendGet(String url) throws Exception {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(url);
-        CloseableHttpResponse response = httpclient.execute(httpGet);
-        String resultAsString = convertStreamToString(response.getEntity().getContent());
 
-        return resultAsString;
-    }
-
-    public static String convertStreamToString(InputStream is) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line + "\n");
+        HttpResponse response;
+        String result;
+        try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+            response = client.execute(httpGet);
+            result = convertStreamToString(response.getEntity().getContent());
         }
-        is.close();
-        return sb.toString();
+        return result;
     }
 
     // HTTP POST request
     public String sendPost(String jsonData) throws Exception {
-
-        @SuppressWarnings({"resource"})
-        HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(String.format(POE_SEARCHLINK, Config.getEncodedLeagueSelection()));
 
         // add header
         post.addHeader("User-Agent", USER_AGENT);
         post.addHeader("accept", "*/*");
-
         post.addHeader("Host", "www.pathofexile.com");
         post.addHeader("Connection", "keep-alive");
         post.addHeader("Origin", "https://www.pathofexile.com");
@@ -72,30 +55,28 @@ public class PoeNinjaFetcher {
 
         // String demoData = "{\"exchange\":{\"status\":{\"option\":\"online\"},\"have\":[],\"want\":[\"elder-underground-sea-map\"]}}";
         StringEntity params = new StringEntity(jsonData);
-
         post.setEntity(params);
 
+        LOG.debug("Post data: " + jsonData);
 
-        System.out.println("Post data: " + jsonData);
-
-        HttpResponse response = client.execute(post);
-        //HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
-        System.out.println("\nSending 'POST' request to URL : " + String.format(POE_SEARCHLINK, Config.getEncodedLeagueSelection()));
-        System.out.println("Post parameters : " + post.getEntity());
-        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-
-        StringBuilder result = new StringBuilder();
-        try (BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-            String line = "";
-            while ((line = rd.readLine()) != null) {
-                result.append(line);
-            }
+        HttpResponse response;
+        String result;
+        try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+            LOG.debug("Sending 'POST' request to URL : " + String.format(POE_SEARCHLINK, Config.getEncodedLeagueSelection()));
+            LOG.debug("Post Entity : " + post.getEntity());
+            response = client.execute(post);
+            LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
+            result = convertStreamToString(response.getEntity().getContent());
         }
 
-        String resultText = result.toString();
-        System.out.println(resultText);
-        return resultText;
+        LOG.debug(result);
+        return result;
 
+    }
+
+    @Override
+    public Logger getLogger() {
+        return this.LOG;
     }
 
     public String generateSearchString(String jsonResponse) {
@@ -122,11 +103,10 @@ public class PoeNinjaFetcher {
         link += "?query=" + responseObject.getId() + "&exchange";
 
         this.idFromPostRequest = responseObject.getId();
-        System.out.println("Link: " + link);
+        LOG.debug("Link: " + link);
 
         return link;
     }
-
 
     public String getIdFromPostRequest() {
         return this.idFromPostRequest;
@@ -140,7 +120,6 @@ public class PoeNinjaFetcher {
     public void setResultList(List<String> resultList) {
         this.resultList = resultList;
     }
-
 
     public void storeResultsFromResponseAsList(String responseFromPost) {
         Gson gson = new Gson();

@@ -1,7 +1,8 @@
 package gui;
 
 import com.stefank.Main;
-import io.sentry.Sentry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,10 +11,11 @@ import java.io.IOException;
 
 public abstract class PanelBase extends JPanel {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PanelBase.class);
+
     protected static final String[] MAP_TIERS = {"Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6", "Tier 7", "Tier 8",
             "Tier 9", "Tier 10", "Tier 11", "Tier 12", "Tier 13", "Tier 14", "Tier 15", "Tier 16"};
 
-    protected static final String[] CURRENCY_TYPES = { "ANY", "chaos", "alch", "chisel", "vaal", "fuse" };
 
     private JLabel tradeables;
 
@@ -37,7 +39,7 @@ public abstract class PanelBase extends JPanel {
             cancelIcon = ImageIO.read(Main.class.getResourceAsStream("cancel.png"));
             minimizeIcon = ImageIO.read(Main.class.getResourceAsStream("minimize.png"));
         } catch (IOException e) {
-            Sentry.capture(e);
+            LOG.error("PanelBase::init loading resource images", e);
         }
 
         setLayout(null);
@@ -107,10 +109,17 @@ public abstract class PanelBase extends JPanel {
         add(version);
         add(createdBy);
         add(updateButton);
-        add(tradeables);
+
+        if (addOptionalTradeables()) {
+            add(tradeables);
+        }
 
         // Force init
         initTab();
+    }
+
+    protected boolean addOptionalTradeables() {
+        return true;
     }
 
     abstract void initTab();

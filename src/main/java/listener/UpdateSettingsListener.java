@@ -2,13 +2,18 @@ package listener;
 
 import config.Config;
 import gui.MainFrame;
+import items.CurrencyOffer;
 import items.PoeNinjaPrices;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class UpdateSettingsListener implements ActionListener {
+
+    private Logger LOG = LoggerFactory.getLogger(UpdateSettingsListener.class);
 
     private MainFrame frame;
 
@@ -18,10 +23,10 @@ public class UpdateSettingsListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(frame.getSettingsPanel().getLeagueSelection().getSelectedItem().toString());
+        LOG.debug(frame.getSettingsPanel().getLeagueSelection().getSelectedItem().toString());
         String selectedLeague = frame.getSettingsPanel().getLeagueSelection().getSelectedItem().toString();
 
-        if (!Arrays.asList(MainFrame.AVAILABLE_LEAGUES).contains(selectedLeague)) {
+        if (!Arrays.asList(Config.AVAILABLE_LEAGUES).contains(selectedLeague)) {
             throw new RuntimeException("Invalid League Selected/Attempted");
         }
 

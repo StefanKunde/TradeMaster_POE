@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.stefank.Main;
+import config.Config;
 
 public class PanelBulkMaps extends PanelBase {
 
@@ -71,7 +72,7 @@ public class PanelBulkMaps extends PanelBase {
         cmb_maps_bulks = new JComboBox();
         cmb_maps_bulks.setBounds(139, 95, 152, 20);
 
-        cmb_currency_bulks = new JComboBox(CURRENCY_TYPES);
+        cmb_currency_bulks = new JComboBox(Config.CURRENCY_TYPES);
         cmb_currency_bulks.setBounds(139, 34, 152, 20);
 
         // TEXTBOXES

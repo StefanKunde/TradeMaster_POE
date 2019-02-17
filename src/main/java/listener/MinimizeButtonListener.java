@@ -12,9 +12,13 @@ import com.sun.jna.PointerType;
 import gui.IHideable;
 import gui.MainFrame;
 import gui.MinimizedFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utility.User32;
 
 public class MinimizeButtonListener implements ActionListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MinimizeButtonListener.class);
 
     private User32 user32 = User32.INSTANCE;
     private MainFrame myMainFrame;
@@ -31,16 +35,15 @@ public class MinimizeButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         SwingUtilities.invokeLater(new Runnable() {
-            @SuppressWarnings("deprecation")
             @Override
             public void run() {
-                System.out.println("Minimize..");
+                LOG.debug("Minimize..");
 
                 myMainFrame.setUserWantsMinimize(true);
                 myMainFrame.setFrameInvisible();
 
                 if (!startedThread) {
-                    System.out.println("started thread!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    LOG.debug("started thread!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
                         @Override
@@ -50,11 +53,9 @@ public class MinimizeButtonListener implements ActionListener {
                             User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
 
                             String acticeWindowTitle = Native.toString(windowText);
-//                            System.out.println("From MinimizeButtonListener: " + minFrame.getTitle());
                             if (Native.toString(windowText).equals("Path of Exile")) {
-                                if (!((IHideable) minFrame).isFrameVisible() && !((IHideable) minFrame).isUserWantsMinimize()) {
-                                    minFrame.show();
-//                                    System.out.println("show window!");
+                                if (!(minFrame).isFrameVisible() && !(minFrame).isUserWantsMinimize()) {
+                                    minFrame.setVisible(true);
                                 }
                             } else {
 
@@ -62,12 +63,11 @@ public class MinimizeButtonListener implements ActionListener {
                                 boolean isActiveWindowMini = acticeWindowTitle.equals("MapTrado Mini");
 
                                 if (!isActiveWindowMain && !isActiveWindowMini) {
-                                    ((IHideable) minFrame).setFrameInvisible();
-                                    minFrame.hide();
+                                    (minFrame).setFrameInvisible();
+                                    minFrame.setVisible(true);
                                 }
-                                if (((IHideable) minFrame).isUserWantsMinimize()) {
-                                    minFrame.hide();
-                                    System.out.println("hide window!");
+                                if ((minFrame).isUserWantsMinimize()) {
+                                    minFrame.setVisible(true);
                                 }
                             }
                         }
@@ -76,7 +76,7 @@ public class MinimizeButtonListener implements ActionListener {
                 } else {
                     minFrame.setFrameVisible();
                     minFrame.setUserWantsMinimize(false);
-                    minFrame.show();
+                    minFrame.setVisible(true);
                 }
 
                 startedThread = true;

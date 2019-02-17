@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import com.stefank.Main;
+import config.Config;
 
 public class PanelSingleMaps extends PanelBase {
 	private static final long serialVersionUID = 1L;
@@ -77,7 +78,7 @@ public class PanelSingleMaps extends PanelBase {
 		cmb_map.setBounds(105, 87, 152, 22);
 		cmb_map.setEnabled(false);
 		
-		cmb_currency = new JComboBox(CURRENCY_TYPES);
+		cmb_currency = new JComboBox(Config.CURRENCY_TYPES);
 		cmb_currency.setBounds(105, 31, 152, 20);
 		
 		// CHECKBOXES

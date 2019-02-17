@@ -1,7 +1,11 @@
 package items;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CurrencyOffer {
-	
+	private Logger LOG = LoggerFactory.getLogger(CurrencyOffer.class);
+
 	private String nickname = "";
 	private int sellValue = 0;
 	private String sellCurrency = "";
@@ -22,7 +26,7 @@ public class CurrencyOffer {
 		if(sellValue > 0) {
 			pricePerUnit = (double)buyValue / (double)sellValue;
 		} else {
-			System.out.println("ERROR PRICE calculating... Zero div...");
+			LOG.info("ERROR PRICE calculating... Zero div...");
 		}
 	}
 	

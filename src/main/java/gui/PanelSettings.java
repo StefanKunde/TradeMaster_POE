@@ -22,12 +22,17 @@ public class PanelSettings extends PanelBase {
         leagueLabel.setBounds(10, 34, 152, 14);
 
         // COMBO-BOXES
-        leagueSelection = new JComboBox(MainFrame.AVAILABLE_LEAGUES);
+        leagueSelection = new JComboBox(Config.AVAILABLE_LEAGUES);
         leagueSelection.setBounds(10, 59, 152, 20);
         leagueSelection.setSelectedItem(Config.leagueSelection);
 
         add(leagueLabel);
         add(leagueSelection);
+    }
+
+    @Override
+    protected boolean addOptionalTradeables() {
+        return false;
     }
 
     @Override

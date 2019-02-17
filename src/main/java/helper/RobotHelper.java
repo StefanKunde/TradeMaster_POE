@@ -1,13 +1,15 @@
 package helper;
 
-import io.sentry.Sentry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.awt.AWTException;
-import java.awt.Robot;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class RobotHelper {
-	
+
+	private static final Logger LOG = LoggerFactory.getLogger(RobotHelper.class);
+
 	public static void sendClipboardTextToChat() {
 		Robot robot = null;
 		try {
@@ -38,11 +40,11 @@ public class RobotHelper {
 				robot.keyPress(KeyEvent.VK_ENTER); 
 				Thread.sleep(32); 
 				robot.keyRelease(KeyEvent.VK_ENTER); 
-			} catch (InterruptedException e1) {
-				Sentry.capture(e1);
-			} 
-		} catch (AWTException e1) {
-			Sentry.capture(e1);
+			} catch (InterruptedException e) {
+			    LOG.error("InterruptedException::RobotHelper", e);
+			}
+		} catch (AWTException e) {
+			LOG.error("AWTException::RobotHelper", e);
 		}
 	}
 
