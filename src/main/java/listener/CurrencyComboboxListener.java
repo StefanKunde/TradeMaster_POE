@@ -6,23 +6,25 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 
 import gui.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CurrencyComboboxListener implements ActionListener {
-	private MainFrame frame;
-	
-	public CurrencyComboboxListener(MainFrame frame) {
-		this.frame = frame;
-	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		System.out.println(((JComboBox<?>) e.getSource()).getSelectedItem());
-		String selectedCurrency = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
-		if(selectedCurrency.equals("ANY")) {
-			selectedCurrency = "";
-		}
-		frame.setCurrency(selectedCurrency);
-		frame.getSearchBuilder().setCurrency(selectedCurrency);
-		
-	}
+    private MainFrame frame;
+
+    public CurrencyComboboxListener(MainFrame frame) {
+        this.frame = frame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String selectedCurrency = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+        if (selectedCurrency.equalsIgnoreCase("ANY")) {
+            selectedCurrency = "";
+        }
+        frame.setCurrency(selectedCurrency);
+        frame.getSearchBuilder().setCurrency(selectedCurrency);
+
+    }
 
 }

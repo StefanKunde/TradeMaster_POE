@@ -1,19 +1,19 @@
 package listener;
 
+import com.stefank.Main;
+import gui.MainFrame;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
-import javax.swing.JComboBox;
-
-import org.json.JSONObject;
-
-import com.stefank.Main;
-
-import gui.MainFrame;
-
 public class CurrencyTabCmbBoxPayListener implements ActionListener {
+	private Logger LOG = LoggerFactory.getLogger(CurrencyTabCmbBoxPayListener.class);
 
 	private MainFrame frame;
 	
@@ -34,8 +34,7 @@ public class CurrencyTabCmbBoxPayListener implements ActionListener {
 			bytes = text.getBytes("UTF-8");
 			mapsAsJsonString = new String(bytes, "UTF-8");
 		} catch (UnsupportedEncodingException event) {
-			// TODO Auto-generated catch block
-			event.printStackTrace();
+			LOG.error("CurrencyTabCmbBoxPayListener::actionPerformed", event);
 		}
         JSONObject json = new JSONObject(mapsAsJsonString);
         JSONObject currencys = (JSONObject) json.get("Currency");

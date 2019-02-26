@@ -28,13 +28,13 @@ public class NextButtonListener implements ActionListener {
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			clipboard.setContents(stringSelection, null);
 			frame.getTradeableMaps().remove(0);
-			frame.getSingleMapsPanel().getLbl_count().setText("Tradeables left: " + frame.getTradeableMaps().size());
+			frame.getSingleMapsPanel().getTradeables().setText("Tradeables left: " + frame.getTradeableMaps().size());
 			frame.setForegroundWindow("Path of Exile");
 			if(Config.isUseAutomatedTrading()) {
 				RobotHelper.sendClipboardTextToChat();
 			}
 		} else {
-			frame.getSingleMapsPanel().getLbl_count().setText("no tradeables left.");
+			frame.getSingleMapsPanel().getTradeables().setText("no tradeables left.");
 		}
 		
 	}
