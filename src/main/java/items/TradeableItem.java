@@ -1,5 +1,9 @@
 package items;
 
+import config.Config;
+
+import java.math.BigDecimal;
+
 public class TradeableItem {
 	
 	private String username;
@@ -16,20 +20,18 @@ public class TradeableItem {
 	public TradeableItem() {
 		
 	}
-	
-	
+
 	public String generateTradeMessage(int amount) {
-		String message = "";
-		int priceForBulk = amount * getPricePerMap();
-		
-		message += "@" + getUsername() + " ";
-		message += "Hi, I'd like to buy your " + amount + " ";
-		message += getItemToSell() + " ";
-		message += "(T" + getMapTier()+ ") for my ";
-		message += priceForBulk + " ";
-		message += getCurrencyToPay() + " orb in Betryal";
-		
-		return message;
+		BigDecimal priceForBulk = BigDecimal.valueOf(amount * getPricePerMap());
+        priceForBulk.setScale(1, BigDecimal.ROUND_HALF_EVEN);
+
+		StringBuilder sb = new StringBuilder("@");
+		sb.append(getUsername()).append(" ");
+		sb.append("Hi, I'd like to buy your ").append(amount).append(" ");
+		sb.append(getItemToSell()).append(" ");
+		sb.append("(T").append(getMapTier()).append(") for my ").append(priceForBulk.toString());
+		sb.append(getCurrencyToPay()).append(" orb in ").append(Config.leagueSelection);
+		return sb.toString();
 	}
 	
 	public String getUsername() {

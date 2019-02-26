@@ -1,20 +1,24 @@
 package handler;
 
-import java.util.concurrent.TimeUnit;
-
 import com.google.gson.Gson;
-
 import connector.PoeNinjaFetcher;
 import items.TradeableBulk;
 import jsonNinjaResult.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 public class PoeNinjaHandler {
+
+	private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaHandler.class);
+
 	private final int MAX_REQUESTS = 10;
-	PoeNinjaFetcher poeConnector;
-	JsonNinjaSearchData searchData;
-	TradeableBulk tradeables;
-	String jsonSearchString;
-	int minBulk;
+	private PoeNinjaFetcher poeConnector;
+	private JsonNinjaSearchData searchData;
+	private TradeableBulk tradeables;
+	private String jsonSearchString;
+	private int minBulk;
 	
 	public PoeNinjaHandler(int minBulk) {
 		this.poeConnector = new PoeNinjaFetcher();
@@ -40,10 +44,8 @@ public class PoeNinjaHandler {
 	public void handleBulkRequests() {
 		String responseFromPost;
 		String searchLink;
-		String responseSearch = "";
 		try {
 			responseFromPost = poeConnector.sendPost(this.jsonSearchString);
-			
 			poeConnector.storeResultsFromResponseAsList(responseFromPost);
 			
 			Gson gson = new Gson();
@@ -58,8 +60,7 @@ public class PoeNinjaHandler {
 			}
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("e", e);
 		}
 		
 		this.tradeables.generateTradebleItems(this.minBulk);

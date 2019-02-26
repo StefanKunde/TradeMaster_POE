@@ -1,5 +1,13 @@
 package listener;
 
+import com.stefank.Main;
+import gui.MainFrame;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
@@ -8,17 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.JComboBox;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.stefank.Main;
-
-import gui.MainFrame;
-
 public class TierComboboxListener implements ActionListener {
-	
+	private Logger LOG = LoggerFactory.getLogger(ShapedChBoxListener.class);
+
 	private MainFrame frame;
 	
 	public TierComboboxListener(MainFrame frame) {
@@ -34,7 +34,7 @@ public class TierComboboxListener implements ActionListener {
 	}
 	
 	private void loadMapsFromSelectedTier(String selectedTier) {
-		System.out.println("selectedTier " + selectedTier);
+		LOG.debug("selectedTier " + selectedTier);
 		if(selectedTier.startsWith("Tier ")) {
 	        //mapsAsJsonString = new String(Files.readAllBytes(Paths.get("/resources/maps.json")));
 			@SuppressWarnings("resource")
@@ -46,8 +46,7 @@ public class TierComboboxListener implements ActionListener {
 				bytes = text.getBytes("UTF-8");
 				mapsAsJsonString = new String(bytes, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.error("TierComboboxListener::loadMapsFromSelectedTier", e);
 			}
 	        
 	        JSONObject json = new JSONObject(mapsAsJsonString);
@@ -71,7 +70,7 @@ public class TierComboboxListener implements ActionListener {
 	        frame.getSearchBuilder().setTier(segments[1]);
 	        
 	        frame.getSingleMapsPanel().getCmb_map().setEnabled(true);
-	        frame.getSingleMapsPanel().getBtn_update().setEnabled(true);
+	        frame.getSingleMapsPanel().getUpdateButton().setEnabled(true);
 		}
 	}
 

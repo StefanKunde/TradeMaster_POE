@@ -5,9 +5,13 @@ import java.util.List;
 
 import jsonNinjaResult.Listing;
 import jsonNinjaResult.Result_;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TradeableBulk {
-	
+
+	private static final Logger LOG = LoggerFactory.getLogger(TradeableBulk.class);
+
 	private List<Result_> results;
 	private List<TradeableItem> tradeableItems;
 	private List<TradeableItem> filteredTradeableItems;
@@ -31,8 +35,10 @@ public class TradeableBulk {
 	}
 	
 	public void addResults(List<Result_> resultList) {
-		for(Result_ result : resultList) {
-			this.results.add(result);
+		if (resultList != null && !resultList.isEmpty()) {
+			for (Result_ result : resultList) {
+				this.results.add(result);
+			}
 		}
 	}
 
@@ -89,9 +95,9 @@ public class TradeableBulk {
 		List<TradeableItem> tmpTradeables = new ArrayList<TradeableItem>();
 		
 		for(TradeableItem item : this.tradeableItems) {
-			if(item.getCurrencyToPay().equals(currency) && item.getPricePerMap() <= maxPrice) {
+			if(item.getCurrencyToPay().equalsIgnoreCase(currency) && item.getPricePerMap() <= maxPrice) {
 				tmpTradeables.add(item);
-				System.out.println("Added item to filtered tradeables: currency =  " + item.getCurrencyToPay() + " priceperMap: " + item.getPricePerMap());
+				LOG.debug("Added item to filtered tradeables: currency =  " + item.getCurrencyToPay() + " priceperMap: " + item.getPricePerMap());
 			}
 		}
 		

@@ -40,7 +40,7 @@ public class NextButtonBulksListener implements ActionListener {
 					tmpTradeables.getTradeableItems().add(frame.getTradeables().getFilteredTradeableItems().get(i));
 				}
 				frame.setTradeables(tmpTradeables);
-				frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Tradeables: " + tmpTradeables.getTradeableItems().size());
+				frame.getPanelBulkMaps().getTradeables().setText("Tradeables: " + tmpTradeables.getTradeableItems().size());
 			}
 			
 			frame.setForegroundWindow("Path of Exile");
@@ -49,12 +49,12 @@ public class NextButtonBulksListener implements ActionListener {
 			}
 			
 		} else {
-			frame.getPanelBulkMaps().getLbl_tradeables_bulks().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
+			frame.getPanelBulkMaps().getTradeables().setText("Tradeables: " + frame.getTradeables().getFilteredTradeableItems().size());
 			frame.getPanelBulkMaps().getBtn_nextTrade_bulks().setEnabled(false);
 		}
 		
 		if(frame.getTradeables().getFilteredTradeableItems().size() == 0) {
-			frame.getPanelBulkMaps().getBtn_update_bulkbuyer().setEnabled(true);
+			frame.getPanelBulkMaps().getUpdateButton().setEnabled(true);
 		}
 		
 	}
