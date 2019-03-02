@@ -42,7 +42,6 @@ public class Map {
 		this.setPriceAmount(buyoutSplit[0]);
 		this.setPaymentCurrency(buyoutSplit[1]);
 		
-		System.out.println("Payment currency: " + buyoutSplit[1]);
 	}
 	
 	public String generateTradeText() {

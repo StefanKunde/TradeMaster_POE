@@ -1,16 +1,16 @@
 package connector;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import config.Config;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 
 public class SearchParameter {
-	
-	BasicNameValuePair league = new BasicNameValuePair("league", "Betrayal");
+
 	BasicNameValuePair type = new BasicNameValuePair("type", "");
 	BasicNameValuePair base = new BasicNameValuePair("base", "");
 	BasicNameValuePair name = new BasicNameValuePair("name", "");
@@ -101,7 +101,7 @@ public class SearchParameter {
 	
 	public List<NameValuePair> generateSearchData() {
 		List<NameValuePair> searchData = new ArrayList<NameValuePair>();
-		searchData.add(league);
+		searchData.add(new BasicNameValuePair("league", Config.leagueSelection));
 		searchData.add(type);
 		searchData.add(base);
 		searchData.add(name);

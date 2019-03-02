@@ -13,6 +13,8 @@ target/
 .metadata/
 .classpath
 build.fxbuild
+dependency-reduced-pom.xml
+TradeHelpers.iml
 
 # BlueJ files
 *.ctxt
