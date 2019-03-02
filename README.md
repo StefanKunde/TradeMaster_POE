@@ -1,3 +1,5 @@
+[![Build Status](https://home.jrkr.me/jenkins/buildStatus/icon?job=TradeMaster_POE&build=8)](https://home.jrkr.me/jenkins/buildStatus/icon?job=TradeMaster_POE&build=8)
+
 # Trademaster_POE beta v1.4
 
 This is an overview application for the game Path of exile.
