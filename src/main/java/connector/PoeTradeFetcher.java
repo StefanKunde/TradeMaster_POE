@@ -97,12 +97,12 @@ public class PoeTradeFetcher extends BaseConnector {
     private String filterLinkFromResponse(String response) {
         String requestLinkFromResponse = "";
         Document doc = Jsoup.parse(response);
-        LOG.error("##filterLinkFromResponse - " + doc.title());
+        LOG.debug("##filterLinkFromResponse - " + doc.title());
         Elements body = doc.select("a");
         for (Element headline : body) {
             requestLinkFromResponse = headline.html();
         }
-        LOG.error("##requestLinkFromResponse - " + doc.title());
+        LOG.debug("##requestLinkFromResponse - " + doc.title());
         return requestLinkFromResponse;
     }
 

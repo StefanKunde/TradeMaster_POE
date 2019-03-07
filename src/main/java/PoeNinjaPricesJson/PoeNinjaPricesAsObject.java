@@ -1,9 +1,9 @@
 package PoeNinjaPricesJson;
 
 public class PoeNinjaPricesAsObject {
-	
-	Line lines[];
-	CurrencyDetail currencyDetails[];
+
+	private Line lines[];
+	private CurrencyDetail currencyDetails[];
 	
 	public PoeNinjaPricesAsObject() {
 		

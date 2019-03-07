@@ -43,7 +43,7 @@ public class PoeNinjaPriceFetcher extends BaseConnector {
 	private String generateSearchURL() {
         LocalDate ld = LocalDate.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return String.format(POE_SEARCHLINK,  Config.getEncodedLeagueSelection(), ld.format(dtf));
+        return String.format(POE_SEARCHLINK,  Config.get().getEncodedLeagueSelection(), ld.format(dtf));
 	}
 
 	@Override

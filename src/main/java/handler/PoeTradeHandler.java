@@ -13,10 +13,9 @@ import items.Map;
 
 public class PoeTradeHandler {
 	
-	PoeTradeFetcher poeConnector;
-	List<NameValuePair> searchData;
-	Map map;
-	
+	private PoeTradeFetcher poeConnector;
+	private List<NameValuePair> searchData;
+
 	public PoeTradeHandler(List<NameValuePair> searchData) {
 		this.searchData = searchData;
 		this.poeConnector = new PoeTradeFetcher();

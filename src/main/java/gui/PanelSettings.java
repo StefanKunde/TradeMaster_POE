@@ -1,6 +1,7 @@
 package gui;
 
 import config.Config;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,8 @@ public class PanelSettings extends PanelBase {
     private static final long serialVersionUID = 1L;
 
     private JLabel leagueLabel;
+
+    @Getter
     private JComboBox<String> leagueSelection;
 
     @Override
@@ -22,9 +25,9 @@ public class PanelSettings extends PanelBase {
         leagueLabel.setBounds(10, 34, 152, 14);
 
         // COMBO-BOXES
-        leagueSelection = new JComboBox(Config.AVAILABLE_LEAGUES);
+        leagueSelection = new JComboBox(Config.get().getLeagues());
         leagueSelection.setBounds(10, 59, 152, 20);
-        leagueSelection.setSelectedItem(Config.leagueSelection);
+        leagueSelection.setSelectedItem(Config.get().getLeagueSelection());
 
         add(leagueLabel);
         add(leagueSelection);
@@ -37,10 +40,6 @@ public class PanelSettings extends PanelBase {
 
     @Override
     public String getTabTitle() {
-        return "Trademaster - Settings";
-    }
-
-    public JComboBox<String> getLeagueSelection() {
-        return leagueSelection;
+        return "Settings";
     }
 }

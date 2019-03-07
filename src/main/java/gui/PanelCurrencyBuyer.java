@@ -1,43 +1,36 @@
 package gui;
 
 import java.awt.*;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import com.stefank.Main;
 
 public class PanelCurrencyBuyer extends PanelBase {
 
     private static final long serialVersionUID = 1L;
 
-    JButton btn_nextTrade_currencyTab;
-    JLabel lblIWant;
-    JLabel lblAmount;
-    JLabel lblPayForAmount;
+    private JButton btnNextTradeCurrencyTab;
+    private JLabel lblIWant;
+    protected JLabel lblAmount;
+    private JLabel lblPayForAmount;
 
-
-    JLabel lblWhatDoI;
-    JLabel lbl_priceCheck;
-    JComboBox<String> cmb_currencyTab_pay;
-    JComboBox<String> cmb_currencyTab_want;
-    JTextField txt_currencyTab_neededAmount;
-    JTextField txt_currencyTab_MAXpay;
-    JCheckBox chckbxAutomateTrading;
+    private JLabel lblWhatDoI;
+    private JLabel lblPriceCheck;
+    private JComboBox<String> cmbCurrencyTabPay;
+    private JComboBox<String> cmbCurrencyTabWant;
+    private JTextField txtCurrencyTabNeededAmount;
+    private JTextField txtCurrencyTabMaxPay;
+    private JCheckBox chckbxAutomateTrading;
 
     @Override
     protected void initTab() {
-        btn_nextTrade_currencyTab = new JButton();
-        btn_nextTrade_currencyTab.setText("Next Trade");
-        btn_nextTrade_currencyTab.setEnabled(false);
-        btn_nextTrade_currencyTab.setBounds(10, 250, 134, 50);
+        btnNextTradeCurrencyTab = new JButton();
+        btnNextTradeCurrencyTab.setText("Next Trade");
+        btnNextTradeCurrencyTab.setEnabled(false);
+        btnNextTradeCurrencyTab.setBounds(10, 250, 134, 50);
 
         // LABELS
         lblIWant = new JLabel("What do I want?");
@@ -52,7 +45,7 @@ public class PanelCurrencyBuyer extends PanelBase {
         lblAmount.setBackground(Color.GRAY);
         lblAmount.setBounds(172, 34, 153, 14);
 
-        lblPayForAmount = new JLabel("MAX pay for amount");
+        lblPayForAmount = new JLabel("Max price individual item");
         lblPayForAmount.setForeground(Color.WHITE);
         lblPayForAmount.setFont(new Font("Tahoma", Font.BOLD, 11));
         lblPayForAmount.setBackground(Color.GRAY);
@@ -65,20 +58,20 @@ public class PanelCurrencyBuyer extends PanelBase {
         lblWhatDoI.setBackground(Color.GRAY);
         lblWhatDoI.setBounds(10, 90, 152, 14);
 
-        lbl_priceCheck = new JLabel("Priceinfobox...");
-        lbl_priceCheck.setForeground(new Color(255, 235, 205));
-        lbl_priceCheck.setForeground(SystemColor.info);
-        lbl_priceCheck.setBounds(10, 158, 152, 66);
-        lbl_priceCheck.setFont(new Font("Tahoma", Font.BOLD, 11));
-        lbl_priceCheck.setSize(314, 43);
-        lbl_priceCheck.setLocation(10, 146);
+        lblPriceCheck = new JLabel("Price info box...");
+        lblPriceCheck.setForeground(new Color(255, 235, 205));
+        lblPriceCheck.setForeground(SystemColor.info);
+        lblPriceCheck.setBounds(10, 158, 152, 66);
+        lblPriceCheck.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblPriceCheck.setSize(314, 43);
+        lblPriceCheck.setLocation(10, 146);
 
         // COMBOBOXES
-        cmb_currencyTab_pay = new JComboBox();
-        cmb_currencyTab_pay.setBounds(10, 115, 152, 20);
+        cmbCurrencyTabPay = new JComboBox();
+        cmbCurrencyTabPay.setBounds(10, 115, 152, 20);
 
-        cmb_currencyTab_want = new JComboBox();
-        cmb_currencyTab_want.setBounds(10, 59, 152, 20);
+        cmbCurrencyTabWant = new JComboBox();
+        cmbCurrencyTabWant.setBounds(10, 59, 152, 20);
 
         // CHECKBOXES
         chckbxAutomateTrading = new JCheckBox("Automatically send offers?");
@@ -88,55 +81,56 @@ public class PanelCurrencyBuyer extends PanelBase {
         chckbxAutomateTrading.setBounds(10, 227, 134, 23);
 
         // TEXTBOXES
-        txt_currencyTab_neededAmount = new JTextField();
-        txt_currencyTab_neededAmount.setColumns(10);
-        txt_currencyTab_neededAmount.setBounds(172, 59, 153, 20);
+        txtCurrencyTabNeededAmount = new JTextField();
+        txtCurrencyTabNeededAmount.setColumns(10);
+        txtCurrencyTabNeededAmount.setBounds(172, 59, 153, 20);
 
-        txt_currencyTab_MAXpay = new JTextField();
-        txt_currencyTab_MAXpay.setColumns(10);
-        txt_currencyTab_MAXpay.setBounds(172, 115, 153, 20);
+        txtCurrencyTabMaxPay = new JTextField();
+        txtCurrencyTabMaxPay.setColumns(10);
+        txtCurrencyTabMaxPay.setBounds(172, 115, 153, 20);
 
-        add(btn_nextTrade_currencyTab);
+        add(btnNextTradeCurrencyTab);
         add(lblIWant);
         add(lblAmount);
         add(lblPayForAmount);
         add(lblWhatDoI);
-        add(lbl_priceCheck);
-        add(cmb_currencyTab_pay);
-        add(cmb_currencyTab_want);
+        add(lblPriceCheck);
+        add(cmbCurrencyTabPay);
+        add(cmbCurrencyTabWant);
         add(chckbxAutomateTrading);
-        add(txt_currencyTab_neededAmount);
-        add(txt_currencyTab_MAXpay);
+        add(txtCurrencyTabNeededAmount);
+        add(txtCurrencyTabMaxPay);
     }
 
 
     @Override
     public String getTabTitle() {
-        return "Trademaster - Currency";
+        return "Currency";
     }
 
-    public JButton getBtn_nextTrade_currencyTab() {
-        return btn_nextTrade_currencyTab;
+
+    public JButton getBtnNextTradeCurrencyTab() {
+        return btnNextTradeCurrencyTab;
     }
 
-    public JComboBox<String> getCmb_currencyTab_pay() {
-        return cmb_currencyTab_pay;
+    public JComboBox<String> getCmbCurrencyTabPay() {
+        return cmbCurrencyTabPay;
     }
 
-    public JComboBox<String> getCmb_currencyTab_want() {
-        return cmb_currencyTab_want;
+    public JComboBox<String> getCmbCurrencyTabWant() {
+        return cmbCurrencyTabWant;
     }
 
-    public JTextField getTxt_currencyTab_neededAmount() {
-        return txt_currencyTab_neededAmount;
+    public JTextField getTxtCurrencyTabNeededAmount() {
+        return txtCurrencyTabNeededAmount;
     }
 
-    public JTextField getTxt_currencyTab_MAXpay() {
-        return txt_currencyTab_MAXpay;
+    public JTextField getTxtCurrencyTabMaxPay() {
+        return txtCurrencyTabMaxPay;
     }
 
-    public JLabel getLbl_priceCheck() {
-        return lbl_priceCheck;
+    public void setLabelPriceCheckText(String value) {
+        this.lblPriceCheck.setText(value);
     }
 
     public JCheckBox getChckbxAutomateTrading() {

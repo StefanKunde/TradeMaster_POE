@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import connector.PoeNinjaFetcher;
 import items.TradeableBulk;
 import jsonNinjaResult.Result;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,75 +12,46 @@ import java.util.concurrent.TimeUnit;
 
 public class PoeNinjaHandler {
 
-	private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaHandler.class);
 
-	private final int MAX_REQUESTS = 10;
-	private PoeNinjaFetcher poeConnector;
-	private JsonNinjaSearchData searchData;
-	private TradeableBulk tradeables;
-	private String jsonSearchString;
-	private int minBulk;
-	
-	public PoeNinjaHandler(int minBulk) {
-		this.poeConnector = new PoeNinjaFetcher();
-		searchData = new JsonNinjaSearchData();
-		tradeables = new TradeableBulk();
-		jsonSearchString = "";
-		this.minBulk = minBulk;
-	}
-	
-	public void generateJsonSearchString() {
-		String jsonSearchString = "";
-		
-		jsonSearchString += "{\"exchange\":{\"status\":{\"option\":\"online\"},\"have\":[],\"want\":[\"";
-		jsonSearchString += searchData.getMap();
-		jsonSearchString += "\"]";
-		jsonSearchString += ",\"minimum\":";
-		jsonSearchString += searchData.getBulkAmount();
-		jsonSearchString += "}}";
-		
-		this.jsonSearchString = jsonSearchString;
-	}
-	
-	public void handleBulkRequests() {
-		String responseFromPost;
-		String searchLink;
-		try {
-			responseFromPost = poeConnector.sendPost(this.jsonSearchString);
-			poeConnector.storeResultsFromResponseAsList(responseFromPost);
-			
-			Gson gson = new Gson();
-			int i = 0;
-			while(this.poeConnector.getResultList().size() > 0 && i < MAX_REQUESTS) {
-				searchLink = poeConnector.generateSearchString(responseFromPost);
-				String response = poeConnector.sendGet(searchLink);
-				Result result = gson.fromJson(response, Result.class);
-				this.tradeables.addResults(result.getResult());
-				TimeUnit.MILLISECONDS.sleep(300);
-				i++;
-			}
-			
-		} catch (Exception e) {
-			LOG.error("e", e);
-		}
-		
-		this.tradeables.generateTradebleItems(this.minBulk);
-	}
+    private final int MAX_REQUESTS = 4;
+    private PoeNinjaFetcher poeConnector = new PoeNinjaFetcher();
+    private PoeTradeBulkItemExchangeSearchData searchData;
 
-	public JsonNinjaSearchData getSearchData() {
-		return searchData;
-	}
+    @Getter
+    private TradeableBulk tradeables = new TradeableBulk();
 
-	public void setSearchData(JsonNinjaSearchData searchData) {
-		this.searchData = searchData;
-	}
+    public PoeNinjaHandler(PoeTradeBulkItemExchangeSearchData searchData) {
+        this.searchData = searchData;
+    }
 
-	public TradeableBulk getTradeableBulks() {
-		return this.tradeables;
-	}
-	
-	
-	
-	
-	
+    private String generateJsonSearchString() {
+        StringBuilder sb = new StringBuilder("{\"exchange\":{\"status\":{\"option\":\"online\"},");
+        sb.append("\"have\":[\"").append(searchData.getHave()).append("\"],");
+        sb.append("\"want\":[\"").append(searchData.getWant()).append("\"],");
+        sb.append("\"minimum\":").append(searchData.getMinimum()).append("}}");
+        return sb.toString();
+    }
+
+    public void processBulkRequests() {
+        try {
+            String responseFromPost = poeConnector.sendPost(generateJsonSearchString());
+            poeConnector.storeResultsFromResponseAsList(responseFromPost);
+
+            Gson gson = new Gson();
+            int i = 0;
+            while (poeConnector.getResultList().size() > 0 && i < MAX_REQUESTS) {
+                String searchLink = poeConnector.generateSearchString(responseFromPost);
+                String response = poeConnector.sendGet(searchLink);
+                Result result = gson.fromJson(response, Result.class);
+                tradeables.addResults(result.getResult());
+                TimeUnit.MILLISECONDS.sleep(300);
+                i++;
+            }
+        } catch (Exception e) {
+            LOG.error("e", e);
+        }
+
+        this.tradeables.generateTradebleItems(searchData.getMinimum());
+    }
 }

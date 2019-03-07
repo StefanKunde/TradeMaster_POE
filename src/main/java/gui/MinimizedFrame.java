@@ -1,6 +1,6 @@
 package gui;
 
-import com.stefank.Main;
+import app.Main;
 import listener.MaximizeButtonListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +41,7 @@ public class MinimizedFrame extends JFrame implements IHideable {
         btnMaximize.setForeground(Color.BLACK);
         btnMaximize.setContentAreaFilled(false);
         btnMaximize.setBorderPainted(false);
-        Image maximizeIcon = null;
-        try {
-            maximizeIcon = ImageIO.read(Main.class.getResourceAsStream("maximize.png"));
-        } catch (IOException e) {
-            LOG.error("MinimizedFrame:(loading maximizeIcon)", e);
-        }
-        btnMaximize.setIcon(new ImageIcon(maximizeIcon));
+        btnMaximize.setIcon(new ImageIcon(Main.class.getResource("/images/maximize.png")));
         btnMaximize.setFocusPainted(false);
         btnMaximize.setSize(32, 32);
 

@@ -18,12 +18,12 @@ public class AutomateTradesChkBoxListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if( ((JCheckBox) e.getSource()).isSelected()) {
-			Config.setUseAutomatedTrading(true);
+			Config.get().setUseAutomatedTrading(true);
 			frame.getSingleMapsPanel().getChckbxAutomateTrading().setSelected(true);
 			frame.getCurrencyBuyerPanel().getChckbxAutomateTrading().setSelected(true);
 			frame.getPanelBulkMaps().getChckbxAutomateTrading().setSelected(true);
 		} else {
-			Config.setUseAutomatedTrading(false);
+			Config.get().setUseAutomatedTrading(false);
 			frame.getSingleMapsPanel().getChckbxAutomateTrading().setSelected(false);
 			frame.getCurrencyBuyerPanel().getChckbxAutomateTrading().setSelected(false);
 			frame.getPanelBulkMaps().getChckbxAutomateTrading().setSelected(false);

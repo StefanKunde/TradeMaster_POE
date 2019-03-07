@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class SearchParameter {
 
 	BasicNameValuePair type = new BasicNameValuePair("type", "");
@@ -101,7 +100,7 @@ public class SearchParameter {
 	
 	public List<NameValuePair> generateSearchData() {
 		List<NameValuePair> searchData = new ArrayList<NameValuePair>();
-		searchData.add(new BasicNameValuePair("league", Config.leagueSelection));
+		searchData.add(new BasicNameValuePair("league", Config.get().getLeagueSelection()));
 		searchData.add(type);
 		searchData.add(base);
 		searchData.add(name);
@@ -192,7 +191,7 @@ public class SearchParameter {
 	}
 	
 	public void setCurrency(String currency) {
-		this.buyout_currency = new BasicNameValuePair("buyout_currency", currency);
+		this.buyout_currency = new BasicNameValuePair("buyout_currency", currency.toLowerCase());
 	}
 	
 	public void setTier(String tierLevel) {
@@ -204,11 +203,7 @@ public class SearchParameter {
 	}
 	
 	public void setCorrupted(boolean corrupted) {
-		if(corrupted) {
-			this.corrupted = new BasicNameValuePair("corrupted", "1");
-		} else {
-			this.corrupted = new BasicNameValuePair("corrupted", "0");
-		}
+		this.corrupted = new BasicNameValuePair("corrupted", corrupted ? "1" : "0");
 	}
 	
 

@@ -26,11 +26,11 @@ public class UpdateSettingsListener implements ActionListener {
         LOG.debug(frame.getSettingsPanel().getLeagueSelection().getSelectedItem().toString());
         String selectedLeague = frame.getSettingsPanel().getLeagueSelection().getSelectedItem().toString();
 
-        if (!Arrays.asList(Config.AVAILABLE_LEAGUES).contains(selectedLeague)) {
+        if (!Arrays.asList(Config.get().getLeagues()).contains(selectedLeague)) {
             throw new RuntimeException("Invalid League Selected/Attempted");
         }
 
-        Config.leagueSelection = selectedLeague;
+        Config.get().setLeagueSelection(selectedLeague);
 
         // Re-update the PoE Ninja Prices
         PoeNinjaPrices prices = new PoeNinjaPrices();

@@ -1,22 +1,9 @@
 package PoeNinjaPricesJson;
 
 public class CurrencyDetail {
-	
-	String id;
-	String name;
-	String poeTradeId;
-	
-	public CurrencyDetail() {
-		
-	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	private String name;
+	private	String poeTradeId;
 
 	public String getName() {
 		return name;
@@ -34,5 +21,5 @@ public class CurrencyDetail {
 		this.poeTradeId = poeTradeId;
 	}
 
-	
+
 }

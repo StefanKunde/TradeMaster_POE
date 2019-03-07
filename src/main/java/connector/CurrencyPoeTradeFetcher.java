@@ -40,6 +40,6 @@ public class CurrencyPoeTradeFetcher extends BaseConnector {
     }
 
     private String generateSearchUrl(String wantedStock, String wantedCurrencyID, String currencyToPayWithID) {
-        return String.format(POE_SEARCHLINK, Config.getEncodedLeagueSelection(), wantedStock, wantedCurrencyID, currencyToPayWithID);
+        return String.format(POE_SEARCHLINK, Config.get().getEncodedLeagueSelection(), wantedStock, wantedCurrencyID, currencyToPayWithID);
     }
 }
