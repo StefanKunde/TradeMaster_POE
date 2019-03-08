@@ -1,9 +1,10 @@
 package listener;
 
+import app.Main;
+import gui.MainFrame;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import gui.MainFrame;
 
 public class ExitButtonListener implements ActionListener {
 
@@ -15,7 +16,7 @@ public class ExitButtonListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.exit(0);
+        Main.shutdown();
 	}
 
 }

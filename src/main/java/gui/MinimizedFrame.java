@@ -1,106 +1,91 @@
 package gui;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-import com.stefank.Main;
-
+import app.Main;
+import com.sun.jna.Native;
+import com.sun.jna.PointerType;
 import listener.MaximizeButtonListener;
-
-import java.awt.Image;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utility.User32;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
-import java.awt.Font;
-import java.awt.Color;
 
-public class MinimizedFrame extends JFrame implements IHideable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JTextField txtTest;
-	private boolean userWantsMinimize;
-	private boolean isVisible;
-	MainFrame mainFrame;
-	
-	
-	public MinimizedFrame(MainFrame mainFrame)  {
-		this.setTitle("MapTrado Mini");
-		getContentPane().setForeground(Color.GRAY);
-		getContentPane().setBackground(Color.DARK_GRAY);
-		setResizable(false);
-		setAutoRequestFocus(false);
-		setForeground(Color.GRAY);
-		setFont(new Font("Calibri", Font.PLAIN, 12));
-		setBackground(Color.GRAY);
-		
-		this.mainFrame = mainFrame;
-		
-		JFrame.setDefaultLookAndFeelDecorated(true);
-		
-		JButton btnMaximize = new JButton("");
-		btnMaximize.setLocation(14, 14);
-		btnMaximize.setOpaque(false);
-		btnMaximize.setForeground(Color.BLACK);
-		btnMaximize.setContentAreaFilled(false);
-		btnMaximize.setBorderPainted(false);
-		Image maximizeIcon = null;
-		try {
-			maximizeIcon = ImageIO.read(Main.class.getResourceAsStream("maximize.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		btnMaximize.setIcon(new ImageIcon(maximizeIcon));
-		btnMaximize.setFocusPainted(false);
-		btnMaximize.setSize(32, 32);
-		
-		MaximizeButtonListener maxBtnListener = new MaximizeButtonListener(this, mainFrame);
-		btnMaximize.addActionListener(maxBtnListener);
-		getContentPane().setLayout(null);
-		getContentPane().add(btnMaximize);
-		
-		
-		this.setSize(60, 60);
-		this.setLocationRelativeTo(null);
-		this.setUndecorated(true);
-		this.getContentPane().requestFocusInWindow();
-	    FrameDragListener frameDragListener = new FrameDragListener(this);
-	    this.addMouseListener(frameDragListener);
-	    this.addMouseMotionListener(frameDragListener);
-        this.setAlwaysOnTop(true);
-		//frame.setMinimumSize(new Dimension(300, 300));
-		isVisible = false;
-		this.setVisible(false);
-		
-	}
+public class MinimizedFrame extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOG = LoggerFactory.getLogger(MinimizedFrame.class);
 
-	@Override
-	public void setFrameVisible() {
-		this.setVisible(true);
-		isVisible = true;
-	}
+    private User32 user32 = User32.INSTANCE;
 
-	@Override
-	public boolean isUserWantsMinimize() {
-		return userWantsMinimize;
-	}
-	
-	public void setUserWantsMinimize(boolean userWantsMinimize) {
-		this.userWantsMinimize = userWantsMinimize;
-	}
+    public MinimizedFrame(MainFrame mainFrame) {
+        setTitle("MapTrado Mini");
+        setupThreadAndShowFrame();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        getContentPane().setForeground(Color.GRAY);
+        getContentPane().setBackground(Color.DARK_GRAY);
+        setResizable(false);
+        setAutoRequestFocus(false);
+        setForeground(Color.GRAY);
+        setFont(new Font("Calibri", Font.PLAIN, 12));
+        setBackground(Color.GRAY);
 
-	@Override
-	public void setFrameInvisible() {
-		this.setVisible(false);
-		isVisible = false;
-	}
+        JFrame.setDefaultLookAndFeelDecorated(true);
 
-	@Override
-	public boolean isFrameVisible() {
-		return isVisible;
-	}
+        JButton btnMaximize = new JButton("");
+        btnMaximize.setLocation(14, 14);
+        btnMaximize.setOpaque(false);
+        btnMaximize.setForeground(Color.BLACK);
+        btnMaximize.setContentAreaFilled(false);
+        btnMaximize.setBorderPainted(false);
+        btnMaximize.setIcon(new ImageIcon(Main.class.getResource("/images/maximize.png")));
+        btnMaximize.setFocusPainted(false);
+        btnMaximize.setSize(32, 32);
+
+        MaximizeButtonListener maxBtnListener = new MaximizeButtonListener(this, mainFrame);
+        btnMaximize.addActionListener(maxBtnListener);
+        getContentPane().setLayout(null);
+        getContentPane().add(btnMaximize);
+
+
+        setSize(60, 60);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
+        getContentPane().requestFocusInWindow();
+        FrameDragListener frameDragListener = new FrameDragListener(this);
+        addMouseListener(frameDragListener);
+        addMouseMotionListener(frameDragListener);
+        setAlwaysOnTop(true);
+        //frame.setMinimumSize(new Dimension(300, 300));
+        setVisible(false);
+    }
+
+    private void setupThreadAndShowFrame() {
+        Main.scheduleThreadTimer(() -> {
+            byte[] windowText = new byte[512];
+            PointerType hwnd = user32.GetForegroundWindow();
+            User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
+
+            String activeWindowTitle = Native.toString(windowText);
+
+            if (Native.toString(windowText).equals("Path of Exile")) {
+                if (Main.isMinimised() && !isVisible()) {
+                    setVisible(true);
+                }
+                return;
+            }
+            boolean isActiveWindowMain = activeWindowTitle.equals("MapTrado Main");
+            boolean isActiveWindowMini = activeWindowTitle.equals("MapTrado Mini");
+
+            if (!isActiveWindowMain && !isActiveWindowMini) {
+                setVisible(false);
+            } else {
+                if (Main.isMinimised()) {
+                    setVisible(true);
+                }
+            }
+
+        });
+    }
 }

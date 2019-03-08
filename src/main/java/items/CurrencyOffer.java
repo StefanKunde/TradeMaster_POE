@@ -1,100 +1,83 @@
 package items;
 
+import app.Config;
+import lombok.Getter;
+import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 public class CurrencyOffer {
-	
-	private String nickname = "";
-	private int sellValue = 0;
-	private String sellCurrency = "";
-	private String buyCurrency = "";
-	private int buyValue = 0;
-	private int stock = 0;
-	private double pricePerUnit = 0;
-	private int amountPrice = 0;
-	private String tradeMessage = "";
-	
-	public CurrencyOffer() {}
-	
-	public void calculatePriceByAmount(int wantedAmount) {
-		this.amountPrice = (int) ( (double)wantedAmount * (double)pricePerUnit);
-	}
-	
-	public void calculatePricePerUnit() {
-		if(sellValue > 0) {
-			pricePerUnit = (double)buyValue / (double)sellValue;
-		} else {
-			System.out.println("ERROR PRICE calculating... Zero div...");
-		}
-	}
-	
-	public void generateTradeMessage(int wantedAmount) {
-		int priceForAll = (int) ((double)wantedAmount * (double)pricePerUnit);
-		String message = "";
-		message += "@" + nickname + " ";
-		message += "Hi, I'd like to buy your " + wantedAmount + " ";
-		message += sellCurrency + " ";
-		message += "for my " + priceForAll + " ";
-		message += buyCurrency + " in Betrayal.";
-		
-		this.tradeMessage = message;
-	}
+    private Logger LOG = LoggerFactory.getLogger(CurrencyOffer.class);
 
-	public String getNickname() {
-		return nickname;
-	}
+    @Setter
+    private String nickname = "";
+    @Getter
+    @Setter
+    private double sellValue = 0;
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+    @Getter
+    @Setter
+    private String sellCurrency = "";
+    @Getter
+    @Setter
+    private String buyCurrency = "";
+    @Getter
+    @Setter
+    private double buyValue = 0;
+    @Getter
+    @Setter
+    private int stock = 0;
+    @Getter
+    private double pricePerUnit = 0;
+    private double amountPrice = 0;
+    @Getter
+    private String tradeMessage = "";
 
-	public int getSellValue() {
-		return sellValue;
-	}
+    public CurrencyOffer() {
+    }
 
-	public void setSellValue(int sellValue) {
-		this.sellValue = sellValue;
-	}
+    public void calculatePriceByAmount(double wantedAmount) {
+        this.amountPrice = wantedAmount * pricePerUnit;
+    }
 
-	public int getBuyValue() {
-		return buyValue;
-	}
+    public void calculatePricePerUnit() {
+        if (sellValue > 0) {
+            pricePerUnit = buyValue / sellValue;
+        } else {
+            LOG.info("ERROR PRICE calculating... Zero div...");
+        }
+    }
 
-	public void setBuyValue(int buyValue) {
-		this.buyValue = buyValue;
-	}
+    public void generateTradeMessage(double wantedAmount) {
+        double priceForAll = wantedAmount * pricePerUnit;
 
-	public int getStock() {
-		return stock;
-	}
+        if (buyValue == 1 && pricePerUnit < 1 && wantedAmount <= sellValue) {
+            priceForAll = buyValue;
+            wantedAmount = sellValue;
+        }
 
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
+        String priceTextForAll;
 
-	public double getPricePerUnit() {
-		return pricePerUnit;
-	}
+        if (priceForAll % 1 == 0) {
+            priceTextForAll = String.valueOf((int) priceForAll);
+        } else {
+            DecimalFormat df = new DecimalFormat("####0.0");
+            df.setRoundingMode(RoundingMode.CEILING);
+            priceTextForAll = df.format(priceForAll);
+        }
 
-	public void setPricePerUnit(double pricePerUnit) {
-		this.pricePerUnit = pricePerUnit;
-	}
 
-	public String getSellCurrency() {
-		return sellCurrency;
-	}
+        String message = "";
+        message += "@" + nickname + " ";
+        message += "Hi, I'd like to buy your " + (int) wantedAmount + " ";
+        message += sellCurrency + " ";
+        message += "for my " + priceTextForAll + " ";
+        message += buyCurrency + " in " + Config.get().getLeagueSelection() + ".";
 
-	public void setSellCurrency(String sellCurrency) {
-		this.sellCurrency = sellCurrency;
-	}
+        this.tradeMessage = message;
+    }
 
-	public String getBuyCurrency() {
-		return buyCurrency;
-	}
-
-	public void setBuyCurrency(String buyCurrency) {
-		this.buyCurrency = buyCurrency;
-	}
-
-	public String getTradeMessage() {
-		return this.tradeMessage;
-	}
 }

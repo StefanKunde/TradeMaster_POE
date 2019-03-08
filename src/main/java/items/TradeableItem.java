@@ -1,91 +1,49 @@
 package items;
 
+import app.Config;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 public class TradeableItem {
-	
-	private String username;
-	private int mapStock;
-	private int pricePerMap;
-	private String currencyToPay;
-	private String itemToSell;
-	private String mapTier;
-	
-	// Maybe for later:
-	private String iconUrl;
-	
-	
-	public TradeableItem() {
-		
-	}
-	
-	
-	public String generateTradeMessage(int amount) {
-		String message = "";
-		int priceForBulk = amount * getPricePerMap();
-		
-		message += "@" + getUsername() + " ";
-		message += "Hi, I'd like to buy your " + amount + " ";
-		message += getItemToSell() + " ";
-		message += "(T" + getMapTier()+ ") for my ";
-		message += priceForBulk + " ";
-		message += getCurrencyToPay() + " orb in Betryal";
-		
-		return message;
-	}
-	
-	public String getUsername() {
-		return username;
-	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    @Getter
+    @Setter
+    private String username;
+    @Getter
+    @Setter
+    private double pricePerMap;
+    @Setter
+    private int mapStock;
+    @Getter
+    @Setter
+    private String currencyToPay;
+    @Getter
+    @Setter
+    private String itemToSell;
+    @Getter
+    @Setter
+    private String mapTier;
 
-	public int getMapStock() {
-		return mapStock;
-	}
+    public String generateTradeMessage(int amount) {
+        DecimalFormat df = new DecimalFormat("####.#");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        String priceForBulk = df.format(amount * pricePerMap);
+        if (priceForBulk.contains(".0")) {
+            priceForBulk = priceForBulk.replace(".0", "");
+        }
 
-	public void setMapStock(int mapStock) {
-		this.mapStock = mapStock;
-	}
+        StringBuilder sb = new StringBuilder("@");
+        sb.append(getUsername()).append(" ");
+        sb.append("Hi, I'd like to buy your ").append(amount).append(" ");
+        sb.append(getItemToSell()).append(" ");
+        sb.append("(T").append(getMapTier()).append(") for my ").append(priceForBulk).append(" ");
+        sb.append(getCurrencyToPay()).append(" orb in ").append(Config.get().getLeagueSelection());
+        return sb.toString();
+    }
 
-	public int getPricePerMap() {
-		return pricePerMap;
-	}
 
-	public void setPricePerMap(int pricePerMap) {
-		this.pricePerMap = pricePerMap;
-	}
-
-	public String getCurrencyToPay() {
-		return currencyToPay;
-	}
-
-	public void setCurrencyToPay(String currencyToPay) {
-		this.currencyToPay = currencyToPay;
-	}
-
-	public String getIconUrl() {
-		return iconUrl;
-	}
-
-	public void setIconUrl(String iconUrl) {
-		this.iconUrl = iconUrl;
-	}
-
-	public String getItemToSell() {
-		return itemToSell;
-	}
-
-	public void setItemToSell(String itemToSell) {
-		this.itemToSell = itemToSell;
-	}
-
-	public String getMapTier() {
-		return mapTier;
-	}
-
-	public void setMapTier(String mapTier) {
-		this.mapTier = mapTier;
-	}
 }
 

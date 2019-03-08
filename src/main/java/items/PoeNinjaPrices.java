@@ -1,46 +1,32 @@
 package items;
 
+import connector.PoeNinjaPriceFetcher;
+import handler.PoeNinjaPriceCheckHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import connector.CurrencyPoeTradeFetcher;
-import connector.PoeNinjaPriceFetcher;
-import handler.CurrencyPoeTradeHandler;
-import handler.PoeNinjaPriceCheckHandler;
-
 public class PoeNinjaPrices {
-	
-	List<PoeNinjaPriceItem> priceItemList;
-	
-	public PoeNinjaPrices() {
-		priceItemList = new ArrayList<PoeNinjaPriceItem>();
-	}
-	
-	public void addPriceItem(PoeNinjaPriceItem item) {
-		priceItemList.add(item);
-	}
 
-	public List<PoeNinjaPriceItem> getPriceItemList() {
-		return priceItemList;
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaPrices.class);
 
-	public void setPriceItemList(List<PoeNinjaPriceItem> priceItemList) {
-		this.priceItemList = priceItemList;
-	}
+    private List<PoeNinjaPriceItem> priceItemList = new ArrayList<>();
 
-	public void getPrices() {
-		PoeNinjaPriceFetcher fetcher = new PoeNinjaPriceFetcher();
-		String pricesAsJsonText = "";
-		try {
-			pricesAsJsonText = fetcher.sendGet();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		PoeNinjaPriceCheckHandler handler = new PoeNinjaPriceCheckHandler(pricesAsJsonText);
-		priceItemList = handler.getPriceItemList();
-		
-		
-	}
+    public PoeNinjaPrices() {
+        loadPrices();
+    }
+
+    public List<PoeNinjaPriceItem> getPriceItemList() {
+        return priceItemList;
+    }
+
+    private void loadPrices() {
+        PoeNinjaPriceFetcher fetcher = new PoeNinjaPriceFetcher();
+        String pricesAsJsonText = fetcher.sendGet();
+
+        PoeNinjaPriceCheckHandler handler = new PoeNinjaPriceCheckHandler(pricesAsJsonText);
+        priceItemList = handler.getPriceItemList();
+    }
 }
