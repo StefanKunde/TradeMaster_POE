@@ -2,6 +2,7 @@ package handler;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.NameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,27 +13,19 @@ import connector.PoeTradeFetcher;
 import items.Map;
 
 public class PoeTradeHandler {
-	
-	PoeTradeFetcher poeConnector;
-	List<NameValuePair> searchData;
-	Map map;
-	
-	public PoeTradeHandler(List<NameValuePair> searchData) {
-		this.searchData = searchData;
-		this.poeConnector = new PoeTradeFetcher();
-	}
-	
-	public List<Element> fetchBuyableMapsAsHtml() {
-		String responseFromRequest = poeConnector.getAllMapsFromRequestAsHtml(this.searchData);
-		
-		List<Element> elements = new ArrayList<Element>();
-		Document doc = Jsoup.parse(responseFromRequest);
-		Elements items = doc.select("[id^=item-container-]");
-		for (Element item : items) {
-			elements.add(item);
-		}
-		
-		return elements;
-	}
+
+    private static final String CSS_QUERY = "[id^=item-container-]";
+    private PoeTradeHandler() {}
+
+    public static List<Element> fetchBuyableMapsAsHtml(List<NameValuePair> searchData) {
+        String responseFromRequest = new PoeTradeFetcher().getAllMapsFromRequestAsHtml(searchData);
+        List<Element> elements = new ArrayList<>();
+        Document doc = Jsoup.parse(responseFromRequest);
+        Elements items = doc.select(CSS_QUERY);
+        for (Element item : items) {
+            elements.add(item);
+        }
+        return elements;
+    }
 
 }

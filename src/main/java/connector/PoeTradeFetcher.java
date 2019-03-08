@@ -1,9 +1,8 @@
 package connector;
 
-import org.apache.http.HttpEntity;
+import app.Config;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -16,55 +15,56 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 
 public class PoeTradeFetcher extends BaseConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(PoeTradeFetcher.class);
+    private static final String POE_SEARCHLINK = "http://poe.trade/search";
 
-    final String POE_SEARCHLINK = "http://poe.trade/search";
-
-    // HTTP GET request
-    public String sendGet(String url) throws Exception {
+    public String sendGet(String url) {
         HttpGet request = new HttpGet(url);
 
-        // add request header
+        // add request headers
         request.addHeader("User-Agent", USER_AGENT);
         request.addHeader("accept", USER_AGENT);
 
-        HttpResponse response;
-        String result;
+        String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             LOG.debug("Sending 'GET' request to URL : " + url);
-            response = client.execute(request);
+            HttpResponse response = client.execute(request);
             LOG.debug("Response Code: " + response.getStatusLine().getStatusCode());
-            result = convertHttpEntityContentToString(response.getEntity());
+            result = convertStreamToString(response.getEntity().getContent());
+        } catch (IOException ioe) {
+            LOG.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
         }
 
         return result;
     }
 
-    // HTTP POST request
-    public String sendPost(String url, List<NameValuePair> postData) throws Exception {
+    public String sendPost(String url, List<NameValuePair> postData) {
         HttpPost post = new HttpPost(url);
 
-        // add header
+        // add headers
         post.setHeader("User-Agent", USER_AGENT);
         post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        post.setEntity(new UrlEncodedFormEntity(postData));
+        post.setEntity(new UrlEncodedFormEntity(postData, Charset.forName(Config.get().ENCODING_TYPE)));
 
         LOG.debug("Post data: " + postData);
 
-        HttpResponse response;
-        String result;
+        String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             LOG.debug("Sending 'POST' request to URL : " + url);
             LOG.debug("Post parameters : " + post.getEntity());
-            response = client.execute(post);
+            HttpResponse response = client.execute(post);
             LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
             result = convertStreamToString(response.getEntity().getContent());
+        } catch (IOException ioe) {
+            LOG.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
         }
 
         return result;
@@ -72,37 +72,23 @@ public class PoeTradeFetcher extends BaseConnector {
 
 
     private String getRequestLinkForSearchData(List<NameValuePair> searchData) {
-        String response = "";
-        try {
-            response = this.sendPost(this.POE_SEARCHLINK, searchData);
-        } catch (Exception e) {
-            LOG.error("PoeTradeFetcher::getRequestLinkForSearchData", e);
-        }
-        String requestLink = this.filterLinkFromResponse(response);
-        return requestLink;
+        String response = sendPost(POE_SEARCHLINK, searchData);
+        return filterLinkFromResponse(response);
     }
 
     public String getAllMapsFromRequestAsHtml(List<NameValuePair> searchData) {
-        String response = "";
-        String requestLink = this.getRequestLinkForSearchData(searchData);
-        try {
-            response = this.sendGet(requestLink);
-        } catch (Exception e) {
-            LOG.error("PoeTradeFetcher::getAllMapsFromRequestAsHtml", e);
-        }
-
+        String requestLink = getRequestLinkForSearchData(searchData);
+        String response = sendGet(requestLink);
         return response;
     }
 
     private String filterLinkFromResponse(String response) {
         String requestLinkFromResponse = "";
         Document doc = Jsoup.parse(response);
-        LOG.error("##filterLinkFromResponse - " + doc.title());
         Elements body = doc.select("a");
         for (Element headline : body) {
             requestLinkFromResponse = headline.html();
         }
-        LOG.error("##requestLinkFromResponse - " + doc.title());
         return requestLinkFromResponse;
     }
 

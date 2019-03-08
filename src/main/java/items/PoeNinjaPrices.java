@@ -12,24 +12,19 @@ public class PoeNinjaPrices {
 
     private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaPrices.class);
 
-    private List<PoeNinjaPriceItem> priceItemList;
+    private List<PoeNinjaPriceItem> priceItemList = new ArrayList<>();
 
     public PoeNinjaPrices() {
-        priceItemList = new ArrayList<>();
+        loadPrices();
     }
 
     public List<PoeNinjaPriceItem> getPriceItemList() {
         return priceItemList;
     }
 
-    public void getPrices() {
+    private void loadPrices() {
         PoeNinjaPriceFetcher fetcher = new PoeNinjaPriceFetcher();
-        String pricesAsJsonText = "";
-        try {
-            pricesAsJsonText = fetcher.sendGet();
-        } catch (Exception e) {
-            LOG.error("PoeNinjaPrices::getPrices()", e);
-        }
+        String pricesAsJsonText = fetcher.sendGet();
 
         PoeNinjaPriceCheckHandler handler = new PoeNinjaPriceCheckHandler(pricesAsJsonText);
         priceItemList = handler.getPriceItemList();

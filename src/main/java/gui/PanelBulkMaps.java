@@ -1,40 +1,33 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.stefank.Main;
-import config.Config;
+import app.Config;
 
 public class PanelBulkMaps extends PanelBase {
 
     private static final long serialVersionUID = 1L;
 
-    JButton btn_nextTrade_bulks;
-    JLabel lbl_currency_bulks;
+    private JButton btn_nextTrade_bulks;
+    private JLabel lbl_currency_bulks;
 
-    JLabel lbl_payPerMap;
-    JLabel lblBulkAmount;
-    JLabel lbl_map_bulks;
-    JComboBox<String> cmb_maps_bulks;
-    JComboBox<?> cmb_currency_bulks;
-    JTextField txtbox_pricePerMap;
-    JTextField txt_amount_bulks;
-    JCheckBox chckbxShapedMap;
-    JCheckBox chckbxElderMap;
-    JCheckBox chckbxAutomateTrading;
+    private JLabel lbl_payPerMap;
+    private JLabel lblBulkAmount;
+    private JLabel lbl_map_bulks;
+    private JComboBox<String> cmb_maps_bulks;
+    private JComboBox<?> cmb_currency_bulks;
+    private JTextField txtbox_pricePerMap;
+    private JTextField txt_amount_bulks;
+    private JCheckBox chckbxShapedMap;
+    private JCheckBox chckbxElderMap;
+    private JCheckBox chckbxAutomateTrading;
 
     @Override
     protected void initTab() {
@@ -69,10 +62,10 @@ public class PanelBulkMaps extends PanelBase {
         lbl_map_bulks.setBounds(11, 98, 77, 14);
 
         //COMBOBOXES
-        cmb_maps_bulks = new JComboBox();
+        cmb_maps_bulks = new JComboBox(Config.get().getAllMaps());
         cmb_maps_bulks.setBounds(139, 95, 152, 20);
 
-        cmb_currency_bulks = new JComboBox(Config.CURRENCY_TYPES);
+        cmb_currency_bulks = new JComboBox(Config.get().getBulkBuyWithCurrencies());
         cmb_currency_bulks.setBounds(139, 34, 152, 20);
 
         // TEXTBOXES
@@ -117,7 +110,7 @@ public class PanelBulkMaps extends PanelBase {
 
     @Override
     public String getTabTitle() {
-        return "Trademaster - Bulkbuyer";
+        return "Bulk Maps";
     }
 
     public JButton getBtn_nextTrade_bulks() {

@@ -1,29 +1,16 @@
 package PoeNinjaPricesJson;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Line {
-	
-	double chaosEquivalent;
-	String currencyTypeName;
-	
-	public Line() {
-		
-	}
 
-	public double getChaosEquivalent() {
-		return chaosEquivalent;
-	}
+    @Getter
+    @Setter
+    double chaosEquivalent;
 
-	public void setChaosEquivalent(double chaosEquivalent) {
-		this.chaosEquivalent = chaosEquivalent;
-	}
+    @Getter
+    @Setter
+    String currencyTypeName;
 
-	public String getCurrencyTypeName() {
-		return currencyTypeName;
-	}
-
-	public void setCurrencyTypeName(String currencyTypeName) {
-		this.currencyTypeName = currencyTypeName;
-	}
-
-	
 }
