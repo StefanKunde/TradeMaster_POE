@@ -1,6 +1,8 @@
 package gui;
 
+import app.Main;
 import com.sun.jna.Native;
+import com.sun.jna.PointerType;
 import config.Config;
 import connector.SearchParameter;
 import items.CurrencyOffers;
@@ -10,6 +12,8 @@ import items.TradeableBulk;
 import listener.*;
 import listener.bulkMaps.*;
 import listener.currency.*;
+import listener.settings.LeagueChangeListener;
+import listener.settings.UpdateSettingsListener;
 import listener.singleMaps.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +29,9 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
-public class MainFrame extends JDialog implements IHideable {
-    private Logger LOG = LoggerFactory.getLogger(MainFrame.class);
+public class MainFrame extends JDialog {
 
-    private static final long serialVersionUID = 1L;
+    private Logger LOG = LoggerFactory.getLogger(MainFrame.class);
 
     @Getter
     @Setter
@@ -43,7 +46,6 @@ public class MainFrame extends JDialog implements IHideable {
     @Setter
     private CurrencyOffers currencyOffers;
 
-    private boolean isVisible;
     @Getter
     @Setter
     private List<Map> maps;
@@ -70,9 +72,6 @@ public class MainFrame extends JDialog implements IHideable {
     @Setter
     private boolean validAmountCurrencyInput = false;
 
-    @Getter
-    @Setter
-    private boolean userWantsMinimize = false;
     private JTabbedPane tabbedPane;
 
     @Getter
@@ -101,12 +100,14 @@ public class MainFrame extends JDialog implements IHideable {
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         initFrame();
-        this.setTitle("MapTrado Main");
-        this.setUndecorated(true);
-        this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("MapTrado Main");
+        setUndecorated(true);
+        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
         addEventsForDragging();
         loadMapsFromJson(Config.get().getAllMaps());
         loadCurrencyFromJson();
+        setupThreadAndShowFrame();
     }
 
     private void initFrame() {
@@ -134,7 +135,6 @@ public class MainFrame extends JDialog implements IHideable {
         this.getContentPane().requestFocusInWindow();
         this.setAlwaysOnTop(true);
         SwingUtilities.updateComponentTreeUI(this);
-        isVisible = false;
         this.setVisible(false);
         this.setResizable(false);
         setDefaultLookAndFeelDecorated(true);
@@ -199,7 +199,7 @@ public class MainFrame extends JDialog implements IHideable {
         currencyPollerPanel.getBtnExit().addActionListener(exitListener);
 
         // All minimize button listeners
-        MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this);
+        MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this, new MinimizedFrame(this));
         singleMapsPanel.getBtnMinimize().addActionListener(minimizeListener);
         settingsPanel.getBtnMinimize().addActionListener(minimizeListener);
         panelBulkMaps.getBtnMinimize().addActionListener(minimizeListener);
@@ -308,26 +308,29 @@ public class MainFrame extends JDialog implements IHideable {
         });
     }
 
+    public void setupThreadAndShowFrame() {
+        Main.scheduleThreadTimer(() -> {
+            byte[] windowText = new byte[512];
+            PointerType hwnd = user32.GetForegroundWindow();
+            User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
 
-    public void setFrameVisible() {
-        this.setVisible(true);
+            String activeWindowTitle = Native.toString(windowText);
+
+            if (Native.toString(windowText).equals("Path of Exile")) {
+                if (!Main.isMinimised() && !isVisible()) {
+                    setVisible(true);
+                }
+                return;
+            }
+            boolean isActiveWindowMain = activeWindowTitle.equals("MapTrado Main");
+            boolean isActiveWindowMini = activeWindowTitle.equals("MapTrado Mini");
+
+            if (!isActiveWindowMain && !isActiveWindowMini && isVisible()) {
+                setVisible(false);
+            }
+            if (Main.isMinimised() && isVisible()) {
+                setVisible(false);
+            }
+        });
     }
-
-    public void setFrameInvisible() {
-        this.setVisible(false);
-    }
-
-    public boolean isFrameVisible() {
-        return this.isVisible();
-    }
-
-    public User32 getUser32() {
-        return user32;
-    }
-
-    public void setUser32(User32 user32) {
-        this.user32 = user32;
-    }
-
-
 }

@@ -1,28 +1,28 @@
 package gui;
 
 import app.Main;
+import com.sun.jna.Native;
+import com.sun.jna.PointerType;
 import listener.MaximizeButtonListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utility.User32;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class MinimizedFrame extends JFrame implements IHideable {
-
+public class MinimizedFrame extends JFrame {
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(MinimizedFrame.class);
 
-    private static final long serialVersionUID = 1L;
-    private JTextField txtTest;
-    private boolean userWantsMinimize;
-    private boolean isVisible;
-    private MainFrame mainFrame;
-
+    private User32 user32 = User32.INSTANCE;
 
     public MinimizedFrame(MainFrame mainFrame) {
-        this.setTitle("MapTrado Mini");
+        setTitle("MapTrado Mini");
+        setupThreadAndShowFrame();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setForeground(Color.GRAY);
         getContentPane().setBackground(Color.DARK_GRAY);
         setResizable(false);
@@ -30,8 +30,6 @@ public class MinimizedFrame extends JFrame implements IHideable {
         setForeground(Color.GRAY);
         setFont(new Font("Calibri", Font.PLAIN, 12));
         setBackground(Color.GRAY);
-
-        this.mainFrame = mainFrame;
 
         JFrame.setDefaultLookAndFeelDecorated(true);
 
@@ -51,43 +49,43 @@ public class MinimizedFrame extends JFrame implements IHideable {
         getContentPane().add(btnMaximize);
 
 
-        this.setSize(60, 60);
-        this.setLocationRelativeTo(null);
-        this.setUndecorated(true);
-        this.getContentPane().requestFocusInWindow();
+        setSize(60, 60);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
+        getContentPane().requestFocusInWindow();
         FrameDragListener frameDragListener = new FrameDragListener(this);
-        this.addMouseListener(frameDragListener);
-        this.addMouseMotionListener(frameDragListener);
-        this.setAlwaysOnTop(true);
+        addMouseListener(frameDragListener);
+        addMouseMotionListener(frameDragListener);
+        setAlwaysOnTop(true);
         //frame.setMinimumSize(new Dimension(300, 300));
-        isVisible = false;
-        this.setVisible(false);
-
+        setVisible(false);
     }
 
-    @Override
-    public void setFrameVisible() {
-        this.setVisible(true);
-        isVisible = true;
-    }
+    private void setupThreadAndShowFrame() {
+        Main.scheduleThreadTimer(() -> {
+            byte[] windowText = new byte[512];
+            PointerType hwnd = user32.GetForegroundWindow();
+            User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
 
-    @Override
-    public boolean isUserWantsMinimize() {
-        return userWantsMinimize;
-    }
+            String activeWindowTitle = Native.toString(windowText);
 
-    public void setUserWantsMinimize(boolean userWantsMinimize) {
-        this.userWantsMinimize = userWantsMinimize;
-    }
+            if (Native.toString(windowText).equals("Path of Exile")) {
+                if (Main.isMinimised() && !isVisible()) {
+                    setVisible(true);
+                }
+                return;
+            }
+            boolean isActiveWindowMain = activeWindowTitle.equals("MapTrado Main");
+            boolean isActiveWindowMini = activeWindowTitle.equals("MapTrado Mini");
 
-    @Override
-    public void setFrameInvisible() {
-        this.setVisible(false);
-        isVisible = false;
-    }
+            if (!isActiveWindowMain && !isActiveWindowMini) {
+                setVisible(false);
+            } else {
+                if (Main.isMinimised()) {
+                    setVisible(true);
+                }
+            }
 
-    @Override
-    public boolean isFrameVisible() {
-        return isVisible;
+        });
     }
 }

@@ -7,9 +7,9 @@ public class PoeTradeBulkItemExchangeSearchData {
     @Getter
     private int minimum = 1;
     @Getter
-    private String want;
+    private String want = "";
     @Getter
-    private String have;
+    private String have = "";
 
     private PoeTradeBulkItemExchangeSearchData() {
     }

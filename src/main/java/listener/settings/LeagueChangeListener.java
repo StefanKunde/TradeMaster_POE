@@ -1,4 +1,4 @@
-package listener;
+package listener.settings;
 
 import gui.MainFrame;
 

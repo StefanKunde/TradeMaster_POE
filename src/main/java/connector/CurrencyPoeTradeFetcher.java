@@ -28,7 +28,7 @@ public class CurrencyPoeTradeFetcher extends BaseConnector {
             LOG.debug("Sending 'GET' request to URL : " + url);
             response = client.execute(request);
             LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
-            result = convertHttpEntityContentToString(response.getEntity());
+            result = convertStreamToString(response.getEntity().getContent());
         }
 
         return result;

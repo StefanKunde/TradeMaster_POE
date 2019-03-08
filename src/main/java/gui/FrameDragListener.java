@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 public class FrameDragListener extends MouseAdapter {
 
     private final JFrame frame;
-    private Point mouseDownCompCoords = null;
+    private Point mouseDownCompCoords;
 
     public FrameDragListener(JFrame frame) {
         this.frame = frame;

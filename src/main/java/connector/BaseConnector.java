@@ -15,27 +15,6 @@ public abstract class BaseConnector {
 
     protected static final String USER_AGENT = "Mozilla/5.0";
 
-    protected String convertHttpEntityContentToString(HttpEntity httpEntity) {
-        StringBuilder result = new StringBuilder();
-
-//        HttpEntity entity = new GzipDecompressingEntity(httpEntity);
-        try (BufferedReader rd = new BufferedReader(new InputStreamReader(httpEntity.getContent()))) {
-            String line;
-            while ((line = rd.readLine()) != null) {
-                result.append(line);
-            }
-        } catch (IOException e) {
-            getLogger().error("convertEntityContentToString", e);
-        } finally {
-            try {
-                EntityUtils.consume(httpEntity);
-            } catch (IOException e) {
-                getLogger().error("convertEntityContentToString attempting to consume httpEntity", e);
-            }
-        }
-        return result.toString();
-    }
-
     protected String convertStreamToString(InputStream is) {
         StringBuilder result = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
