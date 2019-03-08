@@ -18,6 +18,9 @@ public class Main {
     private static final ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(3);
 
     @Getter
+    private static final ExecutorService executor = Executors.newFixedThreadPool(2);
+
+    @Getter
     @Setter
     private static boolean minimised;
 
@@ -35,7 +38,9 @@ public class Main {
     public static void shutdown() {
         LOG.debug("Main::shutdown() activated, destroying scheduler pools then frames.");
         scheduledThreadPool.shutdownNow();
-        while (!scheduledThreadPool.isTerminated()) {
+        executor.shutdownNow();
+
+        while (!scheduledThreadPool.isTerminated() && !executor.isTerminated()) {
             LOG.debug("All threads not terminated yet.. waiting...");
         }
         LOG.debug("All threads now in terminated state.");

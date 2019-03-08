@@ -1,10 +1,12 @@
 package listener.singleMaps;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.Main;
 import org.jsoup.nodes.Element;
 
 import gui.MainFrame;
@@ -29,28 +31,35 @@ public class UpdateButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        List<Element> buyableMaps = PoeTradeHandler.fetchBuyableMapsAsHtml(frame.getSearchBuilder().generateSearchData());
+        frame.getSingleMapsPanel().disableUpdateButtonAndSetPendingText();
+        frame.getSingleMapsPanel().getTradeables().setText("Loading...");
 
-        frame.setMaps(new ArrayList<>());
-        for (int i = 0; i < buyableMaps.size(); i++) {
-            frame.getMaps().add(new Map(buyableMaps.get(i)));
-        }
+        Main.getExecutor().execute(() -> {
+            List<Element> buyableMaps = PoeTradeHandler.fetchBuyableMapsAsHtml(frame.getSearchBuilder().generateSearchData());
 
-        Maps myMaps = new Maps(frame.getMaps());
-        myMaps.initializeMaps();
+            frame.setMaps(new ArrayList<>());
+            for (int i = 0; i < buyableMaps.size(); i++) {
+                frame.getMaps().add(new Map(buyableMaps.get(i)));
+            }
 
-        LOG.debug("Map Size: " + myMaps.getMaps().size());
+            Maps myMaps = new Maps(frame.getMaps());
+            myMaps.initializeMaps();
 
-        myMaps.filterByCurrency(frame.getCurrency());
+            LOG.debug("Map Size: " + myMaps.getMaps().size());
+            myMaps.filterByCurrency(frame.getCurrency());
 
-        frame.getSingleMapsPanel().getTradeables().setText("Tradeables count: " + myMaps.getMaps().size());
-        frame.getSingleMapsPanel().getTradeables().setEnabled(true);
-        frame.setTradeableMaps(myMaps.getMaps());
+            frame.getSingleMapsPanel().getTradeables().setText("Tradeables count: " + myMaps.getMaps().size());
+            frame.getSingleMapsPanel().getTradeables().setEnabled(true);
+            frame.setTradeableMaps(myMaps.getMaps());
 
-        if (frame.getTradeableMaps().size() > 0) {
-            frame.getSingleMapsPanel().getBtn_nextTrade().setEnabled(true);
-        }
+            if (frame.getTradeableMaps().size() > 0) {
+                frame.getSingleMapsPanel().getBtn_nextTrade().setEnabled(true);
+            }
 
+            frame.getSingleMapsPanel().enableAndResetUpdateButtonText();
+            Toolkit.getDefaultToolkit().beep();
+
+        });
     }
 
 }

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public abstract class PanelBase extends JPanel {
@@ -26,6 +27,7 @@ public abstract class PanelBase extends JPanel {
     private JButton updateButton;
 
     private JLabel createdBy;
+    private JLabel maintainedBy;
     private JLabel version;
 
     public PanelBase() {
@@ -33,15 +35,6 @@ public abstract class PanelBase extends JPanel {
     }
 
     private void init() {
-//        Image cancelIcon = null;
-//        Image minimizeIcon = null;
-//        try {
-//            cancelIcon = ImageIO.read(Main.class.getResourceAsStream("./images/cancel.png"));
-//            minimizeIcon = ImageIO.read(Main.class.getResourceAsStream("./images/minimize.png"));
-//        } catch (IOException e) {
-//            LOG.error("PanelBase::init loading resource images", e);
-//        }
-//
         setLayout(null);
         setPreferredSize(new Dimension(420, 315));
         setForeground(Color.GRAY);
@@ -79,13 +72,13 @@ public abstract class PanelBase extends JPanel {
         btnExit.setBounds(342, -1, 19, 24);
 
         updateButton = new JButton();
-        updateButton.setText("Update");
+        updateButton.setText("Send Request");
         updateButton.setEnabled(false);
         updateButton.setBounds(139, 186, 152, 43);
         updateButton.setLocation(172, 196);
 
         // LABELS
-        version = new JLabel("beta 1.5.1");
+        version = new JLabel("v" + getClass().getPackage().getImplementationVersion());
         version.setForeground(new Color(255, 235, 205));
         version.setFont(new Font("Tahoma", Font.PLAIN, 8));
         version.setBackground(new Color(0, 128, 0));
@@ -96,6 +89,12 @@ public abstract class PanelBase extends JPanel {
         createdBy.setFont(new Font("Tahoma", Font.PLAIN, 8));
         createdBy.setBackground(new Color(0, 128, 0));
         createdBy.setBounds(180, 286, 110, 14);
+
+        maintainedBy = new JLabel("Maintained by VeenarM");
+        maintainedBy.setForeground(new Color(255, 235, 205));
+        maintainedBy.setFont(new Font("Tahoma", Font.PLAIN, 8));
+        maintainedBy.setBackground(new Color(0, 128, 0));
+        maintainedBy.setBounds(180, 300, 110, 14);
 
         tradeables = new JLabel("Tradeables: ");
         tradeables.setForeground(Color.WHITE);
@@ -109,6 +108,7 @@ public abstract class PanelBase extends JPanel {
         add(version);
         add(createdBy);
         add(updateButton);
+        add(maintainedBy);
 
         if (addOptionalTradeables()) {
             add(tradeables);
@@ -126,5 +126,13 @@ public abstract class PanelBase extends JPanel {
 
     abstract String getTabTitle();
 
+    public void enableAndResetUpdateButtonText() {
+        updateButton.setText("Send Request");
+        updateButton.setEnabled(true);
+    }
 
+    public void disableUpdateButtonAndSetPendingText() {
+        updateButton.setText("Please wait...");
+        updateButton.setEnabled(false);
+    }
 }

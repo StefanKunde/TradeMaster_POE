@@ -17,6 +17,7 @@ import listener.settings.UpdateSettingsListener;
 import listener.singleMaps.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,18 +126,18 @@ public class MainFrame extends JDialog {
         tabbedPane.addTab(currencyPollerPanel.getTabTitle(), currencyPollerPanel);
         tabbedPane.addTab(settingsPanel.getTabTitle(), settingsPanel);
 
-        this.setPreferredSize(new Dimension(390, 343));
-        this.setForeground(Color.GRAY);
-        this.setFont(new Font("Calibri", Font.PLAIN, 12));
-        this.setBackground(Color.GRAY);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setSize(390, 343);
-        this.setLocationRelativeTo(null);
-        this.getContentPane().requestFocusInWindow();
-        this.setAlwaysOnTop(true);
+        setPreferredSize(new Dimension(370, 343));
+        setForeground(Color.GRAY);
+        setFont(new Font("Calibri", Font.PLAIN, 12));
+        setBackground(Color.GRAY);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setSize(370, 343);
+        setLocationRelativeTo(null);
+        getContentPane().requestFocusInWindow();
+        setAlwaysOnTop(true);
         SwingUtilities.updateComponentTreeUI(this);
-        this.setVisible(false);
-        this.setResizable(false);
+        setVisible(false);
+        setResizable(false);
         setDefaultLookAndFeelDecorated(true);
 
         // Bulk Maps Panel Listeners
@@ -189,6 +190,13 @@ public class MainFrame extends JDialog {
         singleMapsPanel.getCmb_tier().addActionListener(tierListener);
         tierListener.loadMapsFromSelectedTier("Tier 1");
         singleMapsPanel.getCmb_map().addActionListener(mapListener);
+
+        // Populate Generator with first cut data.
+        getSearchBuilder().setMapName(singleMapsPanel.getCmb_map().getSelectedItem().toString());
+        getSearchBuilder().setCurrency(singleMapsPanel.getCmb_currency().getSelectedItem().toString());
+        getSearchBuilder().setTier(singleMapsPanel.getCmb_tier().getSelectedItem().toString());
+        getSearchBuilder().setRarity(singleMapsPanel.getChckbx_white().isSelected() ? "normal" : "");
+        getSearchBuilder().setCorrupted(singleMapsPanel.getChckbx_corrupted().isSelected());
 
         // All exit button listeners
         ExitButtonListener exitListener = new ExitButtonListener(this);

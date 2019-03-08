@@ -94,7 +94,7 @@ public class SearchParameterModel {
 
 
     public List<NameValuePair> generateSearchData() {
-        List<NameValuePair> searchData = new ArrayList<NameValuePair>();
+        List<NameValuePair> searchData = new ArrayList<>();
         searchData.add(new BasicNameValuePair("league", Config.get().getLeagueSelection()));
         searchData.add(type);
         searchData.add(base);

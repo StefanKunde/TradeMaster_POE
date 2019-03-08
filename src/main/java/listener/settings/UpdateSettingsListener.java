@@ -1,6 +1,7 @@
 package listener.settings;
 
 import app.Config;
+import app.Main;
 import gui.MainFrame;
 import items.PoeNinjaPrices;
 import org.slf4j.Logger;
@@ -31,8 +32,11 @@ public class UpdateSettingsListener implements ActionListener {
 
         Config.get().setLeagueSelection(selectedLeague);
 
-        // Re-update the PoE Ninja Prices
-        frame.setPoeNinjaPrices(new PoeNinjaPrices());
+        Main.getExecutor().execute(() -> {
+            // Re-update the PoE Ninja Prices
+            frame.setPoeNinjaPrices(new PoeNinjaPrices());
+        });
+
     }
 
 }
