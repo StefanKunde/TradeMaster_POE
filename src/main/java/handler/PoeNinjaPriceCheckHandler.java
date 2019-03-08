@@ -19,7 +19,6 @@ public class PoeNinjaPriceCheckHandler {
 
     public List<PoeNinjaPriceItem> getPriceItemList() {
         List<PoeNinjaPriceItem> priceList = new ArrayList<>();
-
         PoeNinjaPricesAsObject items = BaseConnector.GSON.fromJson(pricesAsJson, PoeNinjaPricesAsObject.class);
 
         for (int i = 0; i < items.getLines().length; i++) {
@@ -34,9 +33,6 @@ public class PoeNinjaPriceCheckHandler {
             }
             priceList.add(item);
         }
-
         return priceList;
     }
-
-
 }

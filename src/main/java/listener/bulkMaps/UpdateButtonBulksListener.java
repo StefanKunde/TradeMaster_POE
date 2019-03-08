@@ -68,7 +68,7 @@ public class UpdateButtonBulksListener implements ActionListener {
             }
 
             frame.getPanelBulkMaps().enableAndResetUpdateButtonText();
-            Toolkit.getDefaultToolkit().beep();
+//            Toolkit.getDefaultToolkit().beep();
         });
     }
 }

@@ -57,8 +57,7 @@ public class UpdateButtonListener implements ActionListener {
             }
 
             frame.getSingleMapsPanel().enableAndResetUpdateButtonText();
-            Toolkit.getDefaultToolkit().beep();
-
+//            Toolkit.getDefaultToolkit().beep();
         });
     }
 

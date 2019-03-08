@@ -1,25 +1,15 @@
 package PoeNinjaPricesJson;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CurrencyDetail {
 
-	private String name;
-	private	String poeTradeId;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPoeTradeId() {
-		return poeTradeId;
-	}
-
-	public void setPoeTradeId(String poeTradeId) {
-		this.poeTradeId = poeTradeId;
-	}
-
+    @Getter
+    @Setter
+    private String name;
+    @Getter
+    @Setter
+    private String poeTradeId;
 
 }

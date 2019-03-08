@@ -1,30 +1,15 @@
 package PoeNinjaPricesJson;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class PoeNinjaPricesAsObject {
 
-	private Line lines[];
-	private CurrencyDetail currencyDetails[];
-	
-	public PoeNinjaPricesAsObject() {
-		
-	}
-
-	public Line[] getLines() {
-		return lines;
-	}
-
-	public void setLines(Line[] lines) {
-		this.lines = lines;
-	}
-
-	public CurrencyDetail[] getCurrencyDetails() {
-		return currencyDetails;
-	}
-
-	public void setCurrencyDetails(CurrencyDetail[] currencyDetails) {
-		this.currencyDetails = currencyDetails;
-	}
-	
-	
+    @Getter
+    @Setter
+    private Line lines[];
+    @Getter
+    @Setter
+    private CurrencyDetail currencyDetails[];
 
 }
