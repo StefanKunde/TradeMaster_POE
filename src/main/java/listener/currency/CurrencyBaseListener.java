@@ -22,7 +22,6 @@ public abstract class CurrencyBaseListener implements ActionListener {
         JSONArray names = Config.get().getPoeTradeCurrencies().names();
         for (int i = 0; i < names.length(); i++) {
             if (names.get(i).equals(selectedPayItem)) {
-                Config.get().getPoeTradeCurrencies().opt()
                 selectedPayItemCurrencyID = (String) Config.get().getPoeTradeCurrencies().opt(names.get(i).toString());
             }
             if (names.get(i).equals(selectedWantItem)) {

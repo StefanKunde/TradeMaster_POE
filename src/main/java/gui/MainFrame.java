@@ -82,8 +82,6 @@ public class MainFrame extends JDialog {
     @Getter
     private PanelCurrencyBuyer currencyBuyerPanel;
     @Getter
-    private PanelCurrencyPolling currencyPollerPanel;
-    @Getter
     private PanelSettings settingsPanel;
 
     public MainFrame(PoeNinjaPrices poeNinjaPrices) {
@@ -96,7 +94,6 @@ public class MainFrame extends JDialog {
         singleMapsPanel = new PanelSingleMaps();
         panelBulkMaps = new PanelBulkMaps();
         currencyBuyerPanel = new PanelCurrencyBuyer();
-        currencyPollerPanel = new PanelCurrencyPolling();
         settingsPanel = new PanelSettings();
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
@@ -123,7 +120,6 @@ public class MainFrame extends JDialog {
         tabbedPane.addTab(singleMapsPanel.getTabTitle(), singleMapsPanel);
         tabbedPane.addTab(panelBulkMaps.getTabTitle(), panelBulkMaps);
         tabbedPane.addTab(currencyBuyerPanel.getTabTitle(), currencyBuyerPanel);
-        tabbedPane.addTab(currencyPollerPanel.getTabTitle(), currencyPollerPanel);
         tabbedPane.addTab(settingsPanel.getTabTitle(), settingsPanel);
 
         setPreferredSize(new Dimension(370, 343));
@@ -172,8 +168,6 @@ public class MainFrame extends JDialog {
         currencyBuyerPanel.getCmbCurrencyTabWant().addActionListener(wantListener);
         currencyBuyerPanel.getCmbCurrencyTabPay().addActionListener(payListener);
 
-        setupCurrencyPollingListeners();
-
         // Single Maps Panel Listeners
         CurrencyComboboxListener currencyListener = new CurrencyComboboxListener(this);
         CorruptedCheckBoxListener corruptedBoxListener = new CorruptedCheckBoxListener(this);
@@ -204,7 +198,6 @@ public class MainFrame extends JDialog {
         settingsPanel.getBtnExit().addActionListener(exitListener);
         panelBulkMaps.getBtnExit().addActionListener(exitListener);
         currencyBuyerPanel.getBtnExit().addActionListener(exitListener);
-        currencyPollerPanel.getBtnExit().addActionListener(exitListener);
 
         // All minimize button listeners
         MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this, new MinimizedFrame(this));
@@ -212,7 +205,6 @@ public class MainFrame extends JDialog {
         settingsPanel.getBtnMinimize().addActionListener(minimizeListener);
         panelBulkMaps.getBtnMinimize().addActionListener(minimizeListener);
         currencyBuyerPanel.getBtnMinimize().addActionListener(minimizeListener);
-        currencyPollerPanel.getBtnMinimize().addActionListener(minimizeListener);
 
         LeagueChangeListener leagueChangeListener = new LeagueChangeListener(this);
         UpdateSettingsListener updateSettingsListener = new UpdateSettingsListener(this);
@@ -224,23 +216,6 @@ public class MainFrame extends JDialog {
         currencyBuyerPanel.getChckbxAutomateTrading().addActionListener(automateTradeChBxListener);
         singleMapsPanel.getChckbxAutomateTrading().addActionListener(automateTradeChBxListener);
     }
-
-    private void setupCurrencyPollingListeners() {
-        NeededAmountTxtBoxListener neededAmountListener = new NeededAmountTxtBoxListener(this);
-        MaxPayTxtBoxListener maxPayListener = new MaxPayTxtBoxListener(this);
-        UpdateButtonCurrencyListener updateCurrencyListener = new UpdateButtonCurrencyListener(this);
-        NextButtonCurrencyListener nextCurrencyListener = new NextButtonCurrencyListener(this);
-        CurrencyTabCmbBoxWantListener wantListener = new CurrencyTabCmbBoxWantListener(this);
-        CurrencyTabCmbBoxPayListener payListener = new CurrencyTabCmbBoxPayListener(this);
-
-        currencyPollerPanel.getTxtCurrencyTabNeededAmount().getDocument().addDocumentListener(neededAmountListener);
-        currencyPollerPanel.getTxtCurrencyTabMaxPay().getDocument().addDocumentListener(maxPayListener);
-        currencyPollerPanel.getUpdateButton().addActionListener(updateCurrencyListener);
-        currencyPollerPanel.getBtnNextTradeCurrencyTab().addActionListener(nextCurrencyListener);
-        currencyPollerPanel.getCmbCurrencyTabWant().addActionListener(wantListener);
-        currencyPollerPanel.getCmbCurrencyTabPay().addActionListener(payListener);
-    }
-
 
     public void setForegroundWindow(final String titleName) {
         user32.EnumWindows((hWnd, arg1) -> {
@@ -291,10 +266,8 @@ public class MainFrame extends JDialog {
         for (int i = 0; i < currencysAsList.size(); i++) {
             getCurrencyBuyerPanel().getCmbCurrencyTabWant().addItem(currencysAsList.get(i));
             getCurrencyBuyerPanel().getCmbCurrencyTabPay().addItem(currencysAsList.get(i));
-            getCurrencyPollerPanel().getCmbCurrencyTabWant().addItem(currencysAsList.get(i));
         }
         for (int i = 0; i < bulkCurrencyAsList.size(); i++) {
-            getCurrencyPollerPanel().getCmbCurrencyTabPay().addItem(bulkCurrencyAsList.get(i));
         }
     }
 
