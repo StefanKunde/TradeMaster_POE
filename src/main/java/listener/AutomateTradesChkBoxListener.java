@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 
-import config.Config;
+import app.Config;
 import gui.MainFrame;
 
 public class AutomateTradesChkBoxListener implements ActionListener {

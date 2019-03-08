@@ -1,8 +1,8 @@
-package handler;
+package model;
 
 import lombok.Getter;
 
-public class PoeTradeBulkItemExchangeSearchData {
+public class PoeTradeBulkItemExchangeSearchDataModel {
 
     @Getter
     private int minimum = 1;
@@ -11,7 +11,7 @@ public class PoeTradeBulkItemExchangeSearchData {
     @Getter
     private String have = "";
 
-    private PoeTradeBulkItemExchangeSearchData() {
+    private PoeTradeBulkItemExchangeSearchDataModel() {
     }
 
     public static class Builder {
@@ -37,8 +37,8 @@ public class PoeTradeBulkItemExchangeSearchData {
             return this;
         }
 
-        public PoeTradeBulkItemExchangeSearchData build() {
-            PoeTradeBulkItemExchangeSearchData result = new PoeTradeBulkItemExchangeSearchData();
+        public PoeTradeBulkItemExchangeSearchDataModel build() {
+            PoeTradeBulkItemExchangeSearchDataModel result = new PoeTradeBulkItemExchangeSearchDataModel();
             result.minimum = this.minimum;
             result.have = this.have;
             result.want = this.want;

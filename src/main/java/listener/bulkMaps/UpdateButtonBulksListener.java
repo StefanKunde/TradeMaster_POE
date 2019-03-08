@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import gui.MainFrame;
-import handler.PoeTradeBulkItemExchangeSearchData;
+import model.PoeTradeBulkItemExchangeSearchDataModel;
 import handler.PoeNinjaHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class UpdateButtonBulksListener implements ActionListener {
 
         String map = mapFromCmbBox.replaceAll(" ", "-").toLowerCase();
 
-        PoeTradeBulkItemExchangeSearchData.Builder searchData = new PoeTradeBulkItemExchangeSearchData.Builder();
+        PoeTradeBulkItemExchangeSearchDataModel.Builder searchData = new PoeTradeBulkItemExchangeSearchDataModel.Builder();
         searchData.addMinimum(minimumAmount).addWant(map).addHave(payWithCmbBox);
 
         PoeNinjaHandler ninjaHandler = new PoeNinjaHandler(searchData.build());

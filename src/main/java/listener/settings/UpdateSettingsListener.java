@@ -1,6 +1,6 @@
 package listener.settings;
 
-import config.Config;
+import app.Config;
 import gui.MainFrame;
 import items.PoeNinjaPrices;
 import org.slf4j.Logger;

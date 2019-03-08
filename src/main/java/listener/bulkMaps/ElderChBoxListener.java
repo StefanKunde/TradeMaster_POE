@@ -2,11 +2,8 @@ package listener.bulkMaps;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
-import config.Config;
+import app.Config;
 import gui.MainFrame;
 
 import javax.swing.*;

@@ -1,9 +1,9 @@
-package connector;
+package model;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class NinjaJsonObject {
+public class NinjaJsonModel {
 
     @Getter
     @Setter

@@ -1,6 +1,6 @@
 package listener.currency;
 
-import config.Config;
+import app.Config;
 import gui.MainFrame;
 import org.json.JSONArray;
 import org.slf4j.Logger;

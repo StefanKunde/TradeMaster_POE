@@ -1,10 +1,9 @@
 package items;
 
-import config.Config;
+import app.Config;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
@@ -41,7 +40,7 @@ public class TradeableItem {
         sb.append("Hi, I'd like to buy your ").append(amount).append(" ");
         sb.append(getItemToSell()).append(" ");
         sb.append("(T").append(getMapTier()).append(") for my ").append(priceForBulk).append(" ");
-        sb.append(getCurrencyToPay()).append(" Orb in ").append(Config.get().getLeagueSelection());
+        sb.append(getCurrencyToPay()).append(" orb in ").append(Config.get().getLeagueSelection());
         return sb.toString();
     }
 

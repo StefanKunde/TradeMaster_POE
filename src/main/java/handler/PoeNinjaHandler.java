@@ -1,10 +1,10 @@
 package handler;
 
-import com.google.gson.Gson;
 import connector.PoeNinjaFetcher;
 import items.TradeableBulk;
 import jsonNinjaResult.Result;
 import lombok.Getter;
+import model.PoeTradeBulkItemExchangeSearchDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +14,14 @@ public class PoeNinjaHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaHandler.class);
 
-    private final int MAX_REQUESTS = 4;
+    private final int MAX_REQUESTS = 5;
     private PoeNinjaFetcher poeConnector = new PoeNinjaFetcher();
-    private PoeTradeBulkItemExchangeSearchData searchData;
+    private PoeTradeBulkItemExchangeSearchDataModel searchData;
 
     @Getter
     private TradeableBulk tradeables = new TradeableBulk();
 
-    public PoeNinjaHandler(PoeTradeBulkItemExchangeSearchData searchData) {
+    public PoeNinjaHandler(PoeTradeBulkItemExchangeSearchDataModel searchData) {
         this.searchData = searchData;
     }
 
@@ -34,24 +34,22 @@ public class PoeNinjaHandler {
     }
 
     public void processBulkRequests() {
-        try {
-            String responseFromPost = poeConnector.sendPost(generateJsonSearchString());
-            poeConnector.storeResultsFromResponseAsList(responseFromPost);
+        String responseFromPost = poeConnector.sendPost(generateJsonSearchString());
+        poeConnector.storeResultsFromResponseAsList(responseFromPost);
 
-            Gson gson = new Gson();
-            int i = 0;
-            while (poeConnector.getResultList().size() > 0 && i < MAX_REQUESTS) {
+        if (!poeConnector.getResultList().isEmpty()) {
+            for (int i = 0; i < MAX_REQUESTS; i++) {
                 String searchLink = poeConnector.generateSearchString(responseFromPost);
                 String response = poeConnector.sendGet(searchLink);
-                Result result = gson.fromJson(response, Result.class);
+                Result result = poeConnector.GSON.fromJson(response, Result.class);
                 tradeables.addResults(result.getResult());
-                TimeUnit.MILLISECONDS.sleep(300);
-                i++;
+                try {
+                    TimeUnit.MILLISECONDS.sleep(300);
+                } catch (InterruptedException ie) {
+                    LOG.error("PoeNinjaHandler::processBulkRequests, sleep attempt had an interruption occur - " + ie.getMessage());
+                }
             }
-        } catch (Exception e) {
-            LOG.error("e", e);
         }
-
-        this.tradeables.generateTradebleItems(searchData.getMinimum());
+        tradeables.generateTradebleItems(searchData.getMinimum());
     }
 }

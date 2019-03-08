@@ -1,6 +1,6 @@
 package gui;
 
-import config.Config;
+import app.Config;
 import lombok.Getter;
 
 import javax.swing.*;

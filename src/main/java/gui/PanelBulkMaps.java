@@ -9,7 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import config.Config;
+import app.Config;
 
 public class PanelBulkMaps extends PanelBase {
 

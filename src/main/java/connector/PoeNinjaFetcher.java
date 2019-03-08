@@ -1,9 +1,10 @@
 package connector;
 
 import com.google.gson.Gson;
-import config.Config;
+import app.Config;
 import lombok.Getter;
 import lombok.Setter;
+import model.NinjaJsonModel;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -13,6 +14,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,24 +29,23 @@ public class PoeNinjaFetcher extends BaseConnector {
     @Setter
     private List<String> resultList = new ArrayList<>();
 
-    // HTTP GET request
-    public String sendGet(String url) throws Exception {
+    public String sendGet(String url) {
         HttpGet httpGet = new HttpGet(url);
-
-        HttpResponse response;
-        String result;
+        String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            response = client.execute(httpGet);
+            HttpResponse response = client.execute(httpGet);
             result = convertStreamToString(response.getEntity().getContent());
+        } catch (IOException ioe) {
+            LOG.error("PoeNinjaFetcher::sendGet to " + url + ", Returned IOException: " + ioe.getMessage());
         }
         return result;
     }
 
-    // HTTP POST request
-    public String sendPost(String jsonData) throws Exception {
-        HttpPost post = new HttpPost(String.format(POE_SEARCHLINK, Config.get().getEncodedLeagueSelection()));
+    public String sendPost(String jsonData) {
+        String postUrl = String.format(POE_SEARCHLINK, Config.get().getEncodedLeagueSelection());
+        HttpPost post = new HttpPost(postUrl);
 
-        // add header
+        // add headers
         post.addHeader("User-Agent", USER_AGENT);
         post.addHeader("accept", "*/*");
         post.addHeader("Host", "www.pathofexile.com");
@@ -53,19 +54,19 @@ public class PoeNinjaFetcher extends BaseConnector {
         post.addHeader("X-Requested-With", "XMLHttpRequest");
         post.addHeader("Content-Type", "application/json");
 
-        // String demoData = "{\"exchange\":{\"status\":{\"option\":\"online\"},\"have\":[],\"want\":[\"elder-underground-sea-map\"]}}";
-        StringEntity params = new StringEntity(jsonData);
+        StringEntity params = new StringEntity(jsonData, Config.get().ENCODING_TYPE);
         post.setEntity(params);
 
         LOG.debug("Post data: " + jsonData);
-
-        String result;
+        String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             LOG.debug("Sending 'POST' request to URL : " + String.format(POE_SEARCHLINK, Config.get().getEncodedLeagueSelection()));
             LOG.debug("Post Entity : " + post.getEntity());
             HttpResponse response = client.execute(post);
             LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
             result = convertStreamToString(response.getEntity().getContent());
+        } catch (IOException ioe) {
+            LOG.error("PoeNinjaFetcher::sendPost to " + postUrl + ", Returned IOException: " + ioe.getMessage());
         }
 
         LOG.debug(result);
@@ -80,13 +81,10 @@ public class PoeNinjaFetcher extends BaseConnector {
 
     public String generateSearchString(String jsonResponse) {
         String link = POE_SEARCHLINK_FOR_RESULT;
-
-        Gson gson = new Gson();
-        NinjaJsonObject responseObject = gson.fromJson(jsonResponse, NinjaJsonObject.class);
+        NinjaJsonModel responseObject = GSON.fromJson(jsonResponse, NinjaJsonModel.class);
 
         int max_length = 3;
-
-        List<String> tmpList = new ArrayList<String>();
+        List<String> tmpList = new ArrayList<>();
         for (int i = 0; i < this.resultList.size(); i++) {
             if (i < max_length) {
                 link += resultList.get(i) + ",";
@@ -95,7 +93,6 @@ public class PoeNinjaFetcher extends BaseConnector {
             }
         }
         this.setResultList(tmpList);
-
         // delete last comma
         link = link.substring(0, link.length() - 1);
         link += "?query=" + responseObject.getId() + "&exchange";
@@ -104,8 +101,7 @@ public class PoeNinjaFetcher extends BaseConnector {
     }
 
     public void storeResultsFromResponseAsList(String responseFromPost) {
-        Gson gson = new Gson();
-        NinjaJsonObject responseObject = gson.fromJson(responseFromPost, NinjaJsonObject.class);
+        NinjaJsonModel responseObject = GSON.fromJson(responseFromPost, NinjaJsonModel.class);
         for (String result : responseObject.getResult()) {
             this.resultList.add(result);
         }

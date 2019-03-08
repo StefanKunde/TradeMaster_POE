@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 import app.Main;
-import config.Config;
+import app.Config;
 
 public class PanelSingleMaps extends PanelBase {
     private static final long serialVersionUID = 1L;

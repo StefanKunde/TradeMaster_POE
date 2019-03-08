@@ -1,6 +1,6 @@
 package items;
 
-import config.Config;
+import app.Config;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;

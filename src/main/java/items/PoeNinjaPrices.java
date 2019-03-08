@@ -24,12 +24,7 @@ public class PoeNinjaPrices {
 
     private void loadPrices() {
         PoeNinjaPriceFetcher fetcher = new PoeNinjaPriceFetcher();
-        String pricesAsJsonText = "";
-        try {
-            pricesAsJsonText = fetcher.sendGet();
-        } catch (Exception e) {
-            LOG.error("PoeNinjaPrices::getPrices()", e);
-        }
+        String pricesAsJsonText = fetcher.sendGet();
 
         PoeNinjaPriceCheckHandler handler = new PoeNinjaPriceCheckHandler(pricesAsJsonText);
         priceItemList = handler.getPriceItemList();

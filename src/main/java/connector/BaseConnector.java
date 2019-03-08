@@ -1,5 +1,6 @@
 package connector;
 
+import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.util.EntityUtils;
@@ -13,6 +14,7 @@ import java.util.zip.GZIPInputStream;
 
 public abstract class BaseConnector {
 
+    public static final Gson GSON = new Gson();
     protected static final String USER_AGENT = "Mozilla/5.0";
 
     protected String convertStreamToString(InputStream is) {
@@ -23,7 +25,7 @@ public abstract class BaseConnector {
                 result.append(line + "\n");
             }
         } catch (IOException e) {
-            getLogger().error("PoeNinaFetcher::convertStreamToString", e);
+            getLogger().error("BaseConnector::convertStreamToString", e);
         }
         return result.toString();
     }

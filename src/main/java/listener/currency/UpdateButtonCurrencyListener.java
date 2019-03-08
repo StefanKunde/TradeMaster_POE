@@ -3,7 +3,7 @@ package listener.currency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import config.Config;
+import app.Config;
 import org.json.JSONArray;
 
 import connector.CurrencyPoeTradeFetcher;
@@ -62,13 +62,8 @@ public class UpdateButtonCurrencyListener implements ActionListener {
         }
 
         // Send request to poe.currency.trade
-        String response = "";
         CurrencyPoeTradeFetcher tradeFetcher = new CurrencyPoeTradeFetcher();
-        try {
-            response = tradeFetcher.sendGet(wantedAmountString, wantedCurrencyID, currencyToPayWithID);
-        } catch (Exception e1) {
-            LOG.error("", e1);
-        }
+        String response = tradeFetcher.sendGet(wantedAmountString, wantedCurrencyID, currencyToPayWithID);
 
         // Load all offers from html response
         CurrencyPoeTradeHandler handler = new CurrencyPoeTradeHandler(response);

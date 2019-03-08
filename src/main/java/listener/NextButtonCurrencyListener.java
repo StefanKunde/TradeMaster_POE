@@ -1,6 +1,6 @@
 package listener;
 
-import config.Config;
+import app.Config;
 import gui.MainFrame;
 import helper.RobotHelper;
 import items.CurrencyOffers;

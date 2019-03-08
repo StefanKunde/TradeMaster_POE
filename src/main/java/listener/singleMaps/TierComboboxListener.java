@@ -1,6 +1,6 @@
 package listener.singleMaps;
 
-import config.Config;
+import app.Config;
 import gui.MainFrame;
 import listener.bulkMaps.ShapedChBoxListener;
 import org.json.JSONArray;

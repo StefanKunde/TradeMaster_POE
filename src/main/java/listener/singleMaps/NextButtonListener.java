@@ -6,7 +6,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import config.Config;
+import app.Config;
 import gui.MainFrame;
 import helper.RobotHelper;
 

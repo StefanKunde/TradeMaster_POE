@@ -3,8 +3,8 @@ package gui;
 import app.Main;
 import com.sun.jna.Native;
 import com.sun.jna.PointerType;
-import config.Config;
-import connector.SearchParameter;
+import app.Config;
+import model.SearchParameterModel;
 import items.CurrencyOffers;
 import items.Map;
 import items.PoeNinjaPrices;
@@ -53,7 +53,7 @@ public class MainFrame extends JDialog {
     @Setter
     private List<Map> tradeableMaps;
     @Getter
-    private SearchParameter searchBuilder;
+    private SearchParameterModel searchBuilder;
     @Getter
     @Setter
     private String currency = "";
@@ -91,7 +91,7 @@ public class MainFrame extends JDialog {
         tradeables = new TradeableBulk();
         maps = new ArrayList<>();
         tradeableMaps = new ArrayList<>();
-        searchBuilder = new SearchParameter();
+        searchBuilder = new SearchParameterModel();
         singleMapsPanel = new PanelSingleMaps();
         panelBulkMaps = new PanelBulkMaps();
         currencyBuyerPanel = new PanelCurrencyBuyer();

@@ -29,11 +29,9 @@ public class UpdateButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        List<Element> buyableMaps = PoeTradeHandler.fetchBuyableMapsAsHtml(frame.getSearchBuilder().generateSearchData());
 
-        PoeTradeHandler trader = new PoeTradeHandler(frame.getSearchBuilder().generateSearchData());
-        List<Element> buyableMaps = trader.fetchBuyableMapsAsHtml();
         frame.setMaps(new ArrayList<>());
-
         for (int i = 0; i < buyableMaps.size(); i++) {
             frame.getMaps().add(new Map(buyableMaps.get(i)));
         }

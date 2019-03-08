@@ -1,6 +1,6 @@
 package listener.currencyPolling;
 
-import config.Config;
+import app.Config;
 import connector.CurrencyPoeTradeFetcher;
 import gui.MainFrame;
 import handler.CurrencyPoeTradeHandler;
@@ -61,13 +61,8 @@ public class UpdateCurrencyPollingListener implements ActionListener {
         }
 
         // Send request to poe.currency.trade
-        String response = "";
         CurrencyPoeTradeFetcher tradeFetcher = new CurrencyPoeTradeFetcher();
-        try {
-            response = tradeFetcher.sendGet(wantedAmountString, wantedCurrencyID, currencyToPayWithID);
-        } catch (Exception e1) {
-            LOG.error("", e1);
-        }
+        String response = tradeFetcher.sendGet(wantedAmountString, wantedCurrencyID, currencyToPayWithID);
 
         // Load all offers from html response
         CurrencyPoeTradeHandler handler = new CurrencyPoeTradeHandler(response);
