@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 /**
  * What do I pay? - Currency Tab Listener
  */
-public class WhatDoIPayComboBoxListener extends CurrencyBaseListener {
+public class WhatDoIPayComboBoxListener extends CurrencyPollingBaseListener {
 
     private Logger LOG = LoggerFactory.getLogger(WhatDoIPayComboBoxListener.class);
 
@@ -22,7 +22,7 @@ public class WhatDoIPayComboBoxListener extends CurrencyBaseListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String selectedPayItem = (String) ((JComboBox) e.getSource()).getSelectedItem();
-        String selectedWantItem = (String) frame.getCurrencyBuyerPanel().getCmbCurrencyTabWant().getSelectedItem();
+        String selectedWantItem = (String) frame.getCurrencyPollerPanel().getCmbCurrencyTabWant().getSelectedItem();
 
         runCommonChecks(selectedPayItem, selectedWantItem);
     }

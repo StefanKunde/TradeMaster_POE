@@ -1,7 +1,6 @@
 package listener.currencyPolling;
 
 import gui.MainFrame;
-import listener.currency.CurrencyBaseListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,9 +8,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 /**
- * What do I want? - Currency Tab Listener
+ * What do I want? - Currency Polling Tab Listener
  */
-public class WhatDoIWantComboBoxListener extends CurrencyBaseListener {
+public class WhatDoIWantComboBoxListener extends CurrencyPollingBaseListener {
     private Logger LOG = LoggerFactory.getLogger(WhatDoIWantComboBoxListener.class);
 
     public WhatDoIWantComboBoxListener(MainFrame frame) {
@@ -20,7 +19,7 @@ public class WhatDoIWantComboBoxListener extends CurrencyBaseListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String selectedPayItem = (String) frame.getCurrencyBuyerPanel().getCmbCurrencyTabPay().getSelectedItem();
+        String selectedPayItem = (String) frame.getCurrencyPollerPanel().getCmbCurrencyTabPay().getSelectedItem();
         String selectedWantItem = (String) ((JComboBox) e.getSource()).getSelectedItem();
 
         runCommonChecks(selectedPayItem, selectedWantItem);
