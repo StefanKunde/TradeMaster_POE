@@ -1,4 +1,4 @@
-# Trademaster_POE beta v1.4
+# Trademaster_POE beta
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
@@ -9,8 +9,8 @@ This app is for all the people who feel the pain!
 
 
 
-Live market prices while trading for currencys:
 
+Live market prices while trading for currencys:
 ![Price info](https://i.imgur.com/teQ3lG8.jpg)
 
 Buy maps in bulks:
@@ -48,8 +48,8 @@ Requirements:
 - Works only in window mode of poe.
 
 Warn:
-TradeMaster is still in the beta and under development.
-Dont blame me for bugs. Report them whould be great!
+This version of TradeMaster is a FORK with continous bug fixes/improvements that I am developing.
+It's using an API driven config that's modifyable if issues occur.
 
 
 Download:
