@@ -1,100 +1,80 @@
 package items;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import jsonNinjaResult.Listing;
 import jsonNinjaResult.Result_;
+import lombok.Getter;
+import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TradeableBulk {
-	
-	private List<Result_> results;
-	private List<TradeableItem> tradeableItems;
-	private List<TradeableItem> filteredTradeableItems;
-	
-	public TradeableBulk() {
-		results = new ArrayList<Result_>();
-		this.tradeableItems = new ArrayList<TradeableItem>();
-		filteredTradeableItems = this.tradeableItems;
-	}
 
-	public List<Result_> getResults() {
-		return results;
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(TradeableBulk.class);
 
-	public void setResults(List<Result_> results) {
-		this.results = results;
-	}
-	
-	public void addResult(Result_ result) {
-		this.results.add(result);
-	}
-	
-	public void addResults(List<Result_> resultList) {
-		for(Result_ result : resultList) {
-			this.results.add(result);
-		}
-	}
+    @Getter
+    @Setter
+    private List<Result_> results = new ArrayList<>();
+    @Getter
+    private List<TradeableItem> tradeableItems = new ArrayList<>();
+    @Getter
+    private List<TradeableItem> filteredTradeableItems = tradeableItems;
 
-	public void generateTradebleItems(int bulkAmount) {
-		for(Result_ result : this.results) {
-			TradeableItem item = new TradeableItem();
-			Listing listing = result.getListing();
-			
-			// Calculate price per map
-			double exchangeAmount = listing.getPrice().getExchange().getAmount();
-			int itemAmount = listing.getPrice().getItem().getAmount();
-			
-			String currencyToPay = listing.getPrice().getExchange().getCurrency();
-			int mapStock = listing.getPrice().getItem().getStock();
-			double pricePerMap = exchangeAmount / itemAmount;
-			String userName = listing.getAccount().getLastCharacterName();
-			String iconPath = result.getItem().getIcon();
-			String itemToSell = result.getItem().getTypeLine();
-			String mapTier = result.getItem().getProperties().get(0).getValues().get(0).get(0);
-			
-			item.setCurrencyToPay(currencyToPay);
-			item.setMapStock(mapStock);
-			item.setPricePerMap((int)pricePerMap);
-			item.setUsername(userName);
-			item.setIconUrl(iconPath);
-			item.setItemToSell(itemToSell);
-			item.setMapTier(mapTier);
-			
-			if(!(mapStock < bulkAmount) ) {
-				tradeableItems.add(item);
-			}
-		}
-		
-		this.filteredTradeableItems = tradeableItems;
-	}
 
-	public List<TradeableItem> getTradeableItems() {
-		return tradeableItems;
-	}
+    public void addResults(List<Result_> resultList) {
+        if (resultList != null && !resultList.isEmpty()) {
+            for (Result_ result : resultList) {
+                this.results.add(result);
+            }
+        }
+    }
 
-	public void setTradeableItems(List<TradeableItem> tradeableItems) {
-		this.tradeableItems = tradeableItems;
-	}
+    public void generateTradebleItems(int bulkAmount) {
+        for (Result_ result : this.results) {
+            TradeableItem item = new TradeableItem();
+            Listing listing = result.getListing();
 
-	public List<TradeableItem> getFilteredTradeableItems() {
-		return filteredTradeableItems;
-	}
+            // Calculate price per map
+            double exchangeAmount = listing.getPrice().getExchange().getAmount();
+            int itemAmount = listing.getPrice().getItem().getAmount();
 
-	public void setFilteredTradeableItems(List<TradeableItem> filteredTradeableItems) {
-		this.filteredTradeableItems = filteredTradeableItems;
-	}
-	
-	public void filterByCurrencyAndMaxPrice(String currency, int maxPrice) {
-		List<TradeableItem> tmpTradeables = new ArrayList<TradeableItem>();
-		
-		for(TradeableItem item : this.tradeableItems) {
-			if(item.getCurrencyToPay().equals(currency) && item.getPricePerMap() <= maxPrice) {
-				tmpTradeables.add(item);
-				System.out.println("Added item to filtered tradeables: currency =  " + item.getCurrencyToPay() + " priceperMap: " + item.getPricePerMap());
-			}
-		}
-		
-		this.filteredTradeableItems = tmpTradeables;
-	}
+            String currencyToPay = listing.getPrice().getExchange().getCurrency();
+            int mapStock = listing.getPrice().getItem().getStock();
+
+            double pricePerMap = exchangeAmount / itemAmount;
+
+            String userName = listing.getAccount().getLastCharacterName();
+            String itemToSell = result.getItem().getTypeLine();
+            String mapTier = result.getItem().getProperties().get(0).getValues().get(0).get(0);
+
+            item.setCurrencyToPay(currencyToPay);
+            item.setMapStock(mapStock);
+            item.setPricePerMap(pricePerMap);
+            item.setUsername(userName);
+            item.setItemToSell(itemToSell);
+            item.setMapTier(mapTier);
+
+            if (!(mapStock < bulkAmount)) {
+                tradeableItems.add(item);
+            }
+        }
+
+        this.filteredTradeableItems = tradeableItems;
+    }
+
+    public void filterByCurrencyAndMaxPrice(String currency, int maxPrice) {
+        List<TradeableItem> tmpTradeables = new ArrayList<>();
+
+        for (TradeableItem item : tradeableItems) {
+            if (item.getCurrencyToPay().equalsIgnoreCase(currency) && item.getPricePerMap() <= maxPrice) {
+                tmpTradeables.add(item);
+                LOG.debug("Added item to filtered tradables: currency =  " + item.getCurrencyToPay() + " pricePerMap: " + item.getPricePerMap());
+            }
+        }
+        this.filteredTradeableItems = tmpTradeables;
+    }
 }

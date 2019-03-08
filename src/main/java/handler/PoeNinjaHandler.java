@@ -1,84 +1,55 @@
 package handler;
 
-import java.util.concurrent.TimeUnit;
-
-import com.google.gson.Gson;
-
 import connector.PoeNinjaFetcher;
 import items.TradeableBulk;
 import jsonNinjaResult.Result;
+import lombok.Getter;
+import model.PoeTradeBulkItemExchangeSearchDataModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 public class PoeNinjaHandler {
-	private final int MAX_REQUESTS = 10;
-	PoeNinjaFetcher poeConnector;
-	JsonNinjaSearchData searchData;
-	TradeableBulk tradeables;
-	String jsonSearchString;
-	int minBulk;
-	
-	public PoeNinjaHandler(int minBulk) {
-		this.poeConnector = new PoeNinjaFetcher();
-		searchData = new JsonNinjaSearchData();
-		tradeables = new TradeableBulk();
-		jsonSearchString = "";
-		this.minBulk = minBulk;
-	}
-	
-	public void generateJsonSearchString() {
-		String jsonSearchString = "";
-		
-		jsonSearchString += "{\"exchange\":{\"status\":{\"option\":\"online\"},\"have\":[],\"want\":[\"";
-		jsonSearchString += searchData.getMap();
-		jsonSearchString += "\"]";
-		jsonSearchString += ",\"minimum\":";
-		jsonSearchString += searchData.getBulkAmount();
-		jsonSearchString += "}}";
-		
-		this.jsonSearchString = jsonSearchString;
-	}
-	
-	public void handleBulkRequests() {
-		String responseFromPost;
-		String searchLink;
-		String responseSearch = "";
-		try {
-			responseFromPost = poeConnector.sendPost(this.jsonSearchString);
-			
-			poeConnector.storeResultsFromResponseAsList(responseFromPost);
-			
-			Gson gson = new Gson();
-			int i = 0;
-			while(this.poeConnector.getResultList().size() > 0 && i < MAX_REQUESTS) {
-				searchLink = poeConnector.generateSearchString(responseFromPost);
-				String response = poeConnector.sendGet(searchLink);
-				Result result = gson.fromJson(response, Result.class);
-				this.tradeables.addResults(result.getResult());
-				TimeUnit.MILLISECONDS.sleep(300);
-				i++;
-			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		this.tradeables.generateTradebleItems(this.minBulk);
-	}
 
-	public JsonNinjaSearchData getSearchData() {
-		return searchData;
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaHandler.class);
 
-	public void setSearchData(JsonNinjaSearchData searchData) {
-		this.searchData = searchData;
-	}
+    private final int MAX_REQUESTS = 5;
+    private PoeNinjaFetcher poeConnector = new PoeNinjaFetcher();
+    private PoeTradeBulkItemExchangeSearchDataModel searchData;
 
-	public TradeableBulk getTradeableBulks() {
-		return this.tradeables;
-	}
-	
-	
-	
-	
-	
+    @Getter
+    private TradeableBulk tradeables = new TradeableBulk();
+
+    public PoeNinjaHandler(PoeTradeBulkItemExchangeSearchDataModel searchData) {
+        this.searchData = searchData;
+    }
+
+    private String generateJsonSearchString() {
+        StringBuilder sb = new StringBuilder("{\"exchange\":{\"status\":{\"option\":\"online\"},");
+        sb.append("\"have\":[\"").append(searchData.getHave()).append("\"],");
+        sb.append("\"want\":[\"").append(searchData.getWant()).append("\"],");
+        sb.append("\"minimum\":").append(searchData.getMinimum()).append("}}");
+        return sb.toString();
+    }
+
+    public void processBulkRequests() {
+        String responseFromPost = poeConnector.sendPost(generateJsonSearchString());
+        poeConnector.storeResultsFromResponseAsList(responseFromPost);
+
+        if (!poeConnector.getResultList().isEmpty()) {
+            for (int i = 0; i < MAX_REQUESTS; i++) {
+                String searchLink = poeConnector.generateSearchString(responseFromPost);
+                String response = poeConnector.sendGet(searchLink);
+                Result result = poeConnector.GSON.fromJson(response, Result.class);
+                tradeables.addResults(result.getResult());
+                try {
+                    TimeUnit.MILLISECONDS.sleep(300);
+                } catch (InterruptedException ie) {
+                    LOG.error("PoeNinjaHandler::processBulkRequests, sleep attempt had an interruption occur - " + ie.getMessage());
+                }
+            }
+        }
+        tradeables.generateTradebleItems(searchData.getMinimum());
+    }
 }

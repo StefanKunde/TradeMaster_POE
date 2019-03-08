@@ -1,9 +1,14 @@
 package items;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Maps {
+
+	@Getter @Setter
 	private List<Map> maps;
 	
 	public Maps(List<Map> maps) {
@@ -41,12 +46,11 @@ public class Maps {
 	}
 	
 	public void filterByCurrency(String currency) {
-		
 		if(!currency.equals("")) {
-			List<Map> tmpMaps = new ArrayList<Map>();
+			List<Map> tmpMaps = new ArrayList<>();
 			
 			for(int i = 0; i < this.getMaps().size(); i++) {
-				if(this.getMaps().get(i).getPaymentCurrency().equals(currency)) {
+				if(this.getMaps().get(i).getPaymentCurrency().equalsIgnoreCase(currency)) {
 					tmpMaps.add(this.getMaps().get(i));
 				}
 			}
@@ -55,20 +59,6 @@ public class Maps {
 		}
 		
 	}
-	
-
-	public List<Map> getMaps() {
-		return maps;
-	}
-
-	public void setMaps(List<Map> maps) {
-		this.maps = maps;
-	}
-	
-	public void addMap(Map map) {
-		this.maps.add(map);
-	}
-	
 	
 
 }

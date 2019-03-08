@@ -1,147 +1,99 @@
 package connector;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import org.apache.http.HttpEntity;
+import app.Config;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
 
 
-@SuppressWarnings("deprecation")
-public class PoeTradeFetcher {
-	
-	final String POE_SEARCHLINK = "http://poe.trade/search";
-	final String POE_SEARCHLINK_FOR_RESULT = "http://poe.trade/search/";
+public class PoeTradeFetcher extends BaseConnector {
 
-	private final String USER_AGENT = "Mozilla/5.0";
-	// HTTP GET request
-	public String sendGet(String url) throws Exception {
+    private static final Logger LOG = LoggerFactory.getLogger(PoeTradeFetcher.class);
+    private static final String POE_SEARCHLINK = "http://poe.trade/search";
 
-		@SuppressWarnings({ "resource" })
-		HttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet(url);
+    public String sendGet(String url) {
+        HttpGet request = new HttpGet(url);
 
-		// add request header
-		request.addHeader("User-Agent", USER_AGENT);
-		request.addHeader("accep", USER_AGENT);
+        // add request headers
+        request.addHeader("User-Agent", USER_AGENT);
+        request.addHeader("accept", USER_AGENT);
 
-		HttpResponse response = client.execute(request);
-		HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
-		
+        String result = "";
+        try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+            LOG.debug("Sending 'GET' request to URL : " + url);
+            HttpResponse response = client.execute(request);
+            LOG.debug("Response Code: " + response.getStatusLine().getStatusCode());
+            result = convertStreamToString(response.getEntity().getContent());
+        } catch (IOException ioe) {
+            LOG.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
+        }
 
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + 
-                       response.getStatusLine().getStatusCode());
-		
-		
-		BufferedReader rd = new BufferedReader(
-                       new InputStreamReader(entity.getContent()));
-		
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		rd.close();
-		EntityUtils.consume(entity);
-		
-		String resultString = result.toString();
-		
-		return resultString;
-		
+        return result;
+    }
 
-	}
+    public String sendPost(String url, List<NameValuePair> postData) {
+        HttpPost post = new HttpPost(url);
 
-	// HTTP POST request
-	public String sendPost(String url, List<NameValuePair> postData) throws Exception {
+        // add headers
+        post.setHeader("User-Agent", USER_AGENT);
+        post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-		@SuppressWarnings({ "resource" })
-		HttpClient client = new DefaultHttpClient();
-		HttpPost post = new HttpPost(url);
+        post.setEntity(new UrlEncodedFormEntity(postData, Charset.forName(Config.get().ENCODING_TYPE)));
 
-		// add header
-		post.setHeader("User-Agent", USER_AGENT);
-		post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+        LOG.debug("Post data: " + postData);
 
-		post.setEntity(new UrlEncodedFormEntity(postData));
-		
-		System.out.println("Post data: " + postData);
+        String result = "";
+        try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+            LOG.debug("Sending 'POST' request to URL : " + url);
+            LOG.debug("Post parameters : " + post.getEntity());
+            HttpResponse response = client.execute(post);
+            LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
+            result = convertStreamToString(response.getEntity().getContent());
+        } catch (IOException ioe) {
+            LOG.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
+        }
 
-		HttpResponse response = client.execute(post);
-		//HttpEntity entity = new GzipDecompressingEntity(response.getEntity());
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + post.getEntity());
-		System.out.println("Response Code : " + 
-                                    response.getStatusLine().getStatusCode());
+        return result;
+    }
 
-		BufferedReader rd = new BufferedReader(
-                        new InputStreamReader(response.getEntity().getContent()));
 
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		rd.close();
-		
-		String resultText = result.toString();
+    private String getRequestLinkForSearchData(List<NameValuePair> searchData) {
+        String response = sendPost(POE_SEARCHLINK, searchData);
+        return filterLinkFromResponse(response);
+    }
 
-		return resultText;
+    public String getAllMapsFromRequestAsHtml(List<NameValuePair> searchData) {
+        String requestLink = getRequestLinkForSearchData(searchData);
+        String response = sendGet(requestLink);
+        return response;
+    }
 
-	}
-	
-	
-	private String getRequestLinkForSearchData(List<NameValuePair> searchData) {
-		
-		String response = "";
-		try {
-			response = this.sendPost(this.POE_SEARCHLINK, searchData);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String requestLink = this.filterLinkFromResponse(response);
-		
-		return requestLink;
-		
-	}
-	
-	public String getAllMapsFromRequestAsHtml(List<NameValuePair> searchData) {
-		String response = "";
-		String requestLink = this.getRequestLinkForSearchData(searchData);
-		try {
-			response = this.sendGet(requestLink);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return response;
-	}
-	
-	private String filterLinkFromResponse(String response) {
-		String requestLinkFromResponse = "";
-		
-		Document doc = Jsoup.parse(response);
-		System.out.println(doc.title());
-		Elements body = doc.select("a");
-		for (Element headline : body) {
-			requestLinkFromResponse = headline.html();
-		}
-		
-		System.out.println("requestLinkFromResponse: " + requestLinkFromResponse);
-		return requestLinkFromResponse;
-	}
+    private String filterLinkFromResponse(String response) {
+        String requestLinkFromResponse = "";
+        Document doc = Jsoup.parse(response);
+        Elements body = doc.select("a");
+        for (Element headline : body) {
+            requestLinkFromResponse = headline.html();
+        }
+        return requestLinkFromResponse;
+    }
 
+    @Override
+    public Logger getLogger() {
+        return LOG;
+    }
 }
