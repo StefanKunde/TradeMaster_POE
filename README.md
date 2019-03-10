@@ -1,4 +1,7 @@
-# Trademaster_POE beta v1.4
+# Trademaster_POE beta v1.5
+
+UPDATE:
+Working with Synthesis now!
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
