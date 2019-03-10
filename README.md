@@ -34,6 +34,7 @@ Features:
 + Set currency you whould like to pay with
 + Buy items in bulks (maps as well!)
 + Set a max price of the selected currency you are willing to pay
++ change leagues via gui (standard, hardcore, synthesis, hardcore synthesis)
 + Overlaywindow for Path of exile
 + Minimize main window with little icon to reopen it
 
