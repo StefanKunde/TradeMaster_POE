@@ -1,5 +1,6 @@
 package items;
 
+import config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public class CurrencyOffer {
 		message += "Hi, I'd like to buy your " + wantedAmount + " ";
 		message += sellCurrency + " ";
 		message += "for my " + priceForAll + " ";
-		message += buyCurrency + " in Betrayal.";
+		message += buyCurrency + " in " + Config.leagueSelection + ".";
 		
 		this.tradeMessage = message;
 	}
