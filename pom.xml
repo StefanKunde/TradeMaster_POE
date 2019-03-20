@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>TradeHelpers</groupId>
     <artifactId>TradeHelpers</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.1</version>
     <packaging>jar</packaging>
 
     <properties>
