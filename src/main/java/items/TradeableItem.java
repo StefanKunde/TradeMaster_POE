@@ -26,10 +26,8 @@ public class TradeableItem {
         priceForBulk.setScale(1, BigDecimal.ROUND_HALF_EVEN);
 
 		StringBuilder sb = new StringBuilder("@");
-		sb.append(getUsername()).append(" ");
-		sb.append("Hi, I'd like to buy your ").append(amount).append(" ");
-		sb.append(getItemToSell()).append(" ");
-		sb.append("(T").append(getMapTier()).append(") for my ").append(priceForBulk.toString());
+		sb.append(getUsername()).append(" Hi, I'd like to buy your ").append(amount).append(" ");
+		sb.append(getItemToSell()).append(" (T").append(getMapTier()).append(") for my ").append(priceForBulk.toString()).append(" ");
 		sb.append(getCurrencyToPay()).append(" orb in ").append(Config.leagueSelection);
 		return sb.toString();
 	}
