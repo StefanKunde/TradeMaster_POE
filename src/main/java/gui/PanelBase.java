@@ -85,7 +85,7 @@ public abstract class PanelBase extends JPanel {
         updateButton.setLocation(172, 196);
 
         // LABELS
-        version = new JLabel("beta 1.3");
+        version = new JLabel("v" + getClass().getPackage().getImplementationVersion());
         version.setForeground(new Color(255, 235, 205));
         version.setFont(new Font("Tahoma", Font.PLAIN, 8));
         version.setBackground(new Color(0, 128, 0));
