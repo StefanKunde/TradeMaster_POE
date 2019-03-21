@@ -1,4 +1,4 @@
-# Trademaster_POE beta v1.5
+# Trademaster_POE beta v1.5.1
 
 UPDATE:
 Working with Synthesis now!
