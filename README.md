@@ -59,4 +59,4 @@ Dont blame me for bugs. Report them whould be great!
 
 
 Download:
-https://github.com/StefanKunde/TradeMaster_POE/releases/download/1.5/TradeMaster_POE.v1.5-beta.jar
+https://github.com/StefanKunde/TradeMaster_POE/releases/download/1.5.1/Trademaster_v1.5.1.jar
