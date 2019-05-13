@@ -1,7 +1,7 @@
 # Trademaster_POE beta v1.5.1
 
 UPDATE:
-Working with Synthesis now!
+Working with Synthesis flashback!
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
@@ -59,4 +59,4 @@ Dont blame me for bugs. Report them whould be great!
 
 
 Download:
-https://github.com/StefanKunde/TradeMaster_POE/releases/download/1.5.1/Trademaster_v1.5.1.jar
+https://github.com/StefanKunde/TradeMaster_POE/releases/download/v1.5.2/Trademaster_v1.5.2-SNAPSHOT.jar
