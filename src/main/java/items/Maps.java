@@ -43,7 +43,7 @@ public class Maps {
 	public void filterByCurrency(String currency) {
 		
 		if(!currency.equals("")) {
-			List<Map> tmpMaps = new ArrayList<>();
+			List<Map> tmpMaps = new ArrayList<Map>();
 			
 			for(int i = 0; i < this.getMaps().size(); i++) {
 				if(this.getMaps().get(i).getPaymentCurrency().equalsIgnoreCase(currency)) {

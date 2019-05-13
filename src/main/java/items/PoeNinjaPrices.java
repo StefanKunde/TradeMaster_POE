@@ -15,7 +15,7 @@ public class PoeNinjaPrices {
     private List<PoeNinjaPriceItem> priceItemList;
 
     public PoeNinjaPrices() {
-        priceItemList = new ArrayList<>();
+        priceItemList = new ArrayList<PoeNinjaPriceItem>();
     }
 
     public List<PoeNinjaPriceItem> getPriceItemList() {

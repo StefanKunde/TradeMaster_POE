@@ -70,15 +70,20 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-
+		<defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
+            	<groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
+				  <archive>
+					<manifest>
+						<!-- Jar file entry point -->
+						<mainClass>com.stefank.Main</mainClass>
+					</manifest>
+				  </archive>
+				</configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -89,6 +94,8 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.8.3</version>
                 <configuration>
+                	<source>${java.version}</source>
+                    <target>${java.version}</target>
                     <vendor>YourCompany</vendor>
                     <mainClass>com.stefank.Main</mainClass>
                 </configuration>

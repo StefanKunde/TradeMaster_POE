@@ -24,7 +24,7 @@ public class PoeNinjaFetcher extends BaseConnector {
     private List<String> resultList;
 
     public PoeNinjaFetcher() {
-        resultList = new ArrayList<>();
+        resultList = new ArrayList<String>();
     }
 
     // HTTP GET request
