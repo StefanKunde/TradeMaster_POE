@@ -7,7 +7,7 @@ public class Config {
 	public static String leagueSelection = "Synthesis";
 
     public static final String[] CURRENCY_TYPES = { "ANY", "chaos", "alchemy", "chisel", "vaal", "fuse" };
-    public static final String[] AVAILABLE_LEAGUES = new String[]{"Standard", "Hardcore", "Synthesis", "Hardcore Synthesis"};
+    public static final String[] AVAILABLE_LEAGUES = new String[]{"Standard", "Hardcore", "Synthesis", "Hardcore Synthesis", "Synthesis Event (SRE001)", "Synthesis Event HC (SRE002)"};
 
     public static String getEncodedLeagueSelection() {
 		return leagueSelection.replace(" ", "%20");
