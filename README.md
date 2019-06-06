@@ -1,4 +1,4 @@
-# Trademaster_POE beta v1.5.1
+# Trademaster_POE beta v1.5.3
 
 UPDATE:
 Updated for LEGION league.
