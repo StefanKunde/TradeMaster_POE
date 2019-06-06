@@ -79,6 +79,8 @@
                 <configuration>
 				  <archive>
 					<manifest>
+						<addClasspath>true</addClasspath>
+            			<classpathPrefix>lib/</classpathPrefix>
 						<!-- Jar file entry point -->
 						<mainClass>com.stefank.Main</mainClass>
 					</manifest>
