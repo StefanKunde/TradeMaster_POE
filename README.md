@@ -2,7 +2,6 @@
 
 UPDATE:
 Updated for LEGION league.
-!!!BE AWARE!! Will work only with legion release -> The program will not be executable before release.
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
