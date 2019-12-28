@@ -1,8 +1,7 @@
-# Trademaster_POE beta v1.5.3
+# Trademaster_POE beta v1.5.4  [Updated for 3.9 METAMORPH]
 
 UPDATE:
-Updated for LEGION league.
-!!!BE AWARE!! Will work only with legion release -> The program will not be executable before release.
+Updated for METAMORPH league.
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
@@ -60,4 +59,4 @@ Dont blame me for bugs. Report them whould be great!
 
 
 Download:
-https://github.com/StefanKunde/TradeMaster_POE/releases/download/1.5.3/Trademaster_v1.5.3-SNAPSHOT.jar
+https://github.com/StefanKunde/TradeMaster_POE/releases/download/1.5.4/TradeHelpers-1.5.4.jar
