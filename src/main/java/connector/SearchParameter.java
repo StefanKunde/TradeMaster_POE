@@ -10,7 +10,6 @@ import java.util.List;
 
 
 public class SearchParameter {
-
 	BasicNameValuePair type = new BasicNameValuePair("type", "");
 	BasicNameValuePair base = new BasicNameValuePair("base", "");
 	BasicNameValuePair name = new BasicNameValuePair("name", "");
@@ -81,8 +80,14 @@ public class SearchParameter {
 	BasicNameValuePair elder = new BasicNameValuePair("elder", "");
 	BasicNameValuePair crafted = new BasicNameValuePair("crafted", "");	
 	BasicNameValuePair enchanted = new BasicNameValuePair("enchanted", "");
+	BasicNameValuePair fractured = new BasicNameValuePair("fractured", "");
+	BasicNameValuePair synthesised = new BasicNameValuePair("synthesised", "");
 	BasicNameValuePair mirrored = new BasicNameValuePair("mirrored", "");
 	BasicNameValuePair veiled = new BasicNameValuePair("veiled", "");	
+	BasicNameValuePair crusader = new BasicNameValuePair("crusader", "");	
+	BasicNameValuePair redeemer = new BasicNameValuePair("redeemer", "");	
+	BasicNameValuePair hunter = new BasicNameValuePair("hunter", "");	
+	BasicNameValuePair warlord = new BasicNameValuePair("warlord", "");
 	BasicNameValuePair seller = new BasicNameValuePair("seller", "");
 	BasicNameValuePair thread = new BasicNameValuePair("thread", "");
 	BasicNameValuePair online = new BasicNameValuePair("online", "x");	
@@ -172,9 +177,15 @@ public class SearchParameter {
 		searchData.add(elder);
 		searchData.add(crafted);
 		searchData.add(enchanted);
+		searchData.add(fractured);
+		searchData.add(synthesised);
 		searchData.add(mirrored);
 		searchData.add(veiled);
 		searchData.add(seller);
+		searchData.add(crusader);
+		searchData.add(redeemer);
+		searchData.add(hunter);
+		searchData.add(warlord);
 		searchData.add(thread);
 		searchData.add(online);
 		searchData.add(capquality);
@@ -197,6 +208,7 @@ public class SearchParameter {
 	
 	public void setTier(String tierLevel) {
 		this.level_min = new BasicNameValuePair("level_min", tierLevel);
+		this.level_max = new BasicNameValuePair("level_max", tierLevel);
 	}
 	
 	public void setRarity(String rarity) {

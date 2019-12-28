@@ -23,7 +23,7 @@ public class PoeTradeFetcher extends BaseConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(PoeTradeFetcher.class);
 
-    final String POE_SEARCHLINK = "http://poe.trade/search";
+    final String POE_SEARCHLINK = "https://poe.trade/search";
 
     // HTTP GET request
     public String sendGet(String url) throws Exception {
@@ -75,6 +75,7 @@ public class PoeTradeFetcher extends BaseConnector {
         String response = "";
         try {
             response = this.sendPost(this.POE_SEARCHLINK, searchData);
+            LOG.info("Response from this.sendPost(this.POE_SEARCHLINK, searchData): " + response);
         } catch (Exception e) {
             LOG.error("PoeTradeFetcher::getRequestLinkForSearchData", e);
         }
@@ -89,6 +90,7 @@ public class PoeTradeFetcher extends BaseConnector {
             response = this.sendGet(requestLink);
         } catch (Exception e) {
             LOG.error("PoeTradeFetcher::getAllMapsFromRequestAsHtml", e);
+            LOG.error("requestlink: " + requestLink);
         }
 
         return response;
@@ -102,6 +104,7 @@ public class PoeTradeFetcher extends BaseConnector {
         for (Element headline : body) {
             requestLinkFromResponse = headline.html();
         }
+        LOG.error("response: " + response);
         LOG.error("##requestLinkFromResponse - " + doc.title());
         return requestLinkFromResponse;
     }
