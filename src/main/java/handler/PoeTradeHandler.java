@@ -10,7 +10,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import connector.PoeTradeFetcher;
-import items.Map;
 
 public class PoeTradeHandler {
 

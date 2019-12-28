@@ -3,6 +3,7 @@ package listener.currency;
 import app.Config;
 import gui.MainFrame;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.awt.event.ActionListener;
@@ -19,15 +20,7 @@ public abstract class CurrencyBaseListener implements ActionListener {
     }
 
     protected void runCommonChecks(String selectedPayItem, String selectedWantItem) {
-        JSONArray names = Config.get().getPoeTradeCurrencies().names();
-        for (int i = 0; i < names.length(); i++) {
-            if (names.get(i).equals(selectedPayItem)) {
-                selectedPayItemCurrencyID = (String) Config.get().getPoeTradeCurrencies().opt(names.get(i).toString());
-            }
-            if (names.get(i).equals(selectedWantItem)) {
-                selectedWantItemCurrencyID = (String) Config.get().getPoeTradeCurrencies().opt(names.get(i).toString());
-            }
-        }
+        setSelectionAndPayCurrencies(selectedPayItem, selectedWantItem);
 
         frame.getCurrencyBuyerPanel().setLabelPriceCheckText("Only Chaos Supported.");
         // 4 = Chaos
@@ -53,6 +46,18 @@ public abstract class CurrencyBaseListener implements ActionListener {
                 String priceAsStringRounded = String.format("%.2f", price);
                 String lineAmt = userAmount + " " + currencyName + " = " + priceAsStringRounded + " Chaos Orb (" + (price / userAmount) + ") PPU";
                 frame.getCurrencyBuyerPanel().setLabelPriceCheckText(lineAmt);
+            }
+        }
+    }
+
+    protected void setSelectionAndPayCurrencies(String selectedPayItem, String selectedWantItem) {
+        JSONArray names = Config.get().getPoeTradeCurrencies().names();
+        for (int i = 0; i < names.length(); i++) {
+            if (names.get(i).equals(selectedPayItem)) {
+                selectedPayItemCurrencyID = (String) Config.get().getPoeTradeCurrencies().opt(names.get(i).toString());
+            }
+            if (names.get(i).equals(selectedWantItem)) {
+                selectedWantItemCurrencyID = (String) Config.get().getPoeTradeCurrencies().opt(names.get(i).toString());
             }
         }
     }

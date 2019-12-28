@@ -86,6 +86,6 @@ public class MinimizedFrame extends JFrame {
                 }
             }
 
-        });
+        }, 0, 700);
     }
 }

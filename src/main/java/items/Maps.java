@@ -9,9 +9,9 @@ import java.util.List;
 public class Maps {
 
 	@Getter @Setter
-	private List<Map> maps;
+	private List<PoeTradeResultModel> maps;
 	
-	public Maps(List<Map> maps) {
+	public Maps(List<PoeTradeResultModel> maps) {
 		this.maps = maps;
 	}
 	
@@ -20,7 +20,7 @@ public class Maps {
 	}
 	
 	private void removeDuplicateUsers() {
-		List<Map> tmpMaps = new ArrayList<Map>();
+		List<PoeTradeResultModel> tmpMaps = new ArrayList<PoeTradeResultModel>();
 		
 		for( int i = 0; i < this.getMaps().size(); i++) {
 			if( i == 0 ) {
@@ -33,7 +33,7 @@ public class Maps {
 		this.setMaps(tmpMaps);
 	}
 		
-	private boolean containtsUserAlready(List<Map> tmpMaps, String userToCheck) {
+	private boolean containtsUserAlready(List<PoeTradeResultModel> tmpMaps, String userToCheck) {
 		boolean isDuplicate = false;
 		
 		int i = 0;
@@ -47,7 +47,7 @@ public class Maps {
 	
 	public void filterByCurrency(String currency) {
 		if(!currency.equals("")) {
-			List<Map> tmpMaps = new ArrayList<>();
+			List<PoeTradeResultModel> tmpMaps = new ArrayList<>();
 			
 			for(int i = 0; i < this.getMaps().size(); i++) {
 				if(this.getMaps().get(i).getPaymentCurrency().equalsIgnoreCase(currency)) {

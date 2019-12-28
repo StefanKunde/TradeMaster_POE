@@ -80,8 +80,14 @@ public class SearchParameterModel {
     private BasicNameValuePair elder = new BasicNameValuePair("elder", "");
     private BasicNameValuePair crafted = new BasicNameValuePair("crafted", "");
     private BasicNameValuePair enchanted = new BasicNameValuePair("enchanted", "");
+    BasicNameValuePair fractured = new BasicNameValuePair("fractured", "");
+    BasicNameValuePair synthesised = new BasicNameValuePair("synthesised", "");
     private BasicNameValuePair mirrored = new BasicNameValuePair("mirrored", "");
     private BasicNameValuePair veiled = new BasicNameValuePair("veiled", "");
+    private BasicNameValuePair crusader = new BasicNameValuePair("crusader", "");
+    private BasicNameValuePair redeemer = new BasicNameValuePair("redeemer", "");
+    private BasicNameValuePair hunter = new BasicNameValuePair("hunter", "");
+    private BasicNameValuePair warlord = new BasicNameValuePair("warlord", "");
     private BasicNameValuePair seller = new BasicNameValuePair("seller", "");
     private BasicNameValuePair thread = new BasicNameValuePair("thread", "");
     private BasicNameValuePair online = new BasicNameValuePair("online", "x");
@@ -166,9 +172,15 @@ public class SearchParameterModel {
         searchData.add(elder);
         searchData.add(crafted);
         searchData.add(enchanted);
+        searchData.add(fractured);
+        searchData.add(synthesised);
         searchData.add(mirrored);
         searchData.add(veiled);
         searchData.add(seller);
+        searchData.add(crusader);
+        searchData.add(redeemer);
+        searchData.add(hunter);
+        searchData.add(warlord);
         searchData.add(thread);
         searchData.add(online);
         searchData.add(capquality);
@@ -191,6 +203,7 @@ public class SearchParameterModel {
 
     public void setTier(String tierLevel) {
         this.level_min = new BasicNameValuePair("level_min", tierLevel);
+        this.level_max = new BasicNameValuePair("level_max", tierLevel);
     }
 
     public void setRarity(String rarity) {

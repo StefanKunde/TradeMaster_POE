@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>TradeHelpers</groupId>
     <artifactId>TradeHelpers</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.7.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -57,12 +57,37 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.6</version>
+            <version>1.18.10</version>
         </dependency>
+        <dependency>
+            <groupId>org.mobicents.external.freetts</groupId>
+            <artifactId>freetts</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mobicents.external.freetts</groupId>
+            <artifactId>en_us</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mobicents.external.freetts</groupId>
+            <artifactId>cmu_us_kal</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+        <groupId>org.mobicents.external.freetts</groupId>
+        <artifactId>cmu_time_awb</artifactId>
+        <version>1.2.2</version>
+    </dependency>
+        <dependency>
+            <groupId>org.mobicents.external.freetts</groupId>
+            <artifactId>cmulex</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -136,6 +161,10 @@
         <repository>
             <id>projectlombok.org</id>
             <url>http://projectlombok.org/mavenrepo</url>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
         </repository>
     </repositories>
 </project>

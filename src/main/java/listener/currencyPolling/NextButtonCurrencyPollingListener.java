@@ -1,4 +1,4 @@
-package listener;
+package listener.currencyPolling;
 
 import app.Config;
 import gui.MainFrame;
@@ -11,23 +11,23 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NextButtonCurrencyListener implements ActionListener {
+public class NextButtonCurrencyPollingListener implements ActionListener {
 
     private MainFrame frame;
 
-    public NextButtonCurrencyListener(MainFrame frame) {
+    public NextButtonCurrencyPollingListener(MainFrame frame) {
         this.frame = frame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (frame.getCurrencyOffers().getAllOffersAsList().size() <= 0) {
-            frame.getCurrencyBuyerPanel().getBtnNextTradeCurrencyTab().setEnabled(false);
+            frame.getCurrencyPollerPanel().getBtnNextTradeCurrencyTab().setEnabled(false);
             return;
         }
 
         if (frame.getCurrencyOffers().getAllOffersAsList().size() == 1) {
-            frame.getCurrencyBuyerPanel().getBtnNextTradeCurrencyTab().setEnabled(false);
+            frame.getCurrencyPollerPanel().getBtnNextTradeCurrencyTab().setEnabled(false);
         }
 
         String tradeMessage = frame.getCurrencyOffers().getAllOffersAsList().get(0).getTradeMessage();
@@ -42,7 +42,7 @@ public class NextButtonCurrencyListener implements ActionListener {
         }
         frame.setCurrencyOffers(tmpOffers);
 
-        frame.getCurrencyBuyerPanel().getTradeables().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
+        frame.getCurrencyPollerPanel().getTradeables().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
         frame.setForegroundWindow("Path of Exile");
 
         if (Config.get().isUseAutomatedTrading()) {

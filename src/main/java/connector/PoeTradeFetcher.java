@@ -23,7 +23,7 @@ import java.util.List;
 public class PoeTradeFetcher extends BaseConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(PoeTradeFetcher.class);
-    private static final String POE_SEARCHLINK = "http://poe.trade/search";
+    private static final String POE_SEARCHLINK = "https://poe.trade/search";
 
     public String sendGet(String url) {
         HttpGet request = new HttpGet(url);

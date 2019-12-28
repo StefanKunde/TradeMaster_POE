@@ -16,6 +16,9 @@ public class Config {
     }
 
     @Getter
+    private final String VOICENAME = "kevin16";
+
+    @Getter
     @Setter
     public boolean useAutomatedTrading = false;
 

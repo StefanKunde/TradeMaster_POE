@@ -4,9 +4,13 @@ import app.Main;
 import com.sun.jna.Native;
 import com.sun.jna.PointerType;
 import app.Config;
+import connector.CurrencyPoeTradeFetcher;
+import handler.CurrencyPoeTradeHandler;
+import listener.currencyPolling.*;
+import listener.live.LiveStartListener;
 import model.SearchParameterModel;
 import items.CurrencyOffers;
-import items.Map;
+import items.PoeTradeResultModel;
 import items.PoeNinjaPrices;
 import items.TradeableBulk;
 import listener.*;
@@ -17,7 +21,6 @@ import listener.settings.UpdateSettingsListener;
 import listener.singleMaps.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +32,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 public class MainFrame extends JDialog {
 
     private Logger LOG = LoggerFactory.getLogger(MainFrame.class);
+
+    @Getter
+    @Setter
+    private ScheduledFuture pollingTimerThread;
 
     @Getter
     @Setter
@@ -49,10 +57,10 @@ public class MainFrame extends JDialog {
 
     @Getter
     @Setter
-    private List<Map> maps;
+    private List<PoeTradeResultModel> maps;
     @Getter
     @Setter
-    private List<Map> tradeableMaps;
+    private List<PoeTradeResultModel> tradeableMaps;
     @Getter
     private SearchParameterModel searchBuilder;
     @Getter
@@ -82,6 +90,11 @@ public class MainFrame extends JDialog {
     @Getter
     private PanelCurrencyBuyer currencyBuyerPanel;
     @Getter
+    private PanelCurrencyPolling currencyPollerPanel;
+    @Getter
+    private LivePanel livePanel;
+
+    @Getter
     private PanelSettings settingsPanel;
 
     public MainFrame(PoeNinjaPrices poeNinjaPrices) {
@@ -94,6 +107,8 @@ public class MainFrame extends JDialog {
         singleMapsPanel = new PanelSingleMaps();
         panelBulkMaps = new PanelBulkMaps();
         currencyBuyerPanel = new PanelCurrencyBuyer();
+        currencyPollerPanel = new PanelCurrencyPolling();
+        livePanel = new LivePanel();
         settingsPanel = new PanelSettings();
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
@@ -120,6 +135,8 @@ public class MainFrame extends JDialog {
         tabbedPane.addTab(singleMapsPanel.getTabTitle(), singleMapsPanel);
         tabbedPane.addTab(panelBulkMaps.getTabTitle(), panelBulkMaps);
         tabbedPane.addTab(currencyBuyerPanel.getTabTitle(), currencyBuyerPanel);
+        tabbedPane.addTab(currencyPollerPanel.getTabTitle(), currencyPollerPanel);
+        tabbedPane.addTab(livePanel.getTabTitle(), livePanel);
         tabbedPane.addTab(settingsPanel.getTabTitle(), settingsPanel);
 
         setPreferredSize(new Dimension(370, 343));
@@ -135,6 +152,12 @@ public class MainFrame extends JDialog {
         setVisible(false);
         setResizable(false);
         setDefaultLookAndFeelDecorated(true);
+
+        // Live Panel
+        LiveStartListener liveListener = new LiveStartListener(this);
+        listener.live.NextButtonListener liveNextbutton = new listener.live.NextButtonListener(this);
+        livePanel.getUpdateButton().addActionListener(liveListener);
+        livePanel.getBtnNextTrade().addActionListener(liveNextbutton);
 
         // Bulk Maps Panel Listeners
         AmountTxtBoxListener amountListener = new AmountTxtBoxListener(this);
@@ -168,6 +191,8 @@ public class MainFrame extends JDialog {
         currencyBuyerPanel.getCmbCurrencyTabWant().addActionListener(wantListener);
         currencyBuyerPanel.getCmbCurrencyTabPay().addActionListener(payListener);
 
+        setupCurrencyPollingListeners();
+
         // Single Maps Panel Listeners
         CurrencyComboboxListener currencyListener = new CurrencyComboboxListener(this);
         CorruptedCheckBoxListener corruptedBoxListener = new CorruptedCheckBoxListener(this);
@@ -198,6 +223,7 @@ public class MainFrame extends JDialog {
         settingsPanel.getBtnExit().addActionListener(exitListener);
         panelBulkMaps.getBtnExit().addActionListener(exitListener);
         currencyBuyerPanel.getBtnExit().addActionListener(exitListener);
+        currencyPollerPanel.getBtnExit().addActionListener(exitListener);
 
         // All minimize button listeners
         MinimizeButtonListener minimizeListener = new MinimizeButtonListener(this, new MinimizedFrame(this));
@@ -205,6 +231,7 @@ public class MainFrame extends JDialog {
         settingsPanel.getBtnMinimize().addActionListener(minimizeListener);
         panelBulkMaps.getBtnMinimize().addActionListener(minimizeListener);
         currencyBuyerPanel.getBtnMinimize().addActionListener(minimizeListener);
+        currencyPollerPanel.getBtnMinimize().addActionListener(minimizeListener);
 
         LeagueChangeListener leagueChangeListener = new LeagueChangeListener(this);
         UpdateSettingsListener updateSettingsListener = new UpdateSettingsListener(this);
@@ -216,6 +243,27 @@ public class MainFrame extends JDialog {
         currencyBuyerPanel.getChckbxAutomateTrading().addActionListener(automateTradeChBxListener);
         singleMapsPanel.getChckbxAutomateTrading().addActionListener(automateTradeChBxListener);
     }
+
+    private void setupCurrencyPollingListeners() {
+        LOG.debug("Initializing Polling Listeners");
+        UpdateCurrencyPollingListener updateButtonCurrencyListener = new UpdateCurrencyPollingListener(this);
+        NextButtonCurrencyPollingListener nextButtonCurrencyPollingListener = new NextButtonCurrencyPollingListener(this);
+        MinimumAmountTxtBoxListener minimumAmountTxtBoxListener = new MinimumAmountTxtBoxListener(this);
+        MaximumPricePpuTxtBoxListener maximumPricePpuTxtBoxListener = new MaximumPricePpuTxtBoxListener(this);
+        WhatDoIWantComboBoxListener whatDoIWantComboBoxListener = new WhatDoIWantComboBoxListener(this);
+        WhatDoIPayComboBoxListener whatDoIPayComboBoxListener = new WhatDoIPayComboBoxListener(this);
+        PollingTimeListener pollingTimeListener = new PollingTimeListener(this);
+        EnablePollingCheckboxListener enablePollingCheckboxListener = new EnablePollingCheckboxListener(this);
+        currencyPollerPanel.getTxtCurrencyTabNeededAmount().getDocument().addDocumentListener(minimumAmountTxtBoxListener);
+        currencyPollerPanel.getTxtCurrencyTabMaxPay().getDocument().addDocumentListener(maximumPricePpuTxtBoxListener);
+        currencyPollerPanel.getPollingInMillis().getDocument().addDocumentListener(pollingTimeListener);
+        currencyPollerPanel.getCheckboxEnablePolling().addActionListener(enablePollingCheckboxListener);
+        currencyPollerPanel.getUpdateButton().addActionListener(updateButtonCurrencyListener);
+        currencyPollerPanel.getBtnNextTradeCurrencyTab().addActionListener(nextButtonCurrencyPollingListener);
+        currencyPollerPanel.getCmbCurrencyTabWant().addActionListener(whatDoIWantComboBoxListener);
+        currencyPollerPanel.getCmbCurrencyTabPay().addActionListener(whatDoIPayComboBoxListener);
+    }
+
 
     public void setForegroundWindow(final String titleName) {
         user32.EnumWindows((hWnd, arg1) -> {
@@ -266,8 +314,10 @@ public class MainFrame extends JDialog {
         for (int i = 0; i < currencysAsList.size(); i++) {
             getCurrencyBuyerPanel().getCmbCurrencyTabWant().addItem(currencysAsList.get(i));
             getCurrencyBuyerPanel().getCmbCurrencyTabPay().addItem(currencysAsList.get(i));
+            getCurrencyPollerPanel().getCmbCurrencyTabWant().addItem(currencysAsList.get(i));
         }
         for (int i = 0; i < bulkCurrencyAsList.size(); i++) {
+            getCurrencyPollerPanel().getCmbCurrencyTabPay().addItem(bulkCurrencyAsList.get(i));
         }
     }
 
@@ -297,9 +347,14 @@ public class MainFrame extends JDialog {
 
             String activeWindowTitle = Native.toString(windowText);
 
+//            if (!isVisible()) {
+//                setVisible(true);
+//            }
+
             if (Native.toString(windowText).equals("Path of Exile")) {
                 if (!Main.isMinimised() && !isVisible()) {
                     setVisible(true);
+                    setForegroundWindow("Path of Exile");
                 }
                 return;
             }
@@ -312,6 +367,64 @@ public class MainFrame extends JDialog {
             if (Main.isMinimised() && isVisible()) {
                 setVisible(false);
             }
-        });
+        }, 0 , 700);
+    }
+
+
+    public CurrencyPoeTradeHandler executeCurrencySearch(PanelCurrencyBuyer currencyPanel) {
+        String wantedCurrency = currencyPanel.getCmbCurrencyTabWant().getSelectedItem().toString();
+        String currencyToPayWith = currencyPanel.getCmbCurrencyTabPay().getSelectedItem().toString();
+
+        // Get amount I want
+        String wantedAmountString = currencyPanel.getTxtCurrencyTabNeededAmount().getText();
+
+        int wantedAmount = Integer.valueOf(wantedAmountString);
+        // Get Max price i want to pay
+        double maxPrice;
+        try {
+            maxPrice = Double.valueOf(currencyPanel.getTxtCurrencyTabMaxPay().getText());
+        } catch (NumberFormatException nfe) {
+            LOG.debug("Invalid max-price, default to 0");
+            maxPrice = 0;
+        }
+
+        // Prepare request: Get ids from selected currencies
+        String wantedCurrencyID = "";
+        String currencyToPayWithID = "";
+
+        JSONArray poeTradeNames = Config.get().getPoeTradeCurrencies().names();
+
+        for (int i = 0; i < poeTradeNames.length(); i++) {
+            if (poeTradeNames.get(i).equals(wantedCurrency)) {
+                wantedCurrencyID = (String) Config.get().getPoeTradeCurrencies().opt(poeTradeNames.get(i).toString());
+            }
+            if (poeTradeNames.get(i).equals(currencyToPayWith)) {
+                currencyToPayWithID = (String) Config.get().getPoeTradeCurrencies().opt(poeTradeNames.get(i).toString());
+            }
+        }
+
+        // Send request to poe.currency.trade
+        CurrencyPoeTradeFetcher tradeFetcher = new CurrencyPoeTradeFetcher();
+        String response = tradeFetcher.sendGet(wantedAmountString, wantedCurrencyID, currencyToPayWithID);
+
+        // Load all offers from html response
+        CurrencyPoeTradeHandler handler = new CurrencyPoeTradeHandler(response);
+
+        // Filter out possible trades
+        handler.filterTradesByUserInput(wantedAmount, maxPrice);
+        handler.calculateFilteredPricesByAmount(wantedAmount);
+        handler.getFilteredOffers().generateTradeMessages(wantedAmount);
+
+        for (int i = 0; i < handler.getFilteredOffers().getAllOffersAsList().size(); i++) {
+            LOG.debug(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
+        }
+
+        // Add tradeables to nextbutton
+        setCurrencyOffers(handler.getFilteredOffers());
+
+        // display tradeables amount
+        getCurrencyPollerPanel().getTradeables().setText("Tradeables: " + getCurrencyOffers().getAllOffersAsList().size());
+
+        return handler;
     }
 }

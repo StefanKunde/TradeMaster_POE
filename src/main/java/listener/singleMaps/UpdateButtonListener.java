@@ -1,6 +1,5 @@
 package listener.singleMaps;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import org.jsoup.nodes.Element;
 
 import gui.MainFrame;
 import handler.PoeTradeHandler;
-import items.Map;
+import items.PoeTradeResultModel;
 import items.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ public class UpdateButtonListener implements ActionListener {
 
             frame.setMaps(new ArrayList<>());
             for (int i = 0; i < buyableMaps.size(); i++) {
-                frame.getMaps().add(new Map(buyableMaps.get(i)));
+                frame.getMaps().add(new PoeTradeResultModel(buyableMaps.get(i)));
             }
 
             Maps myMaps = new Maps(frame.getMaps());

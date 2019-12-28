@@ -26,19 +26,8 @@ public class UpdateButtonCurrencyListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         frame.getCurrencyBuyerPanel().disableUpdateButtonAndSetPendingText();
-        frame.getCurrencyBuyerPanel().getTradeables().setText("Loading...");
 
         Main.getExecutor().execute(() -> {
-
-            // Get currency I want from list
-            String wantedCurrency = frame.getCurrencyBuyerPanel().getCmbCurrencyTabWant().getSelectedItem().toString();
-            // Get currency I want to pay from list
-            String currencyToPayWith = frame.getCurrencyBuyerPanel().getCmbCurrencyTabPay().getSelectedItem().toString();
-
-            // Get amount I want
-            String wantedAmountString = frame.getCurrencyBuyerPanel().getTxtCurrencyTabNeededAmount().getText();
-
-            int wantedAmount = Integer.valueOf(wantedAmountString);
             // Get Max price i want to pay
             double maxPrice;
             try {
@@ -48,12 +37,17 @@ public class UpdateButtonCurrencyListener implements ActionListener {
                 maxPrice = 0;
             }
 
+            String wantedCurrency = frame.getCurrencyBuyerPanel().getCmbCurrencyTabWant().getSelectedItem().toString();
+            String currencyToPayWith = frame.getCurrencyBuyerPanel().getCmbCurrencyTabPay().getSelectedItem().toString();
+            String wantedAmountString = frame.getCurrencyBuyerPanel().getTxtCurrencyTabNeededAmount().getText();
+
+            int wantedAmount = Integer.valueOf(wantedAmountString);
+
             // Prepare request: Get ids from selected currencies
             String wantedCurrencyID = "";
             String currencyToPayWithID = "";
 
             JSONArray poeTradeNames = Config.get().getPoeTradeCurrencies().names();
-
             for (int i = 0; i < poeTradeNames.length(); i++) {
                 if (poeTradeNames.get(i).equals(wantedCurrency)) {
                     wantedCurrencyID = (String) Config.get().getPoeTradeCurrencies().opt(poeTradeNames.get(i).toString());
@@ -79,7 +73,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
                 LOG.debug(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
             }
 
-            // Add tradeables to Nextbutton
+            // Add trade-ables to next-button
             frame.setCurrencyOffers(handler.getFilteredOffers());
 
             // display tradeables amount
@@ -90,6 +84,8 @@ public class UpdateButtonCurrencyListener implements ActionListener {
             } else {
                 frame.getCurrencyBuyerPanel().getBtnNextTradeCurrencyTab().setEnabled(false);
             }
+
+            frame.getCurrencyBuyerPanel().enableAndResetUpdateButtonText();
         });
     }
 
