@@ -1,7 +1,7 @@
-# Trademaster_POE beta v1.5.3
+# Trademaster_POE beta v1.5.4  [Updated for 3.9 METAMORPH]
 
 UPDATE:
-Updated for LEGION league.
+Updated for METAMORPH league.
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
