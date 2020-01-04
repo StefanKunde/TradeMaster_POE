@@ -1,4 +1,4 @@
-[![Build Status](https://home.jrkr.me/jenkins/buildStatus/icon?job=TradeMaster_POE&build=8)](https://home.jrkr.me/jenkins/buildStatus/icon?job=TradeMaster_POE&build=8)
+[![Build Status](https://travis-ci.com/veenarm/TradeMaster_POE.svg?branch=master)](https://travis-ci.com/veenarm/TradeMaster_POE.svg?branch=master)
 
 # Trademaster_POE
 
@@ -8,8 +8,6 @@ So just paste it in and fire it up!
 
 You know the pain when you need to trade in this game, dont you?
 This app is for all the people who feel the pain!
-
-
 
 
 Live market prices while trading for currencys:
