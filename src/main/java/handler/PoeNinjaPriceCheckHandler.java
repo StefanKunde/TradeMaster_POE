@@ -21,17 +21,19 @@ public class PoeNinjaPriceCheckHandler {
         List<PoeNinjaPriceItem> priceList = new ArrayList<>();
         PoeNinjaPricesAsObject items = BaseConnector.GSON.fromJson(pricesAsJson, PoeNinjaPricesAsObject.class);
 
-        for (int i = 0; i < items.getLines().length; i++) {
-            PoeNinjaPriceItem item = new PoeNinjaPriceItem();
-            item.setCurrencyTypeName(items.getLines()[i].getCurrencyTypeName());
-            item.setChaosEquivalent(items.getLines()[i].getChaosEquivalent());
+        if (items != null) {
+            for (int i = 0; i < items.getLines().length; i++) {
+                PoeNinjaPriceItem item = new PoeNinjaPriceItem();
+                item.setCurrencyTypeName(items.getLines()[i].getCurrencyTypeName());
+                item.setChaosEquivalent(items.getLines()[i].getChaosEquivalent());
 
-            for (int j = 0; j < items.getCurrencyDetails().length; j++) {
-                if (items.getCurrencyDetails()[j].getName().equals(items.getLines()[i].getCurrencyTypeName())) {
-                    item.setCurrencyID(items.getCurrencyDetails()[j].getPoeTradeId());
+                for (int j = 0; j < items.getCurrencyDetails().length; j++) {
+                    if (items.getCurrencyDetails()[j].getName().equals(items.getLines()[i].getCurrencyTypeName())) {
+                        item.setCurrencyID(items.getCurrencyDetails()[j].getPoeTradeId());
+                    }
                 }
+                priceList.add(item);
             }
-            priceList.add(item);
         }
         return priceList;
     }

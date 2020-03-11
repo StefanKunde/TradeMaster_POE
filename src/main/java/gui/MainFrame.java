@@ -110,6 +110,7 @@ public class MainFrame extends JDialog {
         currencyPollerPanel = new PanelCurrencyPolling();
         livePanel = new LivePanel();
         settingsPanel = new PanelSettings();
+        settingsPanel.updatePricesLoaded(poeNinjaPrices.getPriceItemList() == null || poeNinjaPrices.getPriceItemList().size() < 1 ? "Loading of PoeNinjaPrices Failed": "Loading of PoeNinjaPrices Succeeded");
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         initFrame();
@@ -222,6 +223,7 @@ public class MainFrame extends JDialog {
         singleMapsPanel.getBtnExit().addActionListener(exitListener);
         settingsPanel.getBtnExit().addActionListener(exitListener);
         panelBulkMaps.getBtnExit().addActionListener(exitListener);
+        livePanel.getBtnExit().addActionListener(exitListener);
         currencyBuyerPanel.getBtnExit().addActionListener(exitListener);
         currencyPollerPanel.getBtnExit().addActionListener(exitListener);
 
@@ -230,6 +232,7 @@ public class MainFrame extends JDialog {
         singleMapsPanel.getBtnMinimize().addActionListener(minimizeListener);
         settingsPanel.getBtnMinimize().addActionListener(minimizeListener);
         panelBulkMaps.getBtnMinimize().addActionListener(minimizeListener);
+        livePanel.getBtnMinimize().addActionListener(minimizeListener);
         currencyBuyerPanel.getBtnMinimize().addActionListener(minimizeListener);
         currencyPollerPanel.getBtnMinimize().addActionListener(minimizeListener);
 
