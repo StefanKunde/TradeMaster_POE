@@ -1,7 +1,7 @@
 # Trademaster_POE v1.7.2  [Updated for DELIRIUM]
 
 Note:
-veenarm has added some new major features in his own fork for this tool.
+@veenarm has added some new major features in his own fork for this tool.
 I had no time to work on this last time.
 He updated it for any new league.
 Download his latest release for the newest league here:
