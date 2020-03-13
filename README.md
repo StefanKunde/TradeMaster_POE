@@ -3,7 +3,8 @@
 Note:
 veenarm has added some new major features in his own fork for this tool.
 I had no time to work on this last time.
-Download his latest release here:
+He updated it for any new league.
+Download his latest release for the newest league here:
 https://github.com/veenarm/TradeMaster_POE
 
 Plans for feature:
