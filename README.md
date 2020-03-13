@@ -1,7 +1,19 @@
-# Trademaster_POE beta v1.5.4  [Updated for 3.9 METAMORPH]
+# Trademaster_POE beta v1.5.4  [Updated for DELIRIUM]
+
+Note:
+veenarm has added some new major features in his own fork for this tool.
+I had no time to work on this last time.
+Download his latest release here:
+https://github.com/veenarm/TradeMaster_POE
+
+Plans for feature:
+Complete redesign and restructure with electron.
+To follow the work on this check this Repo: https://github.com/StefanKunde/Trademaster-Electron-Path-of-exile-tool
+Will take some time to finish.
+
 
 UPDATE:
-Updated for METAMORPH league.
+Updated for DELIRIUM league.
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
@@ -59,4 +71,4 @@ Dont blame me for bugs. Report them whould be great!
 
 
 Download:
-https://github.com/StefanKunde/TradeMaster_POE/releases/download/1.5.4/Trademaster_v1.5.4.jar
+https://github.com/veenarm/TradeMaster_POE/releases/download/1.7.2/Trademaster_v1.7.2.jar
