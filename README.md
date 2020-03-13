@@ -1,4 +1,4 @@
-# Trademaster_POE beta v1.5.4  [Updated for DELIRIUM]
+# Trademaster_POE v1.7.2  [Updated for DELIRIUM]
 
 Note:
 veenarm has added some new major features in his own fork for this tool.
