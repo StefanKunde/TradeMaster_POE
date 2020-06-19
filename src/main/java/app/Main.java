@@ -27,12 +27,12 @@ public class Main {
     public static void main(String... args) {
         // Loads all required configuration from API
         ConfigurationConnector.configure();
-
+        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         new MainFrame(new PoeNinjaPrices());
     }
 
-    public static void scheduleThreadTimer(Runnable timerTask) {
-        scheduledThreadPool.scheduleAtFixedRate(timerTask, 0, 700, TimeUnit.MILLISECONDS);
+    public static ScheduledFuture scheduleThreadTimer(Runnable timerTask, int initialDelay, int period) {
+        return scheduledThreadPool.scheduleAtFixedRate(timerTask, initialDelay, period, TimeUnit.MILLISECONDS);
     }
 
     public static void shutdown() {

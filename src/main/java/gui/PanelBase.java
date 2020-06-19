@@ -135,4 +135,9 @@ public abstract class PanelBase extends JPanel {
         updateButton.setText("Please wait...");
         updateButton.setEnabled(false);
     }
+
+    public void disableUpdateButtonAndSetText(String text) {
+        disableUpdateButtonAndSetPendingText();
+        updateButton.setText(text);
+    }
 }

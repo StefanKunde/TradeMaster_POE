@@ -1,5 +1,7 @@
 package gui;
 
+import lombok.Getter;
+
 import java.awt.*;
 
 import javax.swing.JButton;
@@ -12,17 +14,24 @@ public class PanelCurrencyBuyer extends PanelBase {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter
     private JButton btnNextTradeCurrencyTab;
     private JLabel lblIWant;
-    protected JLabel lblAmount;
+    @Getter
+    private JLabel lblAmount;
     private JLabel lblPayForAmount;
-
     private JLabel lblWhatDoI;
+    @Getter
     private JLabel lblPriceCheck;
+    @Getter
     private JComboBox<String> cmbCurrencyTabPay;
+    @Getter
     private JComboBox<String> cmbCurrencyTabWant;
+    @Getter
     private JTextField txtCurrencyTabNeededAmount;
+    @Getter
     private JTextField txtCurrencyTabMaxPay;
+    @Getter
     private JCheckBox chckbxAutomateTrading;
 
     @Override
@@ -108,32 +117,8 @@ public class PanelCurrencyBuyer extends PanelBase {
         return "Currency";
     }
 
-
-    public JButton getBtnNextTradeCurrencyTab() {
-        return btnNextTradeCurrencyTab;
-    }
-
-    public JComboBox<String> getCmbCurrencyTabPay() {
-        return cmbCurrencyTabPay;
-    }
-
-    public JComboBox<String> getCmbCurrencyTabWant() {
-        return cmbCurrencyTabWant;
-    }
-
-    public JTextField getTxtCurrencyTabNeededAmount() {
-        return txtCurrencyTabNeededAmount;
-    }
-
-    public JTextField getTxtCurrencyTabMaxPay() {
-        return txtCurrencyTabMaxPay;
-    }
-
     public void setLabelPriceCheckText(String value) {
         this.lblPriceCheck.setText(value);
     }
 
-    public JCheckBox getChckbxAutomateTrading() {
-        return chckbxAutomateTrading;
-    }
 }

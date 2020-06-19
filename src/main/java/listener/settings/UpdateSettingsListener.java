@@ -34,7 +34,13 @@ public class UpdateSettingsListener implements ActionListener {
 
         Main.getExecutor().execute(() -> {
             // Re-update the PoE Ninja Prices
+            this.frame.getSettingsPanel().updatePricesLoaded("Loading of PoeNinjaPrices ...");
             frame.setPoeNinjaPrices(new PoeNinjaPrices());
+            if (frame.getPoeNinjaPrices().getPriceItemList() == null || frame.getPoeNinjaPrices().getPriceItemList().size() < 1) {
+                this.frame.getSettingsPanel().updatePricesLoaded("Loading of PoeNinjaPrices Failed");
+            } else {
+                this.frame.getSettingsPanel().updatePricesLoaded("Loading of PoeNinjaPrices Succeeded");
+            }
         });
 
     }
