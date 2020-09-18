@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import app.Config;
 import app.Main;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 
 import connector.CurrencyPoeTradeFetcher;
@@ -13,9 +14,8 @@ import handler.CurrencyPoeTradeHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class UpdateButtonCurrencyListener implements ActionListener {
-
-    private static final Logger LOG = LoggerFactory.getLogger(UpdateButtonCurrencyListener.class);
 
     private MainFrame frame;
 
@@ -33,7 +33,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
             try {
                 maxPrice = Double.valueOf(frame.getCurrencyBuyerPanel().getTxtCurrencyTabMaxPay().getText());
             } catch (NumberFormatException nfe) {
-                LOG.debug("Invalid max-price, default to 0");
+                log.debug("Invalid max-price, default to 0");
                 maxPrice = 0;
             }
 
@@ -70,7 +70,7 @@ public class UpdateButtonCurrencyListener implements ActionListener {
             handler.getFilteredOffers().generateTradeMessages(wantedAmount);
 
             for (int i = 0; i < handler.getFilteredOffers().getAllOffersAsList().size(); i++) {
-                LOG.debug(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
+                log.debug(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
             }
 
             // Add trade-ables to next-button

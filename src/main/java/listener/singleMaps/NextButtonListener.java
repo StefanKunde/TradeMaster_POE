@@ -29,7 +29,7 @@ public class NextButtonListener implements ActionListener {
 			clipboard.setContents(stringSelection, null);
 			frame.getTradeableMaps().remove(0);
 			frame.getSingleMapsPanel().getTradeables().setText("Tradeables left: " + frame.getTradeableMaps().size());
-			frame.setForegroundWindow("Path of Exile");
+			frame.setForegroundWindow(MainFrame.POE_WINDOW_NAME);
 			if(Config.get().isUseAutomatedTrading()) {
 				RobotHelper.sendClipboardTextToChat();
 			}

@@ -1,14 +1,15 @@
 package listener.currency;
 
 import gui.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.BadLocationException;
 
+@Slf4j
 public class NeededAmountTxtBoxListener extends CurrencyDocumentBaseListener {
-    private Logger LOG = LoggerFactory.getLogger(NeededAmountTxtBoxListener.class);
 
     public NeededAmountTxtBoxListener(MainFrame frame) {
         super(frame);
@@ -20,7 +21,7 @@ public class NeededAmountTxtBoxListener extends CurrencyDocumentBaseListener {
         try {
             userInput = e.getDocument().getText(0, e.getDocument().getLength());
         } catch (BadLocationException e1) {
-            LOG.error("MaxPayTxtBoxListener::insertUpdate", e1);
+            log.error("MaxPayTxtBoxListener::insertUpdate", e1);
         }
 
         //Default
@@ -40,14 +41,14 @@ public class NeededAmountTxtBoxListener extends CurrencyDocumentBaseListener {
                 runCommonChecks(selectedPayItem, selectedWantItem);
             }
         } catch (NumberFormatException nfe) {
-            LOG.debug("Invalid number input, not re-updating");
+            log.debug("Invalid number input, not re-updating");
         }
     }
 
 
     @Override
     public Logger getLogger() {
-        return LOG;
+        return log;
     }
 
 }

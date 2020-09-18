@@ -1,6 +1,7 @@
 package connector;
 
 import app.Config;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -12,9 +13,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 public class PoeNinjaPriceFetcher extends BaseConnector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaPriceFetcher.class);
     private static final String POE_SEARCHLINK = "https://poe.ninja/api/data/currencyoverview?league=%s&type=Currency&date=%s";
 
     public String sendGet() {
@@ -22,11 +23,11 @@ public class PoeNinjaPriceFetcher extends BaseConnector {
         HttpGet httpGet = new HttpGet(url);
         String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            LOG.debug("PoeNinjaPriceFetcher::sendGet() to URL: " + url);
+            log.debug("PoeNinjaPriceFetcher::sendGet() to URL: " + url);
             HttpResponse response = client.execute(httpGet);
             result = convertStreamToString(response.getEntity().getContent());
         } catch (IOException ioe) {
-            LOG.error("PoeNinjaPriceFetcher::sendGet() to URL: " + url + ". Message: " + ioe.getMessage());
+            log.error("PoeNinjaPriceFetcher::sendGet() to URL: " + url + ". Message: " + ioe.getMessage());
         }
 
         return result;
@@ -40,6 +41,6 @@ public class PoeNinjaPriceFetcher extends BaseConnector {
 
     @Override
     public Logger getLogger() {
-        return LOG;
+        return log;
     }
 }

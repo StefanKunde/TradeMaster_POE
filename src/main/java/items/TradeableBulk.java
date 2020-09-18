@@ -1,7 +1,5 @@
 package items;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +7,12 @@ import jsonNinjaResult.Listing;
 import jsonNinjaResult.Result_;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class TradeableBulk {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TradeableBulk.class);
 
     @Getter
     @Setter
@@ -72,7 +70,7 @@ public class TradeableBulk {
         for (TradeableItem item : tradeableItems) {
             if (item.getCurrencyToPay().equalsIgnoreCase(currency) && item.getPricePerMap() <= maxPrice) {
                 tmpTradeables.add(item);
-                LOG.debug("Added item to filtered tradables: currency =  " + item.getCurrencyToPay() + " pricePerMap: " + item.getPricePerMap());
+                log.debug("Added item to filtered tradables: currency =  " + item.getCurrencyToPay() + " pricePerMap: " + item.getPricePerMap());
             }
         }
         this.filteredTradeableItems = tmpTradeables;

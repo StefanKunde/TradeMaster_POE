@@ -1,6 +1,7 @@
 package connector;
 
 import app.Config;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -10,11 +11,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class ConfigurationConnector extends BaseConnector {
 
     private static final String CONF_ENDPOINT = "https://www.redwoodit.com.au/trademaster/api/configure";
-    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationConnector.class);
 
     private static ConfigurationConnector instance;
 
@@ -33,7 +33,7 @@ public class ConfigurationConnector extends BaseConnector {
         Config.get().setShapedMaps(mapJSONArrayToStringArray(data.getJSONArray("ShapedMaps")));
         Config.get().setElderMaps(mapJSONArrayToStringArray(data.getJSONArray("ElderMaps")));
         Config.get().setBulkBuyWithCurrencies(mapJSONArrayToStringArray(data.getJSONArray("BulkBuyWithCurrencies")));
-        LOG.debug(data.toString());
+        log.debug(data.toString());
 
         // Clean up
         instance = null;
@@ -50,11 +50,11 @@ public class ConfigurationConnector extends BaseConnector {
 
     private JSONObject retrieveData() {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            LOG.debug("Sending 'GET' request to URL : " + CONF_ENDPOINT);
+            log.debug("Sending 'GET' request to URL : " + CONF_ENDPOINT);
             HttpGet httpGet = new HttpGet(CONF_ENDPOINT);
             httpGet.addHeader("Accept", "application/json");
             HttpResponse response = client.execute(httpGet);
-            LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
+            log.debug("Response Code : " + response.getStatusLine().getStatusCode());
             String stringResult = convertStreamToString(response.getEntity().getContent());
             return new JSONObject(stringResult);
         } catch (Exception e) {
@@ -64,6 +64,6 @@ public class ConfigurationConnector extends BaseConnector {
 
     @Override
     public Logger getLogger() {
-        return LOG;
+        return log;
     }
 }

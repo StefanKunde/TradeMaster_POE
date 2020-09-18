@@ -5,12 +5,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import gui.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class AmountTxtBoxListener implements DocumentListener {
-
-    private Logger LOG = LoggerFactory.getLogger(AmountTxtBoxListener.class);
 
     private MainFrame frame;
 
@@ -24,7 +24,7 @@ public class AmountTxtBoxListener implements DocumentListener {
         try {
             userInput = e.getDocument().getText(0, e.getDocument().getLength());
         } catch (BadLocationException e1) {
-            LOG.error("AmountTxtBoxListener:insertUpdate", e1);
+            log.error("AmountTxtBoxListener:insertUpdate", e1);
         }
 
         if (isNumeric(userInput) && Integer.valueOf(userInput) >= 1 && Integer.valueOf(userInput) <= 100) { // between 1 and 100

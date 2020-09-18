@@ -15,7 +15,7 @@ import java.util.zip.GZIPInputStream;
 public abstract class BaseConnector {
 
     public static final Gson GSON = new Gson();
-    protected static final String USER_AGENT = "Mozilla/5.0";
+    protected static final String USER_AGENT = "Mozilla/5.0 - PoeTradeMaster/@VeenarM";
 
     protected String convertStreamToString(InputStream is) {
         StringBuilder result = new StringBuilder();

@@ -1,17 +1,15 @@
 package listener.currency;
 
 import gui.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-/**
- * What do I want? - Currency Tab Listener
- */
+@Slf4j
 public class CurrencyTabCmbBoxWantListener extends CurrencyBaseListener {
-    private Logger LOG = LoggerFactory.getLogger(CurrencyTabCmbBoxWantListener.class);
 
     public CurrencyTabCmbBoxWantListener(MainFrame frame) {
         super(frame);
@@ -27,6 +25,6 @@ public class CurrencyTabCmbBoxWantListener extends CurrencyBaseListener {
 
     @Override
     public Logger getLogger() {
-        return LOG;
+        return log;
     }
 }

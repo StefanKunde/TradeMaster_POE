@@ -1,15 +1,16 @@
 package listener.bulkMaps;
 
 import gui.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+@Slf4j
 public class PricePerMapTxtBoxListener implements DocumentListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PricePerMapTxtBoxListener.class);
     private MainFrame frame;
 
     public PricePerMapTxtBoxListener(MainFrame frame) {
@@ -40,12 +41,4 @@ public class PricePerMapTxtBoxListener implements DocumentListener {
     public void changedUpdate(DocumentEvent e) {
 
     }
-
-    public static boolean isNumeric(String str) {
-        for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) return false;
-        }
-        return true;
-    }
-
 }

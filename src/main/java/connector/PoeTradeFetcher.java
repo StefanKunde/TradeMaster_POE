@@ -1,6 +1,7 @@
 package connector;
 
 import app.Config;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -19,10 +20,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
-
+@Slf4j
 public class PoeTradeFetcher extends BaseConnector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PoeTradeFetcher.class);
     private static final String POE_SEARCHLINK = "https://poe.trade/search";
 
     public String sendGet(String url) {
@@ -34,12 +34,12 @@ public class PoeTradeFetcher extends BaseConnector {
 
         String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            LOG.debug("Sending 'GET' request to URL : " + url);
+            log.debug("Sending 'GET' request to URL : " + url);
             HttpResponse response = client.execute(request);
-            LOG.debug("Response Code: " + response.getStatusLine().getStatusCode());
+            log.debug("Response Code: " + response.getStatusLine().getStatusCode());
             result = convertStreamToString(response.getEntity().getContent());
         } catch (IOException ioe) {
-            LOG.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
+            log.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
         }
 
         return result;
@@ -54,17 +54,17 @@ public class PoeTradeFetcher extends BaseConnector {
 
         post.setEntity(new UrlEncodedFormEntity(postData, Charset.forName(Config.get().ENCODING_TYPE)));
 
-        LOG.debug("Post data: " + postData);
+        log.debug("Post data: " + postData);
 
         String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            LOG.debug("Sending 'POST' request to URL : " + url);
-            LOG.debug("Post parameters : " + post.getEntity());
+            log.debug("Sending 'POST' request to URL : " + url);
+            log.debug("Post parameters : " + post.getEntity());
             HttpResponse response = client.execute(post);
-            LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
+            log.debug("Response Code : " + response.getStatusLine().getStatusCode());
             result = convertStreamToString(response.getEntity().getContent());
         } catch (IOException ioe) {
-            LOG.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
+            log.error("PoeTradeFetcher::sendPost to " + url + ", Returned IOException: " + ioe.getMessage());
         }
 
         return result;
@@ -94,6 +94,6 @@ public class PoeTradeFetcher extends BaseConnector {
 
     @Override
     public Logger getLogger() {
-        return LOG;
+        return log;
     }
 }

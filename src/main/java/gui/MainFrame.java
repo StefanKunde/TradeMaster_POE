@@ -8,6 +8,7 @@ import connector.CurrencyPoeTradeFetcher;
 import handler.CurrencyPoeTradeHandler;
 import listener.currencyPolling.*;
 import listener.live.LiveStartListener;
+import lombok.extern.slf4j.Slf4j;
 import model.SearchParameterModel;
 import items.CurrencyOffers;
 import items.PoeTradeResultModel;
@@ -34,9 +35,10 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
+@Slf4j
 public class MainFrame extends JDialog {
 
-    private Logger LOG = LoggerFactory.getLogger(MainFrame.class);
+    public static final String POE_WINDOW_NAME = "Path of Exile";
 
     @Getter
     @Setter
@@ -128,7 +130,7 @@ public class MainFrame extends JDialog {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e1) {
-            LOG.error("Mainframe::initFrame failure", e1);
+            log.error("Mainframe::initFrame failure", e1);
         }
 
         tabbedPane.setBackground(new Color(32, 178, 170));
@@ -248,7 +250,7 @@ public class MainFrame extends JDialog {
     }
 
     private void setupCurrencyPollingListeners() {
-        LOG.debug("Initializing Polling Listeners");
+        log.debug("Initializing Polling Listeners");
         UpdateCurrencyPollingListener updateButtonCurrencyListener = new UpdateCurrencyPollingListener(this);
         NextButtonCurrencyPollingListener nextButtonCurrencyPollingListener = new NextButtonCurrencyPollingListener(this);
         MinimumAmountTxtBoxListener minimumAmountTxtBoxListener = new MinimumAmountTxtBoxListener(this);
@@ -286,7 +288,7 @@ public class MainFrame extends JDialog {
     }
 
     public void loadMapsFromJson(String[] maps) {
-        LOG.debug("selectedTier " + selectedTier);
+        log.debug("selectedTier " + selectedTier);
 
         List<String> allMapsAsList = Arrays.asList(maps);
         Collections.sort(allMapsAsList, String.CASE_INSENSITIVE_ORDER);
@@ -344,32 +346,7 @@ public class MainFrame extends JDialog {
 
     public void setupThreadAndShowFrame() {
         Main.scheduleThreadTimer(() -> {
-            byte[] windowText = new byte[512];
-            PointerType hwnd = user32.GetForegroundWindow();
-            User32.INSTANCE.GetWindowTextA(hwnd, windowText, 512);
-
-            String activeWindowTitle = Native.toString(windowText);
-
-//            if (!isVisible()) {
-//                setVisible(true);
-//            }
-
-            if (Native.toString(windowText).equals("Path of Exile")) {
-                if (!Main.isMinimised() && !isVisible()) {
-                    setVisible(true);
-                    setForegroundWindow("Path of Exile");
-                }
-                return;
-            }
-            boolean isActiveWindowMain = activeWindowTitle.equals("MapTrado Main");
-            boolean isActiveWindowMini = activeWindowTitle.equals("MapTrado Mini");
-
-            if (!isActiveWindowMain && !isActiveWindowMini && isVisible()) {
-                setVisible(false);
-            }
-            if (Main.isMinimised() && isVisible()) {
-                setVisible(false);
-            }
+            setVisible(!Main.isMinimised());
         }, 0 , 700);
     }
 
@@ -387,7 +364,7 @@ public class MainFrame extends JDialog {
         try {
             maxPrice = Double.valueOf(currencyPanel.getTxtCurrencyTabMaxPay().getText());
         } catch (NumberFormatException nfe) {
-            LOG.debug("Invalid max-price, default to 0");
+            log.debug("Invalid max-price, default to 0");
             maxPrice = 0;
         }
 
@@ -419,7 +396,7 @@ public class MainFrame extends JDialog {
         handler.getFilteredOffers().generateTradeMessages(wantedAmount);
 
         for (int i = 0; i < handler.getFilteredOffers().getAllOffersAsList().size(); i++) {
-            LOG.debug(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
+            log.debug(handler.getFilteredOffers().getAllOffersAsList().get(i).getTradeMessage());
         }
 
         // Add tradeables to nextbutton
