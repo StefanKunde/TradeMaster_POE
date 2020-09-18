@@ -36,7 +36,7 @@ public class NextButtonListener implements ActionListener {
             ((DefaultTableModel) _this.getJdt().getModel()).removeRow(0);
 
             _this.getTradeables().setText("Tradeables: " + result.size());
-            frame.setForegroundWindow("Path of Exile");
+            frame.setForegroundWindow(MainFrame.POE_WINDOW_NAME);
 
             String generatedTradeText = result.get(0).generateTradeText();
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(generatedTradeText), null);

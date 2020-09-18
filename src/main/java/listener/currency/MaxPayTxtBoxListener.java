@@ -1,14 +1,15 @@
 package listener.currency;
 
 import gui.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.BadLocationException;
 
+@Slf4j
 public class MaxPayTxtBoxListener extends CurrencyDocumentBaseListener {
-    private Logger LOG = LoggerFactory.getLogger(MaxPayTxtBoxListener.class);
 
     public MaxPayTxtBoxListener(MainFrame frame) {
         super(frame);
@@ -20,7 +21,7 @@ public class MaxPayTxtBoxListener extends CurrencyDocumentBaseListener {
         try {
             userInput = e.getDocument().getText(0, e.getDocument().getLength());
         } catch (BadLocationException e1) {
-            LOG.error("MaxPayTxtBoxListener::insertUpdate", e1);
+            log.error("MaxPayTxtBoxListener::insertUpdate", e1);
         }
 
         frame.setValidMaxPayInput(false);
@@ -34,19 +35,19 @@ public class MaxPayTxtBoxListener extends CurrencyDocumentBaseListener {
                     frame.getCurrencyBuyerPanel().getUpdateButton().setEnabled(true);
                 }
 
-                LOG.debug("MaxPayTxtBoxListener true");
+                log.debug("MaxPayTxtBoxListener true");
                 String selectedPayItem = (String) frame.getCurrencyBuyerPanel().getCmbCurrencyTabPay().getSelectedItem();
                 String selectedWantItem = (String) frame.getCurrencyBuyerPanel().getCmbCurrencyTabWant().getSelectedItem();
                 runCommonChecks(selectedPayItem, selectedWantItem);
             }
         } catch (NumberFormatException nfe) {
-            LOG.debug("Invalid double entered. MaxPayTxtBoxListener - false");
+            log.debug("Invalid double entered. MaxPayTxtBoxListener - false");
         }
     }
 
     @Override
     public Logger getLogger() {
-        return LOG;
+        return log;
     }
 
 

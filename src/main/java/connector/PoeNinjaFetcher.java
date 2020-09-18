@@ -1,9 +1,9 @@
 package connector;
 
-import com.google.gson.Gson;
 import app.Config;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import model.NinjaJsonModel;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -18,9 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class PoeNinjaFetcher extends BaseConnector {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaFetcher.class);
 
     final String POE_SEARCHLINK = "https://www.pathofexile.com/api/trade/exchange/%s";
     final String POE_SEARCHLINK_FOR_RESULT = "https://www.pathofexile.com/api/trade/fetch/";
@@ -36,7 +35,7 @@ public class PoeNinjaFetcher extends BaseConnector {
             HttpResponse response = client.execute(httpGet);
             result = convertStreamToString(response.getEntity().getContent());
         } catch (IOException ioe) {
-            LOG.error("PoeNinjaFetcher::sendGet to " + url + ", Returned IOException: " + ioe.getMessage());
+            log.error("PoeNinjaFetcher::sendGet to " + url + ", Returned IOException: " + ioe.getMessage());
         }
         return result;
     }
@@ -57,26 +56,26 @@ public class PoeNinjaFetcher extends BaseConnector {
         StringEntity params = new StringEntity(jsonData, Config.get().ENCODING_TYPE);
         post.setEntity(params);
 
-        LOG.debug("Post data: " + jsonData);
+        log.debug("Post data: " + jsonData);
         String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            LOG.debug("Sending 'POST' request to URL : " + String.format(POE_SEARCHLINK, Config.get().getEncodedLeagueSelection()));
-            LOG.debug("Post Entity : " + post.getEntity());
+            log.debug("Sending 'POST' request to URL : " + String.format(POE_SEARCHLINK, Config.get().getEncodedLeagueSelection()));
+            log.debug("Post Entity : " + post.getEntity());
             HttpResponse response = client.execute(post);
-            LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
+            log.debug("Response Code : " + response.getStatusLine().getStatusCode());
             result = convertStreamToString(response.getEntity().getContent());
         } catch (IOException ioe) {
-            LOG.error("PoeNinjaFetcher::sendPost to " + postUrl + ", Returned IOException: " + ioe.getMessage());
+            log.error("PoeNinjaFetcher::sendPost to " + postUrl + ", Returned IOException: " + ioe.getMessage());
         }
 
-        LOG.debug(result);
+        log.debug(result);
         return result;
 
     }
 
     @Override
     public Logger getLogger() {
-        return this.LOG;
+        return this.log;
     }
 
     public String generateSearchString(String jsonResponse) {
@@ -96,7 +95,7 @@ public class PoeNinjaFetcher extends BaseConnector {
         // delete last comma
         link = link.substring(0, link.length() - 1);
         link += "?query=" + responseObject.getId() + "&exchange";
-        LOG.debug("Link: " + link);
+        log.debug("Link: " + link);
         return link;
     }
 

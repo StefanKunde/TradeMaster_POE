@@ -43,7 +43,7 @@ public class NextButtonCurrencyListener implements ActionListener {
         frame.setCurrencyOffers(tmpOffers);
 
         frame.getCurrencyBuyerPanel().getTradeables().setText("Tradeables: " + frame.getCurrencyOffers().getAllOffersAsList().size());
-        frame.setForegroundWindow("Path of Exile");
+        frame.setForegroundWindow(MainFrame.POE_WINDOW_NAME);
 
         if (Config.get().isUseAutomatedTrading()) {
             RobotHelper.sendClipboardTextToChat();

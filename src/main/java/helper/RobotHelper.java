@@ -1,14 +1,14 @@
 package helper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+@Slf4j
 public class RobotHelper {
-
-    private static final Logger LOG = LoggerFactory.getLogger(RobotHelper.class);
 
     public static void sendClipboardTextToChat() {
         try {
@@ -40,10 +40,10 @@ public class RobotHelper {
                 Thread.sleep(32);
                 robot.keyRelease(KeyEvent.VK_ENTER);
             } catch (InterruptedException e) {
-                LOG.error("InterruptedException::RobotHelper", e);
+                log.error("InterruptedException::RobotHelper", e);
             }
         } catch (AWTException e) {
-            LOG.error("AWTException::RobotHelper", e);
+            log.error("AWTException::RobotHelper", e);
         }
     }
 

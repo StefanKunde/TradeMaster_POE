@@ -1,21 +1,16 @@
 package listener.bulkMaps;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import app.Main;
 import gui.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 import model.PoeTradeBulkItemExchangeSearchDataModel;
 import handler.PoeNinjaHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
-
+@Slf4j
 public class UpdateButtonBulksListener implements ActionListener {
-
-    private static final Logger LOG = LoggerFactory.getLogger(UpdateButtonBulksListener.class);
 
     private MainFrame frame;
 
@@ -56,7 +51,7 @@ public class UpdateButtonBulksListener implements ActionListener {
 
                 String currency = frame.getPanelBulkMaps().getCmb_currency_bulks().getSelectedItem().toString();
 
-                LOG.debug("Currency before filtering: " + currency);
+                log.debug("Currency before filtering: " + currency);
                 frame.getTradeables().filterByCurrencyAndMaxPrice(currency, pricePerMap);
             }
 

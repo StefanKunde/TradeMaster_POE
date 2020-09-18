@@ -1,6 +1,7 @@
 package connector;
 
 import app.Config;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -10,9 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+@Slf4j
 public class CurrencyPoeTradeFetcher extends BaseConnector {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CurrencyPoeTradeFetcher.class);
 
     private static final String POE_SEARCHLINK = "http://currency.poe.trade/search?league=%s&online=x&stock=%s&want=%s&have=%s";
 
@@ -26,12 +26,12 @@ public class CurrencyPoeTradeFetcher extends BaseConnector {
 
         String result = "";
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            LOG.debug("Sending 'GET' request to URL : " + url);
+            log.debug("Sending 'GET' request to URL : " + url);
             HttpResponse response = client.execute(request);
-            LOG.debug("Response Code : " + response.getStatusLine().getStatusCode());
+            log.debug("Response Code : " + response.getStatusLine().getStatusCode());
             result = convertStreamToString(response.getEntity().getContent());
         } catch (IOException ioe) {
-            LOG.error("CurrencyPoeTradeFetcher::sendGet to " + url + ", Returned IOException: " + ioe.getMessage());
+            log.error("CurrencyPoeTradeFetcher::sendGet to " + url + ", Returned IOException: " + ioe.getMessage());
         }
 
         return result;
@@ -39,7 +39,7 @@ public class CurrencyPoeTradeFetcher extends BaseConnector {
 
     @Override
     public Logger getLogger() {
-        return LOG;
+        return log;
     }
 
 }

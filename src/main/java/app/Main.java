@@ -5,15 +5,15 @@ import gui.MainFrame;
 import items.PoeNinjaPrices;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.concurrent.*;
 
-
+@Slf4j
 public class Main {
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private static final ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(3);
 
@@ -36,18 +36,18 @@ public class Main {
     }
 
     public static void shutdown() {
-        LOG.debug("Main::shutdown() activated, destroying scheduler pools then frames.");
+        log.debug("Main::shutdown() activated, destroying scheduler pools then frames.");
         scheduledThreadPool.shutdownNow();
         executor.shutdownNow();
 
         while (!scheduledThreadPool.isTerminated() && !executor.isTerminated()) {
-            LOG.debug("All threads not terminated yet.. waiting...");
+            log.debug("All threads not terminated yet.. waiting...");
         }
-        LOG.debug("All threads now in terminated state.");
+        log.debug("All threads now in terminated state.");
         for (Frame f : Frame.getFrames()) {
             f.dispose();
         }
-        LOG.debug("All Frames now disposed, application process terminated.");
+        log.debug("All Frames now disposed, application process terminated.");
     }
 
 }

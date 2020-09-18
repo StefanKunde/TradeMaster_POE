@@ -43,7 +43,7 @@ public class NextButtonBulksListener implements ActionListener {
 				frame.getPanelBulkMaps().getTradeables().setText("Tradeables: " + tmpTradeables.getTradeableItems().size());
 			}
 			
-			frame.setForegroundWindow("Path of Exile");
+			frame.setForegroundWindow(MainFrame.POE_WINDOW_NAME);
 			if(Config.get().isUseAutomatedTrading()) {
 				RobotHelper.sendClipboardTextToChat();
 			}

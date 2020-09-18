@@ -4,15 +4,15 @@ import connector.PoeNinjaFetcher;
 import items.TradeableBulk;
 import jsonNinjaResult.Result;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import model.PoeTradeBulkItemExchangeSearchDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class PoeNinjaHandler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PoeNinjaHandler.class);
 
     private final int MAX_REQUESTS = 5;
     private PoeNinjaFetcher poeConnector = new PoeNinjaFetcher();
@@ -46,7 +46,7 @@ public class PoeNinjaHandler {
                 try {
                     TimeUnit.MILLISECONDS.sleep(300);
                 } catch (InterruptedException ie) {
-                    LOG.error("PoeNinjaHandler::processBulkRequests, sleep attempt had an interruption occur - " + ie.getMessage());
+                    log.error("PoeNinjaHandler::processBulkRequests, sleep attempt had an interruption occur - " + ie.getMessage());
                 }
             }
         }
