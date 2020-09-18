@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.com/veenarm/TradeMaster_POE.svg?branch=master)](https://travis-ci.com/veenarm/TradeMaster_POE.svg?branch=master)
 
+- API has been updated for heist
+
 # Trademaster_POE
 
 This is an overview application for the game Path of exile.
