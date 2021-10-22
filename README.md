@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/veenarm/TradeMaster_POE.svg?branch=master)](https://travis-ci.com/veenarm/TradeMaster_POE.svg?branch=master)
 
-- API has been updated for Ultimatum
+- API has been updated for Scourge!
 
 # Trademaster_POE
 
