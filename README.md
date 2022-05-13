@@ -1,4 +1,4 @@
-# Trademaster_POE v1.7.2  [Updated for DELIRIUM]
+# Trademaster_POE v1.7.2  [Updated for Sentinel]
 
 Note:
 @veenarm has added some new major features in his own fork for this tool.
@@ -14,7 +14,7 @@ Will take some time to finish.
 
 
 UPDATE:
-Updated for DELIRIUM league.
+Updated for Sentinel league.
 
 This is an overview application for the game Path of exile.
 You can search for currencys and maps with it and you will instantly get the tradetext to your clipboard.
